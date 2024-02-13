@@ -12,7 +12,7 @@ export async function login(username: string, password: string) {
   })
   if (!user) throw new HttpError("username is incorrect", StatusCode.BadRequest)
 
-  const isCorrect = bcrypt.compareSync(password, user.password)
+  const isCorrect = await bcrypt.compare(password, user.password)
   if (!isCorrect) {
     throw new HttpError("password is incorrect", StatusCode.BadRequest)
   }

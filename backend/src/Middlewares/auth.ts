@@ -3,7 +3,7 @@ import { HttpError, StatusCode } from "../Utils/HttpError"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { getSecretJWT } from "../Utils/helpers"
 import db from "../Config/db"
-import { User } from "../Entities/user"
+import { User, UserRole } from "../Entities/user"
 
 export function authorization(req: Request, res: Response, next: NextFunction) {
   const token = req.headers["authorization"]
@@ -20,4 +20,12 @@ export function authorization(req: Request, res: Response, next: NextFunction) {
     req.user = user
     next()
   })
+}
+
+export function isAdmin(req: Request, res: Response, next: NextFunction) {
+  if (req.user?.role === UserRole.ADMIN) {
+    next()
+  } else {
+    return next(new HttpError("Unauthorized", StatusCode.Unauthorized))
+  }
 }

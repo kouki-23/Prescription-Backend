@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
 export enum UserRole {
   ADMIN = "admin",
@@ -26,4 +26,6 @@ export class User {
     nullable: false,
   })
   role: UserRole
+  @Column()
+  type_service: string
 }
