@@ -1,4 +1,3 @@
-import { User } from "../Entities/user"
 import { DataSource } from "typeorm"
 
 export default new DataSource({
@@ -10,5 +9,5 @@ export default new DataSource({
   database: "prescription",
   synchronize: true,
   logging: true,
-  entities: [User],
+  entities: ["./src/Entities/*{.ts,.js}"],
 })

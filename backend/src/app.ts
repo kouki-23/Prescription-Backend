@@ -9,7 +9,7 @@ import db from "./Config/db"
 import { HttpError } from "./Utils/HttpError"
 import auth from "./Routers/auth"
 import { authorization } from "./Middlewares/auth"
-import { User } from "./Entities/user"
+import { User } from "./Entities/User"
 
 db.initialize()
   .then(() => {

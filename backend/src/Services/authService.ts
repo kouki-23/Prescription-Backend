@@ -1,5 +1,5 @@
 import db from "../Config/db"
-import { User } from "../Entities/user"
+import { User } from "../Entities/User"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"

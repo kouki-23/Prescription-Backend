@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm"
+import { DataHistory } from "./DataHistory"
 
 export enum UserRole {
   ADMIN = "admin",
@@ -14,7 +21,7 @@ export class User {
   @Column()
   name: string
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   username: string
 
   @Column({ nullable: false })
@@ -27,5 +34,8 @@ export class User {
   })
   role: UserRole
   @Column()
-  type_service: string
+  serviceType: string
+
+  @OneToMany(() => DataHistory, (datahistory) => datahistory.user)
+  dataHistory: DataHistory[]
 }
