@@ -10,6 +10,7 @@ import { HttpError } from "./Utils/HttpError"
 import auth from "./Routers/auth"
 import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
+import morgan from "morgan"
 
 db.initialize()
   .then(() => {
@@ -34,10 +35,10 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 app.use(express.json())
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
 
 //routers
 app.use("/", auth)
-
 app.use(authorization)
 
 //error handler
