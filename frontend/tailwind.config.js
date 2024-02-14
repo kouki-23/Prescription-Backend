@@ -23,7 +23,11 @@ export default {
       montserrat: ["Montserrat"],
       lato: ["Lato"],
     },
-    extend: {},
+    extend: {
+      fontSize: {
+        title: ["2.5rem", "2.75rem"],
+      },
+    },
   },
   plugins: [],
 }
