@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import express, { Request, Response, NextFunction } from "express"
 import dotenv from "dotenv"
+import cors from "cors"
 if (process.env.NODE_ENV === "development") {
   dotenv.config()
 }
@@ -34,11 +35,12 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
 
 //routers
-app.use("/", auth)
+app.use("/auth", auth)
 app.use(authorization)
 
 //error handler

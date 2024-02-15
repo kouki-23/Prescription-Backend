@@ -3,7 +3,7 @@ import { User } from "../Entities/User"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { getSecretJWT } from "../Utils/helpers"
+import { getSecretJWT } from "../Utils/jwt"
 
 export async function login(username: string, password: string) {
   const userRepo = db.getRepository(User)
@@ -17,14 +17,27 @@ export async function login(username: string, password: string) {
     throw new HttpError("password is incorrect", StatusCode.BadRequest)
   }
 
-  const token = jwt.sign(
+  const accessToken = jwt.sign(
     {
-      id: user.id,
+      user: { id: user.id, username: user.username },
     },
     getSecretJWT(),
+    {
+      expiresIn: "1h",
+    },
+  )
+  const refreshToken = jwt.sign(
+    {
+      user: { id: user.id },
+    },
+    getSecretJWT(),
+    {
+      expiresIn: "7d",
+    },
   )
   return {
-    token,
+    accessToken,
+    refreshToken,
     user: {
       id: user.id,
       name: user.name,
