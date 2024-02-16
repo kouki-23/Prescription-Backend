@@ -1,7 +1,14 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm"
+import {
+  Column,
+  JoinTable,
+  ManyToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm"
+import { Molecule } from "./Molecule"
 
 export class Protocol {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number
 
   @Column()
@@ -24,4 +31,8 @@ export class Protocol {
 
   @Column()
   isCreated: boolean
+
+  @ManyToMany(() => Molecule)
+  @JoinTable({ name: "ProtocolMoleculeAssociation" })
+  categories: Molecule[]
 }
