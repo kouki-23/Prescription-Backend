@@ -7,6 +7,7 @@ import {
 } from "typeorm"
 import { number } from "zod"
 import { Prescription } from "./Prescription"
+import { PrepMolecule } from "./PrepMolecule"
 @Entity()
 export class Cure {
   @PrimaryGeneratedColumn()
@@ -23,4 +24,7 @@ export class Cure {
 
   @ManyToOne(() => Prescription, (pres) => pres.cures)
   prescription: Prescription
+
+  @OneToMany(() => PrepMolecule, (b) => b.cure)
+  prepMolecule: PrepMolecule[]
 }

@@ -10,9 +10,10 @@ import {
 import { Vehicule } from "./Vehicule"
 import { DetailPrepMolucule } from "./DetailPrepMolucule"
 import { BottleUsed } from "./BottleUsed"
+import { Cure } from "./Cure"
 @Entity()
 export class PrepMolecule {
-  @Column()
+  @PrimaryGeneratedColumn()
   id: number
 
   @Column()
@@ -42,4 +43,7 @@ export class PrepMolecule {
 
   @OneToMany(() => BottleUsed, (b) => b.prepmolecule)
   bottlesused: BottleUsed[]
+
+  @ManyToOne(() => Cure, (b) => b.prepMolecule)
+  cure: Cure
 }

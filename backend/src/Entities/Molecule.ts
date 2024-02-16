@@ -5,9 +5,12 @@ import {
   OneToOne,
   ManyToOne,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm"
 import { DetailPrepMolucule } from "./DetailPrepMolucule"
 import { Bottle } from "./Bottle"
+import { Protocol } from "./Protocol"
 @Entity()
 export class Molecule {
   @PrimaryGeneratedColumn()
@@ -51,4 +54,8 @@ export class Molecule {
 
   @OneToMany(() => Bottle, (b) => b.molecule)
   bottles: Bottle[]
+
+  @ManyToMany(() => Protocol, (p) => p.molecule)
+  @JoinTable()
+  protocole: Protocol[]
 }

@@ -8,7 +8,7 @@ import {
 import { PrepMolecule } from "./PrepMolecule"
 @Entity()
 export class Vehicule {
-  @Column()
+  @PrimaryGeneratedColumn()
   id: number
 
   @Column()
