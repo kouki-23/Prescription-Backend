@@ -14,7 +14,13 @@ export async function loginHandler(
 ) {
   const { username, password } = req.body
   try {
-    const data = await login(username, password)
+    const { refreshToken, ...data } = await login(username, password)
+    const expirationDate = new Date()
+    expirationDate.setTime(expirationDate.getTime() + 7 * 24 * 60 * 60 * 1000)
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      expires: expirationDate,
+    })
     return res.json(data)
   } catch (e) {
     return next(e)
@@ -27,9 +33,9 @@ export async function refreshTokenHandler(
   res: Response,
   next: NextFunction,
 ) {
-  const { token } = req.body
+  const { refreshToken } = req.cookies
   try {
-    const payload = verifyJWT(token)
+    const payload = verifyJWT(refreshToken)
     const id = payload.user.id
     const user = await db.getRepository(User).findOneBy({
       id,

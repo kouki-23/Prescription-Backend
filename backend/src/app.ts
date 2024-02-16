@@ -12,6 +12,7 @@ import auth from "./Routers/auth"
 import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
 import morgan from "morgan"
+import cookieParser from "cookie-parser"
 
 db.initialize()
   .then(() => {
@@ -36,6 +37,7 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 app.use(cors())
+app.use(cookieParser())
 app.use(express.json())
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
 

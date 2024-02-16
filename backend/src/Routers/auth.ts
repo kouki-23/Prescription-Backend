@@ -9,7 +9,7 @@ import {
 const router = Router()
 
 router.post("/login", validateRequestBody(loginBodySchema), loginHandler)
-router.post(
+router.get(
   "/refresh",
   validateRequestBody(refreshTokenBodySchema),
   refreshTokenHandler,
