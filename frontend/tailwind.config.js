@@ -23,7 +23,14 @@ export default {
       montserrat: ["Montserrat"],
       lato: ["Lato"],
     },
-    extend: {},
+    extend: {
+      opacity: {
+        38: ".38",
+        40: ".40",
+        85: ".85",
+        87: ".87",
+      },
+    },
   },
   plugins: [],
 }
