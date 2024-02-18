@@ -36,8 +36,8 @@ export async function login(username: string, password: string) {
     },
   )
   return {
-    accessToken,
-    refreshToken,
+    refreshToken: refreshToken,
+    accessToken: accessToken,
     user: {
       id: user.id,
       name: user.name,

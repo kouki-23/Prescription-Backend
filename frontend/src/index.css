@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: "Montserrat";
+  font-family: "Montserrat" ,sans-serif;
   font-weight: 400;
 
   font-synthesis: none;

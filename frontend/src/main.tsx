@@ -1,18 +1,30 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
-import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LoginPage from "./pages/Login/LoginPage"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { AuthGuard, AuthProvider } from "./helpers/auth/Auth"
+import Index from "./pages/Index/Index"
 
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-])
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<AuthGuard role="admin" />}>
+              <Route path="/" element={<Index />} />
+            </Route>
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
+    <ToastContainer />
   </React.StrictMode>,
 )

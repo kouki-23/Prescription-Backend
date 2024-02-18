@@ -1,5 +1,3 @@
-import { Button } from "@mui/base"
-
 type Props = {
   text: string
   clickFn: React.MouseEventHandler<HTMLButtonElement>
@@ -7,11 +5,11 @@ type Props = {
 
 export default function LoginBtn({ text, clickFn }: Props) {
   return (
-    <Button
-      className="bg-primary-blue bg-opacity-90 rounded-md px-36 py-3 text-white-shade text-3xl font-semibold"
+    <button
+      className="bg-primary-blue bg-opacity-90 rounded-md px-28 py-2 text-white-shade text-2xl font-semibold hover:bg-opacity-100"
       onClick={clickFn}
     >
       {text}
-    </Button>
+    </button>
   )
 }

@@ -14,14 +14,14 @@ export async function loginHandler(
 ) {
   const { username, password } = req.body
   try {
-    const { refreshToken, ...data } = await login(username, password)
+    const { refreshToken, user, accessToken } = await login(username, password)
     const expirationDate = new Date()
     expirationDate.setTime(expirationDate.getTime() + 7 * 24 * 60 * 60 * 1000)
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       expires: expirationDate,
     })
-    return res.json(data)
+    return res.json({ user, accessToken })
   } catch (e) {
     return next(e)
   }
