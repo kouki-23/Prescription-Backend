@@ -20,7 +20,7 @@ export function login(username: string, password: string) {
 
 export async function fetchAccessToken() {
   try {
-    const response = await axios.get(BASE_URL + "/auth/refresh")
+    const response = await axios.get(BASE_URL + "auth/refresh")
     const token = response.data.accessToken
     const { user, login } = useAuth()
     if (user) {
