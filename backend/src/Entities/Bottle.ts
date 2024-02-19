@@ -28,5 +28,5 @@ export class Bottle {
   molecule: Molecule
 
   @OneToMany(() => BottleUsed, (b) => b.bottles)
-  bottleused: BottleUsed[]
+  bottleUsed: BottleUsed[]
 }

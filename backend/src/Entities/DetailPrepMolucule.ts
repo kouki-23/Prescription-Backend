@@ -74,7 +74,7 @@ export class DetailPrepMolucule {
   SensivityPVC: number
 
   @OneToMany(() => PrepMolecule, (prep) => prep.details)
-  prepmolicule: PrepMolecule[]
+  prepMolecule: PrepMolecule[]
 
   @OneToOne(() => Molecule)
   @JoinColumn()

@@ -18,10 +18,10 @@ export class BottleUsed {
   isFraction: boolean
 
   @PrimaryColumn({ type: "int" })
-  @ManyToOne(() => PrepMolecule, (p) => p.bottlesused)
-  prepmolecule: PrepMolecule
+  @ManyToOne(() => PrepMolecule, (p) => p.bottlesUsed)
+  prepMolecule: PrepMolecule
 
   @PrimaryColumn({ type: "int" })
-  @ManyToOne(() => Bottle, (b) => b.bottleused)
+  @ManyToOne(() => Bottle, (b) => b.bottleUsed)
   bottles: Bottle
 }

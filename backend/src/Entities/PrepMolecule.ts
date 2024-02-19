@@ -38,11 +38,11 @@ export class PrepMolecule {
   @JoinColumn()
   vehicule: Vehicule
 
-  @ManyToOne(() => DetailPrepMolucule, (d) => d.prepmolicule)
+  @ManyToOne(() => DetailPrepMolucule, (d) => d.prepMolecule)
   details: DetailPrepMolucule
 
-  @OneToMany(() => BottleUsed, (b) => b.prepmolecule)
-  bottlesused: BottleUsed[]
+  @OneToMany(() => BottleUsed, (b) => b.prepMolecule)
+  bottlesUsed: BottleUsed[]
 
   @ManyToOne(() => Cure, (b) => b.prepMolecule)
   cure: Cure
