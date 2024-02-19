@@ -2,9 +2,8 @@ import "reflect-metadata"
 import express, { Request, Response, NextFunction } from "express"
 import dotenv from "dotenv"
 import cors from "cors"
-if (process.env.NODE_ENV === "development") {
-  dotenv.config()
-}
+
+dotenv.config()
 
 import db from "./Config/db"
 import { HttpError } from "./Utils/HttpError"

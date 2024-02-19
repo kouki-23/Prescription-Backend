@@ -3,6 +3,7 @@ import { User, isAboutToExpired, useAuth } from "./auth"
 import { Navigate, Outlet } from "react-router-dom"
 import { fetchAccessToken } from "../apis"
 import { AuthContext } from "./auth"
+import LoadingInterface from "../../components/organisms/LoadingInterface"
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User>()
@@ -10,11 +11,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const userLocalStorage = localStorage.getItem("user")
-    const token = localStorage.getItem("access-token")
-    if (userLocalStorage && token) {
-      setUser(JSON.parse(userLocalStorage))
-      setToken(token)
+    if (user || token) {
+      const userLocalStorage = localStorage.getItem("user")
+      const token = localStorage.getItem("access-token")
+      if (userLocalStorage && token) {
+        setUser(JSON.parse(userLocalStorage))
+        setToken(token)
+      }
     }
     setLoading(false)
   }, [])
@@ -24,11 +27,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("user", JSON.stringify(user))
     localStorage.setItem("access-token", token)
     setUser(user)
+    setToken(token)
   }
   const logout = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("access-token")
     setUser(undefined)
+    setToken("")
   }
 
   const value = useMemo(
@@ -39,15 +44,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       login,
       logout,
     }),
-    [user, token],
+    [user, token, loading],
   )
-  if (loading) return <p>Loading Auth</p>
+  if (loading) return <LoadingInterface />
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function AuthGuard({ role }: { role: string }) {
-  const { user, token } = useAuth()
+  const { user, token, loading } = useAuth()
   const [isAllowed, setIsAllowed] = useState<boolean | null>(null)
   useEffect(() => {
     async function checkValid() {
@@ -70,7 +75,7 @@ export function AuthGuard({ role }: { role: string }) {
     }
     checkValid()
   }, [user, token])
-  if (isAllowed === null) return <p>Loading</p>
+  if (isAllowed === null || loading) return <LoadingInterface />
 
   if (isAllowed) {
     return <Outlet />
