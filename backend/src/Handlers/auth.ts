@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import { login } from "../Services/authService"
-import { LoginBody, refreshTokenBody } from "../Middlewares/validation/schema"
+import { LoginBody } from "../Middlewares/validation/schema"
 import jwt from "jsonwebtoken"
 import { getSecretJWT, verifyJWT } from "../Utils/jwt"
 import db from "../Config/db"
@@ -29,7 +29,7 @@ export async function loginHandler(
 
 //TODO : database for refresh tokens
 export async function refreshTokenHandler(
-  req: Request<never, never, refreshTokenBody, never>,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {

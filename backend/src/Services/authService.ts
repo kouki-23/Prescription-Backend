@@ -23,7 +23,7 @@ export async function login(username: string, password: string) {
     },
     getSecretJWT(),
     {
-      expiresIn: "1h",
+      expiresIn: "7d",
     },
   )
   const refreshToken = jwt.sign(
