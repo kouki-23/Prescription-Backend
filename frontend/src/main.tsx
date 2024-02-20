@@ -8,6 +8,9 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { AuthGuard, AuthProvider } from "./helpers/auth/Auth"
 import Index from "./pages/Index/Index"
+import { globalDefault } from "./helpers/apis"
+
+globalDefault()
 
 const queryClient = new QueryClient()
 

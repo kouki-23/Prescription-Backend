@@ -4,6 +4,7 @@ import { Navigate, Outlet } from "react-router-dom"
 import { fetchAccessToken } from "../apis"
 import { AuthContext } from "./auth"
 import LoadingInterface from "../../components/organisms/LoadingInterface"
+import axios from "axios"
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User>()
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (user || token) {
+    if (!user || token) {
       const userLocalStorage = localStorage.getItem("user")
       const token = localStorage.getItem("access-token")
       if (userLocalStorage && token) {
@@ -28,12 +29,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("access-token", token)
     setUser(user)
     setToken(token)
+    axios.defaults.headers.common["Authorization"] = "Berare " + token
   }
   const logout = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("access-token")
     setUser(undefined)
     setToken("")
+    axios.defaults.headers.common["Authorization"] = null
   }
 
   const value = useMemo(
@@ -57,6 +60,7 @@ export function AuthGuard({ role }: { role: string }) {
   useEffect(() => {
     async function checkValid() {
       try {
+        console.log(token)
         if (user && token) {
           if (isAboutToExpired(token)) {
             await fetchAccessToken()

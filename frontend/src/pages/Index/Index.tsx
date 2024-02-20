@@ -1,8 +1,11 @@
-import { useAuth } from "../../helpers/auth/auth"
+import Header from "../../components/molecules/Header"
 
 type Props = {}
 
 export default function Index({}: Props) {
-  const { user } = useAuth()
-  return <div>{user?.name}</div>
+  return (
+    <div>
+      <Header />
+    </div>
+  )
 }
