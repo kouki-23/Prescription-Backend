@@ -26,7 +26,7 @@ export class Patient {
   matrimonial: string
 
   @Column("date")
-  BirthDate: Date
+  birthDate: Date
 
   @Column("decimal")
   weight: number
