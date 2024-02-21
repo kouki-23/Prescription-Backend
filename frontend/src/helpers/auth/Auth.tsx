@@ -54,21 +54,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export function AuthGuard({ role }: { role: string }) {
+export function AuthGuard({ role }: { role?: string }) {
   const { user, token, loading } = useAuth()
   const [isAllowed, setIsAllowed] = useState<boolean | null>(null)
   useEffect(() => {
     async function checkValid() {
       try {
-        console.log(token)
         if (user && token) {
           if (isAboutToExpired(token)) {
             await fetchAccessToken()
           }
-          if (role === user.role) {
-            setIsAllowed(true)
+          if (role) {
+            if (role === user.role) {
+              setIsAllowed(true)
+            } else {
+              setIsAllowed(false)
+            }
           } else {
-            setIsAllowed(false)
+            setIsAllowed(true)
           }
         } else {
           setIsAllowed(false)
