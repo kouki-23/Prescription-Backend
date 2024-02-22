@@ -1,13 +1,12 @@
-import { Fragment } from "react"
 import scrollIcon from "../../assets/icons/iconscroll.svg"
 import checkIcon from "../../assets/icons/CheckIcon.svg"
-import { Listbox, Transition } from "@headlessui/react"
-type props = {
+import { Listbox } from "@headlessui/react"
+type Props = {
   value: string
   setValue: React.Dispatch<React.SetStateAction<string>>
   options: string[]
 }
-export default function ({ options, value, setValue }: props) {
+export default function ({ options, value, setValue }: Props) {
   return (
     <Listbox value={value} onChange={setValue}>
       <Listbox.Button className="relative w-56 h-8 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm">
@@ -19,7 +18,7 @@ export default function ({ options, value, setValue }: props) {
           <Listbox.Option
             key={option}
             value={option}
-            className="hover:bg-light-blue opacity-75 cursor-pointer"
+            className="hover:bg-light-blue transition-colors opacity-75 cursor-pointer"
           >
             {({ selected }) => (
               <>

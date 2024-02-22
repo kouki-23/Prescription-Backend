@@ -1,10 +1,10 @@
-type props = {
+type Props = {
   text: string
   value: string
   setValue: Function
 }
 
-export default function LabledInput({ text, value, setValue }: props) {
+export default function LabledInput({ text, value, setValue }: Props) {
   return (
     <div>
       <label className="block mb-0">{text}</label>
