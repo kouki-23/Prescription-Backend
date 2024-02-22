@@ -36,3 +36,19 @@ export function isAdmin(req: Request, res: Response, next: NextFunction) {
     return next(new HttpError("Unauthorized", StatusCode.Unauthorized))
   }
 }
+
+export function isMedecin(req: Request, res: Response, next: NextFunction) {
+  if (req.user?.role === UserRole.MEDECIN) {
+    next()
+  } else {
+    return next(new HttpError("Unauthorized", StatusCode.Unauthorized))
+  }
+}
+
+export function isPharmacien(req: Request, res: Response, next: NextFunction) {
+  if (req.user?.role === UserRole.PHARMACIEN) {
+    next()
+  } else {
+    return next(new HttpError("Unauthorized", StatusCode.Unauthorized))
+  }
+}

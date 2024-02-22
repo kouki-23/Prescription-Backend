@@ -6,7 +6,7 @@ export default new DataSource({
   username: process.env.DB_username || "postgres",
   password: process.env.DB_password || "root",
   database: "prescription",
-  synchronize: true,
+  //synchronize: true,
   logging: true,
   entities: ["./src/Entities/*{.ts,.js}"],
 })

@@ -46,11 +46,11 @@ export class Patient {
   @Column("decimal")
   clairance: number
 
-  @Column()
-  comment: string
+  @Column({ nullable: true })
+  comment?: string
 
-  @Column()
-  serviceType: string
+  @Column({ nullable: true })
+  serviceType?: string
 
   @OneToMany(() => DataHistory, (datahistory) => datahistory.patient)
   dataHistory: DataHistory[]
