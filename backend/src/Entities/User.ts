@@ -28,7 +28,7 @@ export class User {
   })
   role: UserRole
   @Column({ nullable: true })
-  serviceType: string
+  serviceType?: string
 
   @OneToMany(() => DataHistory, (datahistory) => datahistory.user)
   dataHistory: DataHistory[]
