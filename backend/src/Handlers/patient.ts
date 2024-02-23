@@ -1,7 +1,13 @@
-import { NextFunction, Request } from "express"
-import { CreatePatientBody } from "../Middlewares/validation/schema"
-import { Response } from "express"
-import { createPatient, getAllPatients } from "../Services/patientService"
+import { NextFunction, Request, Response } from "express"
+import {
+  CreatePatientBody,
+  GetPatientByIdParams,
+} from "../Middlewares/validation/schema"
+import {
+  createPatient,
+  getAllPatients,
+  getPatientById,
+} from "../Services/patientService"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 
 export async function createPatientHandler(
@@ -20,7 +26,7 @@ export async function createPatientHandler(
   }
 }
 
-export async function GetAllPatientsHandler(
+export async function getAllPatientsHandler(
   req: Request<never, never, CreatePatientBody, never>,
   res: Response,
   next: NextFunction,
@@ -30,5 +36,19 @@ export async function GetAllPatientsHandler(
     res.json(patients)
   } catch (e) {
     return new HttpError("connot get patients", StatusCode.InternalServerError)
+  }
+}
+
+export async function getPatientByIdHandler(
+  req: Request<GetPatientByIdParams, never, never, never>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    const patient = await getPatientById(id)
+    res.json(patient)
+  } catch (e) {
+    next(e)
   }
 }

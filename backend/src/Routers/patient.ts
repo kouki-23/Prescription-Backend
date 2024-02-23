@@ -1,8 +1,9 @@
 import { Router } from "express"
 import { validateRequestBody } from "../Middlewares/validation/validation"
 import {
-  GetAllPatientsHandler,
   createPatientHandler,
+  getAllPatientsHandler,
+  getPatientByIdHandler,
 } from "../Handlers/patient"
 import { createPatientBodySchema } from "../Middlewares/validation/schema"
 import { isMedecin } from "../Middlewares/auth"
@@ -15,5 +16,6 @@ router.post(
   validateRequestBody(createPatientBodySchema),
   createPatientHandler,
 )
-router.get("/", isMedecin, GetAllPatientsHandler)
+router.get("/", isMedecin, getAllPatientsHandler)
+router.get("/:id", isMedecin, getPatientByIdHandler)
 export default router

@@ -37,7 +37,11 @@ export function isAdmin(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export function isMedecin(req: Request, res: Response, next: NextFunction) {
+export function isMedecin(
+  req: Request<any, any, any, any>,
+  res: Response,
+  next: NextFunction,
+) {
   if (req.user?.role === UserRole.MEDECIN) {
     next()
   } else {

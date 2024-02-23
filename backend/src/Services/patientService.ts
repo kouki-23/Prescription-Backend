@@ -1,6 +1,7 @@
 import db from "../Config/db"
 import { Patient } from "../Entities/Patient"
 import { CreatePatientBody } from "../Middlewares/validation/schema"
+import { HttpError, StatusCode } from "../Utils/HttpError"
 
 export async function createPatient(patientB: CreatePatientBody) {
   const patient = new Patient()
@@ -25,4 +26,14 @@ export async function createPatient(patientB: CreatePatientBody) {
 export async function getAllPatients() {
   const patients: Patient[] = await db.getRepository(Patient).find()
   return patients
+}
+
+export async function getPatientById(id: number) {
+  const patient = await db.getRepository(Patient).findOne({
+    where: {
+      id,
+    },
+  })
+  if (!patient) throw new HttpError("patient not found", StatusCode.NotFound)
+  return patient
 }

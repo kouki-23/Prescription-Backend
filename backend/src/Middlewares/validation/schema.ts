@@ -42,4 +42,4 @@ export const getPatientByIdParamsSchema = z.object({
   id: z.number(),
 })
 
-export type getPatientByIdParams = z.infer<typeof getPatientByIdParamsSchema>
+export type GetPatientByIdParams = z.infer<typeof getPatientByIdParamsSchema>
