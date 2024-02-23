@@ -13,3 +13,25 @@ export function validateRequestBody(schema: z.Schema) {
     }
   }
 }
+
+export function validateRequestParams(schema: z.Schema) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await schema.parseAsync(req.params)
+      next()
+    } catch (error) {
+      next(new HttpError("Invalid Request", StatusCode.BadRequest))
+    }
+  }
+}
+
+export function validateRequestQuery(schema: z.Schema) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await schema.parseAsync(req.query)
+      next()
+    } catch (error) {
+      next(new HttpError("Invalid Request", StatusCode.BadRequest))
+    }
+  }
+}
