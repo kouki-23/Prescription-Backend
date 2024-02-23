@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useAuth } from "./auth/auth"
+import { Patient } from "../types/patient"
 
 export function globalDefault() {
   axios.defaults.baseURL = "http://localhost:5000/"
@@ -25,5 +26,14 @@ export async function fetchAccessToken() {
     }
   } catch {
     throw "unauthrozid"
+  }
+}
+
+export async function getAllPatients() {
+  try {
+    const response = await axios.get("/patient/")
+    return response.data as Patient[]
+  } catch (e) {
+    console.error(e)
   }
 }

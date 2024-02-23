@@ -25,7 +25,7 @@ export const createPatientBodySchema = z.object({
   lastName: z.string().min(1).max(50),
   gender: z.string().min(1).max(20),
   matrimonial: z.string().min(1).max(50),
-  birthDate: z.date(),
+  birthDate: z.string(),
   weight: z.number().positive(),
   height: z.number().positive(),
   bodySurface: z.number().positive(),

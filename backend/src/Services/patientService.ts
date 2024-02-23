@@ -5,7 +5,7 @@ import { CreatePatientBody } from "../Middlewares/validation/schema"
 export async function createPatient(patientB: CreatePatientBody) {
   const patient = new Patient()
   patient.DMI = patientB.DMI
-  patient.birthDate = patientB.birthDate
+  patient.birthDate = new Date(patientB.birthDate)
   patient.bodySurface = patientB.bodySurface
   patient.clairance = patientB.clairance
   patient.clairanceFormula = patientB.clairanceFormula

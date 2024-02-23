@@ -9,6 +9,9 @@ import "react-toastify/dist/ReactToastify.css"
 import { AuthGuard, AuthProvider } from "./helpers/auth/Auth"
 import Index from "./pages/Index/Index"
 import { globalDefault } from "./helpers/apis"
+import Layout from "./components/organisms/Layout"
+
+import PatientPage from "./pages/Patient/PatientPage"
 
 globalDefault()
 
@@ -20,8 +23,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route element={<AuthGuard role="admin" />}>
+            <Route element={<AuthGuard />}>
               <Route path="/" element={<Index />} />
+            </Route>
+            <Route element={<Layout />}>
+              <Route path="/medecin" element={<AuthGuard role="medecin" />}>
+                <Route path="" element={<PatientPage />} />
+              </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />
           </Routes>

@@ -10,7 +10,7 @@ export async function createPatientHandler(
   next: NextFunction,
 ) {
   try {
-    createPatient(req.body)
+    await createPatient(req.body)
     res.sendStatus(200)
   } catch (e) {
     return new HttpError(
@@ -26,7 +26,7 @@ export async function GetAllPatientsHandler(
   next: NextFunction,
 ) {
   try {
-    const patients = getAllPatients()
+    const patients = await getAllPatients()
     res.json(patients)
   } catch (e) {
     return new HttpError("connot get patients", StatusCode.InternalServerError)

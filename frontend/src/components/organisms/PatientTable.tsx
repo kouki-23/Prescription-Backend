@@ -7,22 +7,23 @@ import {
 import deleteIcon from "../../assets/icons/delete.svg"
 import listIcon from "../../assets/icons/list.svg"
 import addIcon from "../../assets/icons/add.svg"
+import editIcon from "../../assets/icons/edit.svg"
 
 type Props = {
-  data: Patient[]
+  data: TPatientTable[]
 }
 
-type Patient = {
+export type TPatientTable = {
   id: number
   DMI: number
   index: number
   firstName: string
   lastName: string
-  birthDate: Date
+  birthDate: string
   gender: string
 }
 export default function PatientTable({ data }: Props) {
-  const columnHelper = createColumnHelper<Patient>()
+  const columnHelper = createColumnHelper<TPatientTable>()
   const columns = [
     columnHelper.accessor((row) => row.DMI, {
       id: "DMI",
@@ -41,17 +42,22 @@ export default function PatientTable({ data }: Props) {
     columnHelper.accessor((row) => row.birthDate, {
       id: "birthDate",
       header: "Date de Naissance",
-      cell: (info) => info.getValue().toISOString().split("T")[0],
+      cell: (info) => info.getValue(),
     }),
     columnHelper.accessor((row) => row.gender, {
       id: "gender",
       cell: (info) => info.getValue(),
-      header: "genre",
+      header: "Genre",
     }),
     columnHelper.display({
-      id: "actions",
-      cell: () => <PatientTableActions />,
+      id: "prescriptionActions",
+      cell: () => <PrescriptionActions />,
       header: "Prescription",
+    }),
+    columnHelper.display({
+      id: "Actions",
+      cell: () => <Actions />,
+      header: "Actions",
     }),
   ]
 
@@ -106,12 +112,22 @@ export default function PatientTable({ data }: Props) {
 
 type ActionsProps = {}
 
-function PatientTableActions({}: ActionsProps) {
+function Actions({}: ActionsProps) {
   return (
-    <div className="flex justify-center gap-4">
+    <div className="flex justify-center gap-2">
+      <Icon src={editIcon} />
+      <Icon src={deleteIcon} />
+    </div>
+  )
+}
+
+type PrescriptionActionsProps = {}
+
+function PrescriptionActions({}: PrescriptionActionsProps) {
+  return (
+    <div className="flex justify-center gap-2">
       <Icon src={addIcon} />
       <Icon src={listIcon} />
-      <Icon src={deleteIcon} />
     </div>
   )
 }

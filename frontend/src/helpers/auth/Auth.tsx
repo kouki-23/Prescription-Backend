@@ -12,16 +12,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user || token) {
+    if (!user || !token) {
       const userLocalStorage = localStorage.getItem("user")
-      const token = localStorage.getItem("access-token")
-      if (userLocalStorage && token) {
+      const tokenLocalStorage = localStorage.getItem("access-token")
+      if (userLocalStorage && tokenLocalStorage) {
         setUser(JSON.parse(userLocalStorage))
-        setToken(token)
+        setToken(tokenLocalStorage)
       }
     }
     setLoading(false)
   }, [])
+  useEffect(() => {
+    axios.defaults.headers.common = {
+      Authorization: `Bearer ${token}`,
+    }
+  }, [token])
 
   const login = (user: User, token: string) => {
     // insecure way to store jwt token
@@ -29,14 +34,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("access-token", token)
     setUser(user)
     setToken(token)
-    axios.defaults.headers.common["Authorization"] = "Berare " + token
+    axios.defaults.headers.common = { Authorization: `bearer ${token}` }
   }
   const logout = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("access-token")
     setUser(undefined)
     setToken("")
-    axios.defaults.headers.common["Authorization"] = null
+    axios.defaults.headers.common = { Authorization: null }
   }
 
   const value = useMemo(
@@ -54,7 +59,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export function AuthGuard({ role }: { role?: string }) {
+export function AuthGuard({
+  role,
+}: {
+  role?: "admin" | "medecin" | "pharmacien"
+}) {
   const { user, token, loading } = useAuth()
   const [isAllowed, setIsAllowed] = useState<boolean | null>(null)
   useEffect(() => {
