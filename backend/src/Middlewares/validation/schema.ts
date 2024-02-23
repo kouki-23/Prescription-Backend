@@ -37,3 +37,9 @@ export const createPatientBodySchema = z.object({
 })
 
 export type CreatePatientBody = z.infer<typeof createPatientBodySchema>
+
+export const getPatientByIdParamsSchema = z.object({
+  id: z.number(),
+})
+
+export type getPatientByIdParams = z.infer<typeof getPatientByIdParamsSchema>
