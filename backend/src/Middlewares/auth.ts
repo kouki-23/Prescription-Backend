@@ -38,7 +38,7 @@ export function isAdmin(req: Request, res: Response, next: NextFunction) {
 }
 
 export function isMedecin(
-  req: Request<any, any, any, any>,
+  req: Request<any>,
   res: Response,
   next: NextFunction,
 ) {

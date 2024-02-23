@@ -1,7 +1,12 @@
 import db from "../Config/db"
 import { Patient } from "../Entities/Patient"
-import { CreatePatientBody } from "../Middlewares/validation/schema"
+import {
+  CreatePatientBody,
+  UpdatePatientBody,
+} from "../Middlewares/validation/schema"
 import { HttpError, StatusCode } from "../Utils/HttpError"
+
+const repo = db.getRepository(Patient)
 
 export async function createPatient(patientB: CreatePatientBody) {
   const patient = new Patient()
@@ -20,20 +25,39 @@ export async function createPatient(patientB: CreatePatientBody) {
   patient.matrimonial = patientB.matrimonial
   patient.weight = patientB.weight
   patient.serviceType = patientB.serviceType
-  return await db.getRepository(Patient).save(patient)
+  return await repo.save(patient)
 }
 
 export async function getAllPatients() {
-  const patients: Patient[] = await db.getRepository(Patient).find()
+  const patients: Patient[] = await repo.find()
   return patients
 }
 
 export async function getPatientById(id: number) {
-  const patient = await db.getRepository(Patient).findOne({
+  const patient = await repo.findOne({
     where: {
       id,
     },
   })
   if (!patient) throw new HttpError("patient not found", StatusCode.NotFound)
   return patient
+}
+
+export async function updatePatient(id: number, p: UpdatePatientBody) {
+  const result = await repo.update(
+    {
+      id,
+    },
+    p,
+  )
+  if (!result.affected || result.affected === 0) return false
+  return true
+}
+
+export async function deletePatient(id: number) {
+  const result = await repo.delete({
+    id,
+  })
+  if (!result.affected || result.affected === 0) return false
+  return true
 }
