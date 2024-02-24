@@ -10,6 +10,7 @@ import { HttpError } from "./Utils/HttpError"
 import auth from "./Routers/auth"
 import userRouter from "./Routers/user"
 import patientRouter from "./Routers/patient"
+import moleculeRouter from "./Routers/molecule"
 import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
 import morgan from "morgan"
@@ -52,6 +53,7 @@ app.use("/auth", auth)
 app.use(authorization)
 app.use("/user", userRouter)
 app.use("/patient", patientRouter)
+app.use("/molecule", moleculeRouter)
 
 //error handler
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {

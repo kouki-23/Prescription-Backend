@@ -20,7 +20,7 @@ export class Molecule {
   name: String
 
   @Column()
-  dose: String
+  dose: number
 
   @Column()
   formula: String
@@ -44,10 +44,10 @@ export class Molecule {
   vehicule: String
 
   @Column()
-  finalVolume: String
+  finalVolume: number
 
-  @Column()
-  comment: String
+  @Column({ nullable: true })
+  comment?: String
 
   @OneToOne(() => DetailPrepMolucule)
   detailsPrepMolecule: DetailPrepMolucule
