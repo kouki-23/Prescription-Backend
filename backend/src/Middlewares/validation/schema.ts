@@ -38,8 +38,28 @@ export const createPatientBodySchema = z.object({
 
 export type CreatePatientBody = z.infer<typeof createPatientBodySchema>
 
-export const getPatientByIdParamsSchema = z.object({
-  id: z.number(),
+export const PatientByIdParamsSchema = z.object({
+  id: z.string(),
 })
 
-export type getPatientByIdParams = z.infer<typeof getPatientByIdParamsSchema>
+export type PatientByIdParams = z.infer<typeof PatientByIdParamsSchema>
+
+export const updatePatientBodySchema = z.object({
+  DMI: z.number().optional(),
+  index: z.number().optional(),
+  firstName: z.string().min(1).max(50).optional(),
+  lastName: z.string().min(1).max(50).optional(),
+  gender: z.string().min(1).max(20).optional(),
+  matrimonial: z.string().min(1).max(50).optional(),
+  birthDate: z.string().optional(),
+  weight: z.number().positive().optional(),
+  height: z.number().positive().optional(),
+  bodySurface: z.number().positive().optional(),
+  creatinine: z.number().nonnegative().optional(),
+  clairanceFormula: z.string().optional(),
+  clairance: z.number().optional(),
+  comment: z.string().optional().optional(),
+  serviceType: z.string().optional().optional(),
+})
+
+export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>

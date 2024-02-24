@@ -1,10 +1,20 @@
 import { Router } from "express"
-import { validateRequestBody } from "../Middlewares/validation/validation"
 import {
-  GetAllPatientsHandler,
+  validateRequestBody,
+  validateRequestParams,
+} from "../Middlewares/validation/validation"
+import {
   createPatientHandler,
+  deletePatientHandler,
+  getAllPatientsHandler,
+  getPatientByIdHandler,
+  updatePatientHandler,
 } from "../Handlers/patient"
-import { createPatientBodySchema } from "../Middlewares/validation/schema"
+import {
+  PatientByIdParamsSchema,
+  createPatientBodySchema,
+  updatePatientBodySchema,
+} from "../Middlewares/validation/schema"
 import { isMedecin } from "../Middlewares/auth"
 
 const router = Router()
@@ -15,5 +25,25 @@ router.post(
   validateRequestBody(createPatientBodySchema),
   createPatientHandler,
 )
-router.get("/", isMedecin, GetAllPatientsHandler)
+router.get("/", isMedecin, getAllPatientsHandler)
+router.get(
+  "/:id",
+  isMedecin,
+  validateRequestParams(PatientByIdParamsSchema),
+  getPatientByIdHandler,
+)
+router.patch(
+  "/:id",
+  isMedecin,
+  validateRequestParams(PatientByIdParamsSchema),
+  validateRequestBody(updatePatientBodySchema),
+  updatePatientHandler,
+)
+router.delete(
+  "/:id",
+  isMedecin,
+  validateRequestParams(PatientByIdParamsSchema),
+  deletePatientHandler,
+)
+
 export default router
