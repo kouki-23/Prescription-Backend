@@ -1,5 +1,5 @@
-import Login from "../../components/molecules/Login"
-import logo from "../../assets/asqii_full_logo.svg"
+import Login from "@components/molecules/Login"
+import logo from "@assets/asqii_full_logo.svg"
 
 export default function LoginPage() {
   return (

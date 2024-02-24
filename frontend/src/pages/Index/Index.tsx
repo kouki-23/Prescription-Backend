@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom"
-import { useAuth } from "../../helpers/auth/auth"
-import ErrorPage from "../Error/ErrorPage"
+import { useAuth } from "@helpers/auth/auth"
+import ErrorPage from "@pages/Error/ErrorPage"
 
 type Props = {}
 

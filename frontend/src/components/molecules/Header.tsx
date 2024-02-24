@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
-import logo from "../../assets/asqii_logo.svg"
-import logoutIcon from "../../assets/icons/logout.svg"
-import { useAuth } from "../../helpers/auth/auth"
+import logo from "@assets/asqii_logo.svg"
+import logoutIcon from "@assets/icons/logout.svg"
+import { useAuth } from "@helpers/auth/auth"
 type Props = {}
 
 export default function Header({}: Props) {

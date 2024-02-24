@@ -1,14 +1,14 @@
-import LoginBtn from "../../components/atoms/LoginBtn"
-import LoginInput from "../../components/atoms/LoginInput"
-import Title from "../../components/atoms/Title"
-import userIcon from "../../assets/icons/user.svg"
-import passwordIcon from "../../assets/icons/password.svg"
+import LoginBtn from "@components/atoms/LoginBtn"
+import LoginInput from "@components/atoms/LoginInput"
+import Title from "@components/atoms/Title"
+import userIcon from "@assets/icons/user.svg"
+import passwordIcon from "@assets/icons/password.svg"
 import { useState } from "react"
-import { login } from "../../helpers/apis"
+import { login } from "@helpers/apis"
 import { toast } from "react-toastify"
 import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../../helpers/auth/auth"
+import { useAuth } from "@helpers/auth/auth"
 
 type Props = {}
 

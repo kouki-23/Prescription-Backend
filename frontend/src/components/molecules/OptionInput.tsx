@@ -1,5 +1,5 @@
-import scrollIcon from "../../assets/icons/iconscroll.svg"
-import checkIcon from "../../assets/icons/CheckIcon.svg"
+import scrollIcon from "@assets/icons/iconscroll.svg"
+import checkIcon from "@assets/icons/CheckIcon.svg"
 import { Listbox } from "@headlessui/react"
 type Props = {
   value: string

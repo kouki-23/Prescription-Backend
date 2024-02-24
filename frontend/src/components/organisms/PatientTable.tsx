@@ -4,10 +4,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import deleteIcon from "../../assets/icons/delete.svg"
-import listIcon from "../../assets/icons/list.svg"
-import addIcon from "../../assets/icons/add.svg"
-import editIcon from "../../assets/icons/edit.svg"
+import deleteIcon from "@assets/icons/delete.svg"
+import listIcon from "@assets/icons/list.svg"
+import addIcon from "@assets/icons/add.svg"
+import editIcon from "@assets/icons/edit.svg"
 
 type Props = {
   data: TPatientTable[]

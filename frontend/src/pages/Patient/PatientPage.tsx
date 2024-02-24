@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import PatientTable, {
-  TPatientTable,
-} from "../../components/organisms/PatientTable"
-import { getAllPatients } from "../../helpers/apis"
-import Loading from "../../components/atoms/Loading"
-import ErrorPage from "../Error/ErrorPage"
+import PatientTable, { TPatientTable } from "@components/organisms/PatientTable"
+import { getAllPatients } from "@helpers/apis"
+import Loading from "@components/atoms/Loading"
+import ErrorPage from "@pages/Error/ErrorPage"
 import { Patient } from "../../types/patient"
 
 type Props = {}
