@@ -22,9 +22,8 @@ export async function createPatientHandler(
     await createPatient(req.body)
     res.sendStatus(200)
   } catch (e) {
-    return new HttpError(
-      "cannot create patient",
-      StatusCode.InternalServerError,
+    return next(
+      new HttpError("cannot create patient", StatusCode.InternalServerError),
     )
   }
 }
@@ -38,7 +37,9 @@ export async function getAllPatientsHandler(
     const patients = await getAllPatients()
     res.json(patients)
   } catch (e) {
-    return new HttpError("connot get patients", StatusCode.InternalServerError)
+    return next(
+      new HttpError("connot get patients", StatusCode.InternalServerError),
+    )
   }
 }
 
