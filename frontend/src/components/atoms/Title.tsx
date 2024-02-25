@@ -7,7 +7,10 @@ type Props = {
 export default function Title({ className, text }: Props) {
   return (
     <h1
-      className={twMerge("text-title text-primary-blue font-medium", className)}
+      className={twMerge(
+        "text-[2.5rem] leading-[2.75rem] text-primary-blue font-medium",
+        className,
+      )}
     >
       {text}
     </h1>
