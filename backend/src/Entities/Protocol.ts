@@ -9,6 +9,7 @@ import {
 } from "typeorm"
 import { Molecule } from "./Molecule"
 import { ProtocolAssociation } from "./ProtocolAssociation"
+import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
 @Entity()
 export class Protocol {
   @PrimaryColumn()
@@ -35,10 +36,9 @@ export class Protocol {
   @Column()
   isCreated: boolean
 
-  @ManyToMany(() => Molecule, (m) => m.protocole)
-  @JoinTable()
-  molecule: Molecule[]
-
   @OneToMany(() => ProtocolAssociation, (pA) => pA.protocol)
   protocolAssociation: ProtocolAssociation[]
+
+  @OneToMany(() => ProtocoleMoleculeAssociation, (pm) => pm.protocol)
+  protocolMoleculeAssociation: ProtocoleMoleculeAssociation[]
 }

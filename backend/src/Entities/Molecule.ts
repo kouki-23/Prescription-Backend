@@ -11,6 +11,7 @@ import {
 import { DetailPrepMolucule } from "./DetailPrepMolucule"
 import { Bottle } from "./Bottle"
 import { Protocol } from "./Protocol"
+import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
 @Entity()
 export class Molecule {
   @PrimaryGeneratedColumn()
@@ -55,7 +56,6 @@ export class Molecule {
   @OneToMany(() => Bottle, (b) => b.molecule)
   bottles: Bottle[]
 
-  @ManyToMany(() => Protocol, (p) => p.molecule)
-  @JoinTable()
-  protocole: Protocol[]
+  @OneToMany(() => ProtocoleMoleculeAssociation, (pma) => pma.molecule)
+  protocoleMoleculeAssociation: ProtocoleMoleculeAssociation[]
 }
