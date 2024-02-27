@@ -5,6 +5,7 @@ import {
   UpdateMoleculeBody,
 } from "../Middlewares/validation/schema"
 import { HttpError, StatusCode } from "../Utils/HttpError"
+import { In } from "typeorm"
 
 const repo = db.getRepository(Molecule)
 
@@ -26,6 +27,13 @@ export async function createMolecule(moleculeB: CreateMoleculeBody) {
 
 export async function getAllMolecules() {
   const molecules: Molecule[] = await repo.find()
+  return molecules
+}
+
+export async function getMoleculesByIds(ids: number[]) {
+  const molecules: Molecule[] = await repo.findBy({
+    id: In(ids),
+  })
   return molecules
 }
 
