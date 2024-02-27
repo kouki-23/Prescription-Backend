@@ -56,6 +56,8 @@ export class Molecule {
   @OneToMany(() => Bottle, (b) => b.molecule)
   bottles: Bottle[]
 
-  @OneToMany(() => ProtocoleMoleculeAssociation, (pma) => pma.molecule)
+  @OneToMany(() => ProtocoleMoleculeAssociation, (pma) => pma.molecule, {
+    onDelete: "CASCADE",
+  })
   protocoleMoleculeAssociation: ProtocoleMoleculeAssociation[]
 }

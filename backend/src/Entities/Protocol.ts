@@ -39,6 +39,8 @@ export class Protocol {
   @OneToMany(() => ProtocolAssociation, (pA) => pA.protocol)
   protocolAssociation: ProtocolAssociation[]
 
-  @OneToMany(() => ProtocoleMoleculeAssociation, (pm) => pm.protocol)
+  @OneToMany(() => ProtocoleMoleculeAssociation, (pm) => pm.protocol, {
+    onDelete: "CASCADE",
+  })
   protocolMoleculeAssociation: ProtocoleMoleculeAssociation[]
 }
