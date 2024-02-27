@@ -78,3 +78,46 @@ export const createMoleculeBodySchema = z.object({
 })
 
 export type CreateMoleculeBody = z.infer<typeof createMoleculeBodySchema>
+
+export const MoleculeByIdSchema = z.object({
+  id: z.string(),
+})
+export type MoleculeByIdParams = z.infer<typeof MoleculeByIdSchema>
+
+export const UpdateMoleculeBodySchema = z.object({
+  name: z.string().optional(),
+  dose: z.number().optional(),
+  formula: z.string().optional(),
+  unite: z.string().optional(),
+  prodDay: z.number().optional(),
+  way: z.string().optional(),
+  perfusionType: z.string().optional(),
+  perfusionDuration: z.string().optional(),
+  vehicule: z.string().optional(),
+  finalVolume: z.number().optional(),
+  comment: z.string().optional(),
+})
+export type UpdateMoleculeBody = z.infer<typeof UpdateMoleculeBodySchema>
+
+export const createProtocolBodySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  intercure: z.number(),
+  nbcures: z.number(),
+  details: z.string(),
+  indications: z.string(),
+  histotype: z.string(),
+  iscreated: z.boolean(),
+  molecules: z.array(
+    z.object({
+      moleculeid: z.number(),
+      journey: z.number(),
+    }),
+  ),
+})
+export type CreateProtocolBody = z.infer<typeof createProtocolBodySchema>
+
+export const ProtocolByIdSchema = z.object({
+  id: z.string(),
+})
+export type ProtocolByIdParams = z.infer<typeof ProtocolByIdSchema>
