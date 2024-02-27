@@ -11,3 +11,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(72%) sepia(72%) saturate(2977%) hue-rotate(194deg) brightness(98%) contrast(99%);
+}

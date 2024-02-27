@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { User, isAboutToExpired, useAuth } from "./auth"
 import { Navigate, Outlet } from "react-router-dom"
-import { fetchAccessToken } from "../apis"
+import { fetchAccessToken } from "@helpers/apis/user"
 import { AuthContext } from "./auth"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import axios from "axios"

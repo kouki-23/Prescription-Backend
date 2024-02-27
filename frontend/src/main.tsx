@@ -8,10 +8,11 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { AuthGuard, AuthProvider } from "@helpers/auth/Auth"
 import Index from "@pages/Index/Index"
-import { globalDefault } from "@helpers/apis"
+import { globalDefault } from "@helpers/apis/index"
 import Layout from "@components/organisms/Layout"
 
-import PatientPage from "./pages/Patient/PatientPage"
+import ListPatient from "@pages/Patient/ListPatient"
+import AddPatient from "@pages/Patient/AddPatient"
 
 globalDefault()
 
@@ -28,7 +29,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </Route>
             <Route element={<Layout />}>
               <Route path="/medecin" element={<AuthGuard role="medecin" />}>
-                <Route path="" element={<PatientPage />} />
+                <Route path="" element={<ListPatient />} />
+                <Route path="addPatient" element={<AddPatient />} />
               </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />

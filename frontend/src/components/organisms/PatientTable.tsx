@@ -2,6 +2,9 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 import deleteIcon from "@assets/icons/delete.svg"
@@ -65,10 +68,13 @@ export default function PatientTable({ data }: Props) {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
-    <table className="w-3/5 text-sm table-fixed border-collapse rounded-xl border-hidden shadow">
+    <table className="container mx-auto text-sm table-fixed border-collapse rounded-xl border-hidden shadow">
       <thead className="text-white-shade">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr className="" key={headerGroup.id}>
@@ -114,7 +120,7 @@ type ActionsProps = {}
 
 function Actions({}: ActionsProps) {
   return (
-    <div className="flex justify-center gap-2">
+    <div className="flex justify-center gap-4">
       <Icon src={editIcon} />
       <Icon src={deleteIcon} />
     </div>
@@ -125,7 +131,7 @@ type PrescriptionActionsProps = {}
 
 function PrescriptionActions({}: PrescriptionActionsProps) {
   return (
-    <div className="flex justify-center gap-2">
+    <div className="flex justify-center gap-4">
       <Icon src={addIcon} />
       <Icon src={listIcon} />
     </div>

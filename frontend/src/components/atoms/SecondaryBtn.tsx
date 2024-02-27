@@ -11,7 +11,7 @@ export default function SecondaryBtn({ text, clickFn, className }: props) {
     <button
       onClick={clickFn}
       className={twMerge(
-        "bg-gray-button bg-opacity-35  rounded-lg h-9 px-5 m-2 text-white-shade font-bold  hover:bg-opacity-100",
+        "bg-gray-button bg-opacity-35 rounded-2xl px-12 py-3 text-white-shade font-bold hover:bg-opacity-100",
         className,
       )}
     >
