@@ -1,16 +1,15 @@
-import {
-  CreateProtocolBody,
-  ProtocolByIdParams,
-} from "../Middlewares/validation/schema"
+import { CreateProtocolBody, IdParams } from "../Middlewares/validation/schema"
 import { NextFunction, Response } from "express"
 import { Request } from "express"
 import {
   CreateProtocol,
   deleteProtocol,
   getAllProtocols,
+  getProtocolWithMolecules,
 } from "../Services/protocolService"
 import { HttpError, StatusCode } from "../Utils/HttpError"
-export async function CreateProtocolHandler(
+
+export async function createProtocolHandler(
   req: Request<never, never, CreateProtocolBody, never>,
   res: Response,
   next: NextFunction,
@@ -26,14 +25,14 @@ export async function CreateProtocolHandler(
   }
 }
 
-export async function getAllprotocolsHandler(
-  req: Request<never, never, CreateProtocolBody, never>,
+export async function getAllProtocolsHandler(
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    const protocol = await getAllProtocols()
-    res.json(protocol)
+    const protocols = await getAllProtocols()
+    res.json(protocols)
   } catch (e) {
     return next(
       new HttpError(
@@ -44,8 +43,21 @@ export async function getAllprotocolsHandler(
   }
 }
 
+export async function getProtocolWithMoleculesHandler(
+  req: Request<IdParams, never, never, never>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const protocol = await getProtocolWithMolecules(Number(req.params.id))
+    res.json(protocol)
+  } catch (e) {
+    return next(e)
+  }
+}
+
 export async function deleteProtocolHandler(
-  req: Request<ProtocolByIdParams, never, never, never>,
+  req: Request<IdParams, never, never, never>,
   res: Response,
   next: NextFunction,
 ) {

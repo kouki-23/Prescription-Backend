@@ -36,15 +36,19 @@ export async function getAllProtocols() {
   return protocols
 }
 
-/*export async function getAllProtocolsWithMolecules() {
-  const protocols: Protocol[] = await repo.find({
+export async function getProtocolWithMolecules(id: number) {
+  const protocol: Protocol | null = await repo.findOne({
+    where: { id },
     relations: {
-      
+      protocolMoleculeAssociation: {
+        molecule: true,
+      },
     },
   })
-  return protocols
+  if (!protocol) throw new HttpError("patient not found", StatusCode.NotFound)
+  return protocol
 }
-*/
+
 export async function deleteProtocol(id: number) {
   const result = await repo.delete({
     id,
