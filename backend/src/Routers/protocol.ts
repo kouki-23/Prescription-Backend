@@ -4,29 +4,31 @@ import {
   validateRequestParams,
 } from "../Middlewares/validation/validation"
 import {
-  ProtocolByIdSchema,
+  IdParamsSchema,
   createProtocolBodySchema,
 } from "../Middlewares/validation/schema"
 import { isMedecin } from "../Middlewares/auth"
 import {
-  CreateProtocolHandler,
+  createProtocolHandler,
   deleteProtocolHandler,
-  getAllprotocolsHandler,
+  getAllProtocolsHandler,
+  getProtocolWithMoleculesHandler,
 } from "../Handlers/protocol"
 const router = Router()
-router.get("/", isMedecin, getAllprotocolsHandler)
+router.get("/", isMedecin, getAllProtocolsHandler)
+router.get("/:id", isMedecin, getProtocolWithMoleculesHandler)
 
 router.post(
   "/",
   isMedecin,
   validateRequestBody(createProtocolBodySchema),
-  CreateProtocolHandler,
+  createProtocolHandler,
 )
 
 router.delete(
   "/:id",
   isMedecin,
-  validateRequestParams(ProtocolByIdSchema),
+  validateRequestParams(IdParamsSchema),
   deleteProtocolHandler,
 )
 export default router

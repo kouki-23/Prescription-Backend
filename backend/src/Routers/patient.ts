@@ -11,7 +11,7 @@ import {
   updatePatientHandler,
 } from "../Handlers/patient"
 import {
-  PatientByIdParamsSchema,
+  IdParamsSchema,
   createPatientBodySchema,
   updatePatientBodySchema,
 } from "../Middlewares/validation/schema"
@@ -29,20 +29,20 @@ router.get("/", isMedecin, getAllPatientsHandler)
 router.get(
   "/:id",
   isMedecin,
-  validateRequestParams(PatientByIdParamsSchema),
+  validateRequestParams(IdParamsSchema),
   getPatientByIdHandler,
 )
 router.patch(
   "/:id",
   isMedecin,
-  validateRequestParams(PatientByIdParamsSchema),
+  validateRequestParams(IdParamsSchema),
   validateRequestBody(updatePatientBodySchema),
   updatePatientHandler,
 )
 router.delete(
   "/:id",
   isMedecin,
-  validateRequestParams(PatientByIdParamsSchema),
+  validateRequestParams(IdParamsSchema),
   deletePatientHandler,
 )
 

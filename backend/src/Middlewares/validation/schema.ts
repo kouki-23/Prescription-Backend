@@ -6,6 +6,11 @@ export const loginBodySchema = z.object({
 })
 export type LoginBody = z.infer<typeof loginBodySchema>
 
+export const IdParamsSchema = z.object({
+  id: z.string(),
+})
+export type IdParams = z.infer<typeof IdParamsSchema>
+
 const UserRole = z.enum(["admin", "medecin", "pharmacien"])
 
 export const createUserSchemaBody = z.object({
@@ -15,7 +20,6 @@ export const createUserSchemaBody = z.object({
   role: UserRole,
   serviceType: z.string().optional(),
 })
-
 export type CreateUserBody = z.infer<typeof createUserSchemaBody>
 
 export const createPatientBodySchema = z.object({
@@ -37,12 +41,6 @@ export const createPatientBodySchema = z.object({
 })
 export type CreatePatientBody = z.infer<typeof createPatientBodySchema>
 
-export const PatientByIdParamsSchema = z.object({
-  id: z.string(),
-})
-
-export type PatientByIdParams = z.infer<typeof PatientByIdParamsSchema>
-
 export const updatePatientBodySchema = z.object({
   DMI: z.number().optional(),
   index: z.number().optional(),
@@ -60,7 +58,6 @@ export const updatePatientBodySchema = z.object({
   comment: z.string().optional().optional(),
   serviceType: z.string().optional().optional(),
 })
-
 export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>
 
 export const createMoleculeBodySchema = z.object({
@@ -76,13 +73,7 @@ export const createMoleculeBodySchema = z.object({
   finalVolume: z.number(),
   comment: z.string().optional(),
 })
-
 export type CreateMoleculeBody = z.infer<typeof createMoleculeBodySchema>
-
-export const MoleculeByIdSchema = z.object({
-  id: z.string(),
-})
-export type MoleculeByIdParams = z.infer<typeof MoleculeByIdSchema>
 
 export const UpdateMoleculeBodySchema = z.object({
   name: z.string().optional(),
@@ -116,8 +107,3 @@ export const createProtocolBodySchema = z.object({
   ),
 })
 export type CreateProtocolBody = z.infer<typeof createProtocolBodySchema>
-
-export const ProtocolByIdSchema = z.object({
-  id: z.string(),
-})
-export type ProtocolByIdParams = z.infer<typeof ProtocolByIdSchema>

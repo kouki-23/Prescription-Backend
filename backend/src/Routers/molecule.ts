@@ -1,21 +1,22 @@
 import { Router } from "express"
-import { isAdmin, isMedecin } from "../Middlewares/auth"
+import { isMedecin } from "../Middlewares/auth"
 import {
   validateRequestBody,
   validateRequestParams,
 } from "../Middlewares/validation/validation"
 import {
-  MoleculeByIdSchema,
+  IdParamsSchema,
   UpdateMoleculeBodySchema,
   createMoleculeBodySchema,
 } from "../Middlewares/validation/schema"
 import {
-  DeleteMoleculeHandler,
-  UpdateMoleculeBodyHandler,
   createMoleculeHandler,
+  deleteMoleculeHandler,
   getAllMoleculesHandler,
   getMoleculeByIdHandler,
+  updateMoleculeHandler,
 } from "../Handlers/molecule"
+
 const router = Router()
 
 router.post(
@@ -29,23 +30,23 @@ router.get("/", getAllMoleculesHandler)
 router.get(
   "/:id",
   isMedecin,
-  validateRequestParams(MoleculeByIdSchema),
+  validateRequestParams(IdParamsSchema),
   getMoleculeByIdHandler,
 )
 
 router.patch(
   "/:id",
   isMedecin,
-  validateRequestParams(MoleculeByIdSchema),
+  validateRequestParams(IdParamsSchema),
   validateRequestBody(UpdateMoleculeBodySchema),
-  UpdateMoleculeBodyHandler,
+  updateMoleculeHandler,
 )
 
 router.delete(
   "/:id",
   isMedecin,
-  validateRequestParams(MoleculeByIdSchema),
-  DeleteMoleculeHandler,
+  validateRequestParams(IdParamsSchema),
+  deleteMoleculeHandler,
 )
 
 export default router
