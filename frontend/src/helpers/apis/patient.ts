@@ -9,3 +9,7 @@ export async function getAllPatients() {
 export async function addPatient(data: any) {
   await axios.post("/patient/", data)
 }
+
+export async function deletePatient(id: number) {
+  return await axios.delete(`/patient/${id}`)
+}

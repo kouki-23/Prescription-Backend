@@ -13,7 +13,7 @@ type Props = {}
 
 export default function PatientPage({}: Props) {
   const navigator = useNavigate()
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["patients"],
     queryFn: getAllPatients,
   })
@@ -32,7 +32,10 @@ export default function PatientPage({}: Props) {
           onClick={() => navigator("/medecin/addPatient")}
         />
       </div>
-      <PatientTable data={transformPatientToTablePatient(patients)} />
+      <PatientTable
+        refetch={refetch}
+        data={transformPatientToTablePatient(patients)}
+      />
     </div>
   )
 }

@@ -11,9 +11,13 @@ import deleteIcon from "@assets/icons/delete.svg"
 import listIcon from "@assets/icons/list.svg"
 import addIcon from "@assets/icons/add.svg"
 import editIcon from "@assets/icons/edit.svg"
+import { useMutation } from "@tanstack/react-query"
+import { deletePatient } from "@helpers/apis/patient"
+import { toast } from "react-toastify"
 
 type Props = {
   data: TPatientTable[]
+  refetch: Function
 }
 
 export type TPatientTable = {
@@ -25,7 +29,16 @@ export type TPatientTable = {
   birthDate: string
   gender: string
 }
-export default function PatientTable({ data }: Props) {
+export default function PatientTable({ data, refetch }: Props) {
+  const mutation = useMutation({
+    mutationKey: ["patients"],
+    mutationFn: (id: number) => deletePatient(id),
+    onError: (e) => toast.error(e.message),
+    onSuccess: () => {
+      refetch()
+      toast.success("patient deleted")
+    },
+  })
   const columnHelper = createColumnHelper<TPatientTable>()
   const columns = [
     columnHelper.accessor((row) => row.DMI, {
@@ -59,7 +72,9 @@ export default function PatientTable({ data }: Props) {
     }),
     columnHelper.display({
       id: "Actions",
-      cell: () => <Actions />,
+      cell: (info) => (
+        <Actions deleteFn={() => mutation.mutate(info.row.original.id)} />
+      ),
       header: "Actions",
     }),
   ]
@@ -116,13 +131,15 @@ export default function PatientTable({ data }: Props) {
   )
 }
 
-type ActionsProps = {}
+type ActionsProps = {
+  deleteFn: () => void
+}
 
-function Actions({}: ActionsProps) {
+function Actions({ deleteFn }: ActionsProps) {
   return (
     <div className="flex justify-center gap-4">
       <Icon src={editIcon} />
-      <Icon src={deleteIcon} />
+      <Icon src={deleteIcon} onCLick={deleteFn} />
     </div>
   )
 }
@@ -138,6 +155,12 @@ function PrescriptionActions({}: PrescriptionActionsProps) {
   )
 }
 
-function Icon({ src }: { src: string }) {
-  return <img className="w-7 h-7" src={src} />
+function Icon({ src, onCLick }: { src: string; onCLick?: () => void }) {
+  return (
+    <img
+      className="w-7 h-7"
+      src={src}
+      onClick={() => (onCLick ? onCLick() : null)}
+    />
+  )
 }
