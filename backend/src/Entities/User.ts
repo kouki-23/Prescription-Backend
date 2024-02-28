@@ -15,16 +15,15 @@ export class User {
   @Column()
   name: string
 
-  @Column({ nullable: false, unique: true })
+  @Column({ unique: true })
   username: string
 
-  @Column({ nullable: false })
+  @Column()
   password: string
 
   @Column({
     type: "enum",
     enum: UserRole,
-    nullable: false,
   })
   role: UserRole
 

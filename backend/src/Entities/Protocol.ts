@@ -16,7 +16,7 @@ export class Protocol {
   @Column()
   nbCures: number
 
-  @Column()
+  @Column({ nullable: true })
   details: string
 
   @Column()

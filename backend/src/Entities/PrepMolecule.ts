@@ -24,7 +24,7 @@ export class PrepMolecule {
   dilutionVolume: number
 
   @Column()
-  finalCound: string
+  finalCond: string
 
   @Column("decimal")
   solventVolume: number

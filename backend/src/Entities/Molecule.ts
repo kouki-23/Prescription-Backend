@@ -14,18 +14,20 @@ export class Molecule {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   name: String
 
   @Column()
   dose: number
 
+  //unkown what is this so is empty for now
   @Column()
   formula: String
 
   @Column()
   unite: String
 
+  //we already implements this so i think it should get deleted
   @Column()
   prodDay: number
 
@@ -38,6 +40,7 @@ export class Molecule {
   @Column()
   perfusionDuration: String
 
+  // doesn't make any sense why this variable exist
   @Column()
   vehicule: String
 

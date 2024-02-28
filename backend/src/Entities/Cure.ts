@@ -8,19 +8,28 @@ import {
 import { Prescription } from "./Prescription"
 import { PrepMolecule } from "./PrepMolecule"
 
+export enum CureState {
+  EN_COURS = "En cours",
+  EN_PREVU = "En prévu",
+  TERMINEE = "Terminée",
+}
+
 @Entity()
 export class Cure {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  name: string
+  order: number
 
   @Column()
   startDate: Date
 
-  @Column()
-  state: string
+  @Column({
+    type: "enum",
+    enum: CureState,
+  })
+  state: CureState
 
   @ManyToOne(() => Prescription, (pres) => pres.cures)
   prescription: Prescription
