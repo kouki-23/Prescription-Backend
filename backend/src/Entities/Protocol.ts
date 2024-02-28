@@ -1,15 +1,7 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from "typeorm"
-import { Molecule } from "./Molecule"
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
 import { ProtocolAssociation } from "./ProtocolAssociation"
 import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
+
 @Entity()
 export class Protocol {
   @PrimaryColumn()

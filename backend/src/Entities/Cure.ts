@@ -5,9 +5,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm"
-import { number } from "zod"
 import { Prescription } from "./Prescription"
 import { PrepMolecule } from "./PrepMolecule"
+
 @Entity()
 export class Cure {
   @PrimaryGeneratedColumn()

@@ -5,12 +5,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm"
-import { DataHistory } from "./DataHistory"
 import { Patient } from "./Patient"
 import { Protocol } from "./Protocol"
 import { Cure } from "./Cure"
 
-//fama mochkla fi inheritance
 @Entity()
 export class Prescription extends Protocol {
   @PrimaryGeneratedColumn()

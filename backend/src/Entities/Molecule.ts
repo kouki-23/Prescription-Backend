@@ -3,15 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Entity,
   OneToOne,
-  ManyToOne,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from "typeorm"
 import { DetailPrepMolucule } from "./DetailPrepMolucule"
 import { Bottle } from "./Bottle"
-import { Protocol } from "./Protocol"
 import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
+
 @Entity()
 export class Molecule {
   @PrimaryGeneratedColumn()

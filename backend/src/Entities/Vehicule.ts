@@ -1,11 +1,6 @@
-import {
-  Column,
-  PrimaryGeneratedColumn,
-  Entity,
-  OneToOne,
-  JoinColumn,
-} from "typeorm"
+import { Column, PrimaryGeneratedColumn, Entity, OneToOne } from "typeorm"
 import { PrepMolecule } from "./PrepMolecule"
+
 @Entity()
 export class Vehicule {
   @PrimaryGeneratedColumn()

@@ -11,6 +11,7 @@ import { Vehicule } from "./Vehicule"
 import { DetailPrepMolucule } from "./DetailPrepMolucule"
 import { BottleUsed } from "./BottleUsed"
 import { Cure } from "./Cure"
+
 @Entity()
 export class PrepMolecule {
   @PrimaryGeneratedColumn()
@@ -20,7 +21,7 @@ export class PrepMolecule {
   dilution: string
 
   @Column("decimal")
-  dilution_volume: number
+  dilutionVolume: number
 
   @Column()
   finalCound: string

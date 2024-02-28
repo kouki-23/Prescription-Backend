@@ -27,6 +27,7 @@ export class User {
     nullable: false,
   })
   role: UserRole
+
   @Column({ nullable: true })
   serviceType?: string
 

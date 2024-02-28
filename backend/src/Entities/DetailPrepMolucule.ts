@@ -8,6 +8,7 @@ import {
 } from "typeorm"
 import { PrepMolecule } from "./PrepMolecule"
 import { Molecule } from "./Molecule"
+
 @Entity()
 export class DetailPrepMolucule {
   @PrimaryGeneratedColumn()
