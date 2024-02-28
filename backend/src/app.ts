@@ -11,6 +11,7 @@ import auth from "./Routers/auth"
 import userRouter from "./Routers/user"
 import patientRouter from "./Routers/patient"
 import moleculeRouter from "./Routers/molecule"
+import protocolRouter from "./Routers/protocol"
 import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
 import morgan from "morgan"
@@ -54,12 +55,14 @@ app.use(authorization)
 app.use("/user", userRouter)
 app.use("/patient", patientRouter)
 app.use("/molecule", moleculeRouter)
+app.use("/protocol", protocolRouter)
 
 //error handler
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   if (!error) {
     return
   }
+  console.log(error)
   res.status(500)
   if (error instanceof HttpError) res.status(error.code)
   res.json({ message: error.message || "Something broke" })

@@ -1,6 +1,11 @@
 import db from "../Config/db"
 import { Molecule } from "../Entities/Molecule"
-import { CreateMoleculeBody } from "../Middlewares/validation/schema"
+import {
+  CreateMoleculeBody,
+  UpdateMoleculeBody,
+} from "../Middlewares/validation/schema"
+import { HttpError, StatusCode } from "../Utils/HttpError"
+import { In } from "typeorm"
 
 const repo = db.getRepository(Molecule)
 
@@ -23,4 +28,47 @@ export async function createMolecule(moleculeB: CreateMoleculeBody) {
 export async function getAllMolecules() {
   const molecules: Molecule[] = await repo.find()
   return molecules
+}
+
+export async function getMoleculesByIds(ids: number[]) {
+  const molecules: Molecule[] = await repo.findBy({
+    id: In(ids),
+  })
+  return molecules
+}
+
+export async function getMoleculeById(id: number) {
+  const molecule = await repo.findOne({
+    where: {
+      id,
+    },
+  })
+  if (!molecule)
+    throw new HttpError(
+      "No molecule found having this id ",
+      StatusCode.NotFound,
+    )
+  return molecule
+}
+
+export async function UpdateMolecule(id: number, molecule: UpdateMoleculeBody) {
+  const result = await repo.update(
+    {
+      id,
+    },
+    molecule,
+  )
+  if (!result.affected || result.affected === 0) {
+    return false
+  }
+  return true
+}
+
+export async function deleteMolecule(id: number) {
+  const result = await repo.delete({
+    id,
+  })
+  if (!result.affected || result.affected === 0) {
+    return false
+  } else return true
 }
