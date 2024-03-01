@@ -7,6 +7,14 @@ import LabledInput from "@components/molecules/LabledInput"
 import { handleError } from "@helpers/apis"
 import { addPatient } from "@helpers/apis/patient"
 import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
+import {
+  isEmpty,
+  isFloat,
+  isInteger,
+  isOnlyLetter,
+  isPositif,
+  isValidDate,
+} from "@helpers/validation"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -72,6 +80,55 @@ type PageProps = {
 
 function AddPatientPage1({ data, setData, setPageN }: PageProps) {
   const navigator = useNavigate()
+  function verif(): boolean {
+    if (!data.DMI) {
+      toast.error(" Veuillez saisir le DMI ")
+      return false
+    }
+    if (!isPositif(data.DMI) || !isInteger(data.DMI)) {
+      toast.error("Le DMI doit etre un entier positif ")
+      return false
+    }
+    if (!data.index) {
+      toast.error(" Veuillez saisir l'index ")
+      return false
+    }
+    if (!isPositif(data.index) || !isInteger(data.index)) {
+      toast.error("L'index doit etre un entier positif")
+      return false
+    }
+    if (isEmpty(data.lastName)) {
+      toast.error("Le nom est obligatoire")
+      return false
+    }
+    if (!isOnlyLetter(data.lastName)) {
+      toast.error("Le nom doit contenir seulement des lettres ")
+      return false
+    }
+    if (isEmpty(data.firstName)) {
+      toast.error("Le prenom est obligatoire")
+      return false
+    }
+    if (!isOnlyLetter(data.firstName)) {
+      toast.error("Le prenom doit contenir seulement des lettres ")
+      return false
+    }
+
+    if (isEmpty(data.gender)) {
+      toast.error("Selectionner un genre")
+      return false
+    }
+    if (isEmpty(data.birthDate)) {
+      toast.error("Selectionner Date de naissance")
+      return false
+    }
+    if (!isValidDate(data.birthDate)) {
+      toast.error("Veuillez selectionner un date valid")
+      return false
+    }
+    return true
+  }
+
   return (
     <div>
       <div className="container mx-auto my-16">
@@ -141,7 +198,12 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       </div>
       <div className="container mx-auto flex justify-center mt-14 gap-36">
         <SecondaryBtn text="Annuler" clickFn={() => navigator(-1)} />
-        <PrimaryBtn text="Suivant" clickFn={() => setPageN(2)} />
+        <PrimaryBtn
+          text="Suivant"
+          clickFn={() => {
+            if (verif()) setPageN(2)
+          }}
+        />
       </div>
     </div>
   )
@@ -149,6 +211,45 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
 
 function AddPatientPage2({ data, setData, setPageN }: PageProps) {
   const navigator = useNavigate()
+  function verif(): boolean {
+    if (!data.weight) {
+      toast.error("Veuillez saisir le poids")
+      return false
+    }
+    if (!isPositif(data.weight) || !isFloat(data.weight)) {
+      toast.error("Le poids doit etre un decimal positif")
+      return false
+    }
+    if (!data.height) {
+      toast.error("Veuillez saisir la taille")
+
+      return false
+    }
+    if (!isPositif(data.height) || !isFloat(data.weight)) {
+      toast.error("La taille doit etre un decimal positif")
+      return false
+    }
+    if (data.bodySurface > 2) {
+      toast.error("La surface corporelle doit etre inferieure de 2")
+      return false
+    }
+    if (!data.creatinine) {
+      toast.error("Veuillez saisir la creatine")
+
+      return false
+    }
+    if (!isPositif(data.creatinine) || !isFloat(data.creatinine)) {
+      toast.error("La creatine doit etre un decimal positif")
+      return false
+    }
+    if (!data.clairanceFormula) {
+      toast.error("Veuillez selectionner la formule clairance")
+
+      return false
+    }
+
+    return true
+  }
   useEffect(() => {
     setData({ ...data, bodySurface: getBodySurf(data.weight, data.height) })
   }, [data.height, data.weight])
@@ -232,8 +333,10 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
           text="Ajouter"
           clickFn={async () => {
             try {
-              await addPatient(data)
-              navigator("/medecin")
+              if (verif()) {
+                await addPatient(data)
+                navigator("/medecin")
+              }
             } catch (e) {
               toast.error(handleError(e))
             }
