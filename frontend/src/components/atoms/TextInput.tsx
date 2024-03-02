@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge"
 
 type Props = {
   value: string
-  setValue: Function
+  setValue: (s: string) => void
   className?: string
   disabled?: boolean
 }

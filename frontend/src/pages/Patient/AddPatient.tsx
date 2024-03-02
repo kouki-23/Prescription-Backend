@@ -7,6 +7,7 @@ import LabledInput from "@components/molecules/LabledInput"
 import { handleError } from "@helpers/apis"
 import { addPatient } from "@helpers/apis/patient"
 import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
+import { Option } from "@helpers/types"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -30,11 +31,20 @@ type TData = {
 
 type Props = {}
 
-const formuleClairanceOptions = ["mdrd", "cockroft"]
+const formuleClairanceOptions: Option<string>[] = [
+  { label: "mdrd", value: "mdrd" },
+  { label: "cockroft", value: "cockroft" },
+]
 
-const matrimonialOptions = ["marié", "célibataire"]
+const matrimonialOptions: Option<string>[] = [
+  { label: "marié", value: "marié" },
+  { label: "célibataire", value: "célibataire" },
+]
 
-const genderOptions = ["homme", "femme"]
+const genderOptions: Option<string>[] = [
+  { label: "homme", value: "homme" },
+  { label: "femme", value: "femme" },
+]
 
 export default function AddPatient({}: Props) {
   const [data, setData] = useState<TData>({
@@ -107,15 +117,23 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
         <div className="space-y-9">
           <LabelOption
             text="Genre"
-            value={data.gender}
-            setValue={(value: string) => setData({ ...data, gender: value })}
+            selected={
+              data.gender ? { label: data.gender, value: data.gender } : null
+            }
+            setSelected={(selected) =>
+              setData({ ...data, gender: selected.value })
+            }
             options={genderOptions}
           />
           <LabelOption
             text="Etat Civil"
-            value={data.matrimonial}
-            setValue={(value: string) =>
-              setData({ ...data, matrimonial: value })
+            selected={
+              data.matrimonial
+                ? { label: data.matrimonial, value: data.matrimonial }
+                : null
+            }
+            setSelected={(selected) =>
+              setData({ ...data, matrimonial: selected.value })
             }
             options={matrimonialOptions}
           />
@@ -141,7 +159,12 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       </div>
       <div className="container mx-auto flex justify-center mt-14 gap-36">
         <SecondaryBtn text="Annuler" clickFn={() => navigator(-1)} />
-        <PrimaryBtn text="Suivant" clickFn={() => setPageN(2)} />
+        <PrimaryBtn
+          text="Suivant"
+          clickFn={() => {
+            setPageN(2)
+          }}
+        />
       </div>
     </div>
   )
@@ -210,9 +233,13 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
           />
           <LabelOption
             text="Formule Clairance"
-            value={data.clairanceFormula}
-            setValue={(value: string) => {
-              setData({ ...data, clairanceFormula: value })
+            selected={
+              data.clairanceFormula
+                ? { label: data.clairanceFormula, value: data.clairanceFormula }
+                : null
+            }
+            setSelected={(selected) => {
+              setData({ ...data, clairanceFormula: selected.value })
             }}
             options={formuleClairanceOptions}
           />
@@ -246,16 +273,20 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
 
 type OptionProps = {
   text: string
-  value: string
-  setValue: (s: string) => void
-  options: string[]
+  selected: Option<string> | null
+  setSelected: (s: Option<string>) => void
+  options: Option<string>[]
 }
 
-function LabelOption({ text, value, options, setValue }: OptionProps) {
+function LabelOption({ text, selected, options, setSelected }: OptionProps) {
   return (
     <div>
       <label className="block mb-2 text-2xl">{text}</label>
-      <OptionInput options={options} value={value} setValue={setValue} />
+      <OptionInput
+        options={options}
+        selected={selected}
+        setSelected={setSelected}
+      />
     </div>
   )
 }
