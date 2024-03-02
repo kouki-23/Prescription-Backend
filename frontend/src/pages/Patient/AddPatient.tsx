@@ -72,7 +72,7 @@ export default function AddPatient({}: Props) {
   })
   const [pageN, setPageN] = useState<1 | 2>(1)
   return (
-    <div>
+    <div className="px-24">
       {pageN === 1 ? (
         <AddPatientPage1 data={data} setData={setData} setPageN={setPageN} />
       ) : (
@@ -141,7 +141,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
 
   return (
     <div>
-      <div className="container mx-auto my-16">
+      <div className="container mx-auto my-12">
         <Title text="Données du patient" />
       </div>
       <div className="container mx-auto flex justify-around">
@@ -195,9 +195,9 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             options={matrimonialOptions}
           />
           <div>
-            <label className="block mb-2 text-2xl">Date naissance</label>
+            <label className="block mb-2 text-xl">Date naissance</label>
             <DateInput
-              className="w-96 py-3"
+              className="w-96"
               value={data.birthDate}
               setValue={(value: string) =>
                 setData({ ...data, birthDate: value })
@@ -205,7 +205,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             />
           </div>
           <div>
-            <label className="block mb-2 text-2xl">commentaire</label>
+            <label className="block mb-2 text-xl">commentaire</label>
             <textarea
               className="bg-primary-gray w-96 rounded-lg py-2 px-2 focus:outline-secondary-blue shadow-md"
               value={data.comment}
@@ -384,7 +384,7 @@ type OptionProps = {
 function LabelOption({ text, selected, options, setSelected }: OptionProps) {
   return (
     <div>
-      <label className="block mb-2 text-2xl">{text}</label>
+      <label className="block mb-2 text-xl">{text}</label>
       <OptionInput
         options={options}
         selected={selected}

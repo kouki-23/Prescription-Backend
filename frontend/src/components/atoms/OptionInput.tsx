@@ -16,7 +16,7 @@ export default function OptionInput<keyT>({
 }: Props<keyT>) {
   return (
     <Listbox value={selected} onChange={setSelected}>
-      <Listbox.Button className="relative w-96 py-2 min-h-12 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md">
+      <Listbox.Button className="relative w-96 py-2 min-h-10 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md">
         <img className="absolute end-1" src={scrollIcon} />
         {selected ? selected.label : "Sélectionnez"}
       </Listbox.Button>

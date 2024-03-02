@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
-import PatientTable, { TPatientTable } from "@components/organisms/PatientTable"
+import PatientTable, { TPatientData } from "@components/organisms/PatientTable"
 import { getAllPatients } from "@helpers/apis/patient"
 import Loading from "@components/atoms/Loading"
 import ErrorPage from "@pages/Error/ErrorPage"
-import { Patient } from "../../types/patient"
+import { Patient } from "@helpers/types"
 import PatientFilter from "@components/organisms/PatientFilter"
 import Title from "@components/atoms/Title"
 import addIcon from "@assets/icons/add.svg"
@@ -21,7 +21,7 @@ export default function PatientPage({}: Props) {
   if (error) return <ErrorPage cause={error.message} />
   const patients = data ? data : []
   return (
-    <div>
+    <div className="px-24">
       <div className="mt-16"></div>
       <PatientFilter />
       <div className="container mx-auto my-10 flex justify-between">
@@ -40,8 +40,8 @@ export default function PatientPage({}: Props) {
   )
 }
 
-function transformPatientToTablePatient(p: Patient[]): TPatientTable[] {
-  let patients: TPatientTable[] = []
+function transformPatientToTablePatient(p: Patient[]): TPatientData[] {
+  let patients: TPatientData[] = []
   p.forEach((e) => {
     patients.push({
       id: e.id,

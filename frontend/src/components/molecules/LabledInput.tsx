@@ -17,9 +17,9 @@ export default function LabledInput({
 }: Props) {
   return (
     <div>
-      <label className="block mb-2 text-2xl">{text}</label>
+      <label className="block mb-2 text-xl">{text}</label>
       <TextInput
-        className="w-96 py-3"
+        className="w-96"
         value={value}
         setValue={setValue}
         disabled={disabled}
