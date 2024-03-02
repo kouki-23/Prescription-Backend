@@ -14,7 +14,7 @@ import {
   isInteger,
   isOnlyLetter,
   isPositif,
-  isValidDate,
+  isDateInPast,
 } from "@helpers/validation"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -132,7 +132,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Selectionner Date de naissance")
       return false
     }
-    if (!isValidDate(data.birthDate)) {
+    if (!isDateInPast(data.birthDate)) {
       toast.error("Veuillez selectionner un date valid")
       return false
     }

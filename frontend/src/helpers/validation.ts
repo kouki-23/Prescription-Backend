@@ -24,7 +24,7 @@ export function isFloat(num: number): boolean {
   return Number.isFinite(num)
 }
 
-export function isValidDate(dateString: string): boolean {
+export function isDateInPast(dateString: string): boolean {
   const date = new Date(dateString)
   const today = new Date()
   today.setHours(0, 0, 0, 0)
