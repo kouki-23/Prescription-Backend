@@ -303,6 +303,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) =>
               setData({ ...data, weight: Number(value) })
             }
+            isNumber={true}
           />
           <LabledInput
             text="Taille (cm)"
@@ -310,6 +311,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) =>
               setData({ ...data, height: Number(value) })
             }
+            isNumber={true}
           />
           <LabledInput
             text="Surface corporelle (m²)"
@@ -317,6 +319,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) =>
               setData({ ...data, bodySurface: Number(value) })
             }
+            isNumber={true}
           />
         </div>
         <div className="space-y-9">
@@ -326,6 +329,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) =>
               setData({ ...data, creatinine: Number(value) })
             }
+            isNumber={true}
           />
           <LabelOption
             text="Formule Clairance"
@@ -346,6 +350,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
               setData({ ...data, clairance: Number(value) })
             }
             disabled={true}
+            isNumber={true}
           />
         </div>
       </div>

@@ -3,8 +3,9 @@ import TextInput from "../atoms/TextInput"
 type Props = {
   text: string
   value: string
-  setValue: Function
+  setValue: (s: string) => void
   disabled?: boolean
+  isNumber?: boolean
 }
 
 export default function LabledInput({
@@ -12,6 +13,7 @@ export default function LabledInput({
   value,
   setValue,
   disabled,
+  isNumber,
 }: Props) {
   return (
     <div>
@@ -21,6 +23,7 @@ export default function LabledInput({
         value={value}
         setValue={setValue}
         disabled={disabled}
+        isNumber={isNumber}
       />
     </div>
   )
