@@ -145,7 +145,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
         <Title text="Données du patient" />
       </div>
       <div className="container mx-auto flex justify-around">
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabledInput
             text="DMI"
             value={String(data.DMI)}
@@ -171,7 +171,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) => setData({ ...data, firstName: value })}
           />
         </div>
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabelOption
             text="Genre"
             selected={
@@ -214,7 +214,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
           </div>
         </div>
       </div>
-      <div className="container mx-auto flex justify-center mt-14 gap-36">
+      <div className="container mx-auto flex justify-center mt-12 gap-36">
         <SecondaryBtn text="Annuler" clickFn={() => navigator(-1)} />
         <PrimaryBtn
           text="Suivant"
@@ -292,11 +292,11 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
 
   return (
     <div>
-      <div className="container mx-auto my-20">
+      <div className="container mx-auto my-14">
         <Title text="Informtions Cliniques" />
       </div>
       <div className="container mx-auto flex justify-around">
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabledInput
             text="Poids (Kg)"
             value={String(data.weight)}
@@ -322,7 +322,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             isNumber={true}
           />
         </div>
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabledInput
             text="Créatinine (µmol/l)"
             value={String(data.creatinine)}
@@ -354,7 +354,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
           />
         </div>
       </div>
-      <div className="container mx-auto flex justify-center mt-28 gap-36">
+      <div className="container mx-auto flex justify-center mt-16 gap-36">
         <SecondaryBtn text="Précédent" clickFn={() => setPageN(1)} />
         <PrimaryBtn
           text="Ajouter"

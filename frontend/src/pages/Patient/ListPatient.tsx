@@ -27,7 +27,7 @@ export default function PatientPage({}: Props) {
       <div className="container mx-auto my-10 flex justify-between">
         <Title text="Liste des patients" />
         <img
-          className="size-12 cursor-pointer"
+          className="size-11 cursor-pointer"
           src={addIcon}
           onClick={() => navigator("/medecin/addPatient")}
         />
