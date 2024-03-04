@@ -10,7 +10,7 @@ import { PrepMolecule } from "./PrepMolecule"
 import { Molecule } from "./Molecule"
 
 @Entity()
-export class DetailPrepMolucule {
+export class DetailPrepMolecule {
   @PrimaryGeneratedColumn()
   id: number
 

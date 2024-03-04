@@ -8,7 +8,7 @@ import {
   OneToMany,
 } from "typeorm"
 import { Vehicule } from "./Vehicule"
-import { DetailPrepMolucule } from "./DetailPrepMolucule"
+import { DetailPrepMolecule } from "./DetailPrepMolecule"
 import { BottleUsed } from "./BottleUsed"
 import { Cure } from "./Cure"
 
@@ -39,8 +39,8 @@ export class PrepMolecule {
   @JoinColumn()
   vehicule: Vehicule
 
-  @ManyToOne(() => DetailPrepMolucule, (d) => d.prepMolecule)
-  details: DetailPrepMolucule
+  @ManyToOne(() => DetailPrepMolecule, (d) => d.prepMolecule)
+  details: DetailPrepMolecule
 
   @OneToMany(() => BottleUsed, (b) => b.prepMolecule)
   bottlesUsed: BottleUsed[]

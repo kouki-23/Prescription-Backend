@@ -5,7 +5,7 @@ import {
   OneToOne,
   OneToMany,
 } from "typeorm"
-import { DetailPrepMolucule } from "./DetailPrepMolucule"
+import { DetailPrepMolecule } from "./DetailPrepMolecule"
 import { Bottle } from "./Bottle"
 import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
 
@@ -50,8 +50,8 @@ export class Molecule {
   @Column({ nullable: true })
   comment?: String
 
-  @OneToOne(() => DetailPrepMolucule)
-  detailsPrepMolecule: DetailPrepMolucule
+  @OneToOne(() => DetailPrepMolecule)
+  detailsPrepMolecule: DetailPrepMolecule
 
   @OneToMany(() => Bottle, (b) => b.molecule)
   bottles: Bottle[]
