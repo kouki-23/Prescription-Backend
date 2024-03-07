@@ -8,7 +8,7 @@ export class ProtocoleMoleculeAssociation {
   id: number
 
   @Column()
-  journey: number
+  day: number
 
   @ManyToOne(
     () => Molecule,

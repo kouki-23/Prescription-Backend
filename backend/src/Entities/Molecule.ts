@@ -17,35 +17,17 @@ export class Molecule {
   @Column({ unique: true })
   name: String
 
-  @Column()
+  @Column("decimal")
   dose: number
-
-  //unkown what is this so is empty for now
-  @Column()
-  formula: String
 
   @Column()
   unite: String
-
-  //we already implements this so i think it should get deleted
-  @Column()
-  prodDay: number
 
   @Column()
   way: String
 
   @Column()
   perfusionType: String
-
-  @Column()
-  perfusionDuration: String
-
-  // doesn't make any sense why this variable exist
-  @Column()
-  vehicule: String
-
-  @Column()
-  finalVolume: number
 
   @Column({ nullable: true })
   comment?: String

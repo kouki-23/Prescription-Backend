@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm"
 import { ProtocolAssociation } from "./ProtocolAssociation"
 
 @Entity()
-export class ParentProtocol {
+export class GroupProtocol {
   @PrimaryColumn()
   id: number
 

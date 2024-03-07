@@ -10,9 +10,6 @@ export class BottleUsed {
   @Column("decimal")
   quantityFrac: number
 
-  @Column()
-  isFraction: boolean
-
   @ManyToOne(() => PrepMolecule, (p) => p.bottlesUsed)
   prepMolecule: PrepMolecule
 

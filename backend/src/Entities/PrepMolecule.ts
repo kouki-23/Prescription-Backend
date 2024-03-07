@@ -17,9 +17,7 @@ export class PrepMolecule {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
-  dilution: string
-
+  //imkaniya titna7a
   @Column("decimal")
   dilutionVolume: number
 
@@ -34,6 +32,9 @@ export class PrepMolecule {
 
   @Column("decimal")
   VolumePA: number
+
+  @Column("decimal")
+  dose: number
 
   @OneToOne(() => Vehicule)
   @JoinColumn()

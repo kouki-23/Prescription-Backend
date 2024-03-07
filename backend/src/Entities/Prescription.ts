@@ -29,8 +29,8 @@ export class Prescription {
   @Column()
   clinicalTest: boolean
 
-  @Column()
-  comment: string
+  @Column({ nullable: true })
+  comment?: string
 
   @Column()
   serviceType: string
@@ -49,15 +49,19 @@ export class Prescription {
 
   constructor(
     prescriber: string,
+    intercure: number,
+    nbCures: number,
     startDate: Date,
     clinicalTest: boolean,
-    comment: string,
     serviceType: string,
     patient: Patient,
     protocol: Protocol,
     cures: Cure[],
+    comment?: string,
   ) {
     this.prescriber = prescriber
+    this.nbCures = nbCures
+    this.intercure = intercure
     this.startDate = startDate
     this.clinicalTest = clinicalTest
     this.comment = comment

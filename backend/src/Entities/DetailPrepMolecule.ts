@@ -21,19 +21,13 @@ export class DetailPrepMolecule {
   specialite: string
 
   @Column("decimal")
-  dosage: number
-
-  @Column()
-  dosageUnite: string
-
-  @Column("decimal")
   volume: number
 
   @Column()
   volumeUnite: string
 
   @Column()
-  pretA: string
+  isReconstruct: boolean
 
   @Column()
   solventReconstitution: string
@@ -45,7 +39,7 @@ export class DetailPrepMolecule {
   volumeReconstitutionUnity: string
 
   @Column()
-  conservationReconstitutionFridge: string
+  conservationReconstitutionFridge: boolean
 
   @Column()
   dilutionVolume: number
@@ -63,16 +57,16 @@ export class DetailPrepMolecule {
   concentrationUnite: String
 
   @Column()
-  conservrationDilutionFridge: String
+  conservrationDilutionFridge: boolean
 
   @Column()
-  concervationtionPeriodDilution: String
+  concervationtionPeriodDilution: number
 
   @Column()
-  lightShelter: String
+  lightShelter: boolean
 
   @Column()
-  SensivityPVC: number
+  SensivityPVC: boolean
 
   @OneToMany(() => PrepMolecule, (prep) => prep.details)
   prepMolecule: PrepMolecule[]

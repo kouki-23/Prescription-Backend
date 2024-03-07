@@ -36,4 +36,17 @@ export class Cure {
 
   @OneToMany(() => PrepMolecule, (b) => b.cure)
   prepMolecule: PrepMolecule[]
+
+  constructor(
+    moleculeId: number[],
+    order: number,
+    startDate: Date,
+    state: CureState,
+    prescription: Prescription,
+  ) {
+    this.order = order
+    this.prescription = prescription
+    this.startDate = startDate
+    this.state = state
+  }
 }

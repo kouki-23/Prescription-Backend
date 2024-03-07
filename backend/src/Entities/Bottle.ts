@@ -22,9 +22,6 @@ export class Bottle {
   @Column("decimal")
   volume: number
 
-  @Column()
-  quantity: number
-
   @ManyToOne(() => Molecule, (m) => m.bottles)
   molecule: Molecule
 
