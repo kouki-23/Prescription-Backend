@@ -24,10 +24,8 @@ export async function CreateProtocol(protocolb: CreateProtocolBody) {
     protocolb.molecules.map(async (molecule) => {
       const association = new ProtocoleMoleculeAssociation()
       association.protocol = protocole
-      association.journey = molecule.journey
-      association.molecule = new Molecule()
-      association.molecule.id = molecule.moleculeid
-
+      association.day = molecule.day
+      association.molecule = await getMoleculeById(molecule.moleculeid)
       return association
     }),
   )

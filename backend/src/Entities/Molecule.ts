@@ -42,4 +42,20 @@ export class Molecule {
     onDelete: "CASCADE",
   })
   protocoleMoleculeAssociation: ProtocoleMoleculeAssociation[]
+
+  constructor(
+    name: string,
+    dose: number,
+    unite: string,
+    way: string,
+    perfusionType: string,
+    comment?: string,
+  ) {
+    this.name = name
+    this.dose = dose
+    this.unite = unite
+    this.way = way
+    this.perfusionType = perfusionType
+    this.comment = comment
+  }
 }
