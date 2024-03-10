@@ -4,12 +4,14 @@ RUN mkdir -p /app/dist
 
 WORKDIR /app
 
-COPY package.json package-lock.json .
+COPY package*.json ./
 
-RUN npm install --omit=dev
+RUN npm install
 
-COPY dist/ ./dist
+COPY . .
 
-EXPOSE 3000
+RUN npm run build
+
+EXPOSE 5000
 
 CMD [ "npm", "start"]

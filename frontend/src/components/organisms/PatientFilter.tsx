@@ -1,5 +1,4 @@
 import TextInput from "@components/atoms/TextInput"
-import LabledInput from "../molecules/LabledInput"
 import DateInput from "@components/atoms/DateInput"
 
 type Props = {}
@@ -11,7 +10,7 @@ export default function PatientFilter({}: Props) {
       <LabeledFilter label="Nom" />
       <div className="space-x-4">
         <span>Date naissance</span>
-        <DateInput />
+        <DateInput value="" setValue={() => {}} />
       </div>
       <LabeledFilter label="Genre" />
     </div>
@@ -22,7 +21,7 @@ function LabeledFilter({ label }: { label: string }) {
   return (
     <div className="space-x-4">
       <span>{label}</span>
-      <TextInput />
+      <TextInput value="" setValue={() => {}} />
     </div>
   )
 }

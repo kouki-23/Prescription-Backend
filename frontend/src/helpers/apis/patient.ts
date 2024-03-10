@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Patient } from "../../types/patient"
+import { Patient } from "@helpers/types"
 
 export async function getAllPatients() {
   const response = await axios.get("/patient/")
