@@ -5,26 +5,49 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm"
-import { number } from "zod"
 import { Prescription } from "./Prescription"
 import { PrepMolecule } from "./PrepMolecule"
+
+export enum CureState {
+  EN_COURS = "En cours",
+  EN_PREVU = "En prévu",
+  TERMINEE = "Terminée",
+}
+
 @Entity()
 export class Cure {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  name: string
+  order: number
 
   @Column()
   startDate: Date
 
-  @Column()
-  state: string
+  @Column({
+    type: "enum",
+    enum: CureState,
+  })
+  state: CureState
 
   @ManyToOne(() => Prescription, (pres) => pres.cures)
   prescription: Prescription
 
   @OneToMany(() => PrepMolecule, (b) => b.cure)
   prepMolecule: PrepMolecule[]
+
+  constructor(
+    order: number,
+    startDate: Date,
+    state: CureState,
+    prescription: Prescription,
+    molecules: PrepMolecule[],
+  ) {
+    this.order = order
+    this.prescription = prescription
+    this.startDate = startDate
+    this.state = state
+    this.prepMolecule = molecules
+  }
 }

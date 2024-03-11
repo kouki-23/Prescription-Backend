@@ -2,9 +2,10 @@ import { twMerge } from "tailwind-merge"
 
 type Props = {
   value: string
-  setValue: Function
+  setValue: (s: string) => void
   className?: string
   disabled?: boolean
+  isNumber?: boolean
 }
 
 export default function TextInput({
@@ -12,10 +13,11 @@ export default function TextInput({
   setValue,
   className,
   disabled,
+  isNumber,
 }: Props) {
   return (
     <input
-      type="text"
+      type={isNumber ? "number" : "text"}
       className={twMerge(
         "bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md",
         className,

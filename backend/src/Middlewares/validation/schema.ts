@@ -6,6 +6,11 @@ export const loginBodySchema = z.object({
 })
 export type LoginBody = z.infer<typeof loginBodySchema>
 
+export const IdParamsSchema = z.object({
+  id: z.string(),
+})
+export type IdParams = z.infer<typeof IdParamsSchema>
+
 const UserRole = z.enum(["admin", "medecin", "pharmacien"])
 
 export const createUserSchemaBody = z.object({
@@ -15,7 +20,6 @@ export const createUserSchemaBody = z.object({
   role: UserRole,
   serviceType: z.string().optional(),
 })
-
 export type CreateUserBody = z.infer<typeof createUserSchemaBody>
 
 export const createPatientBodySchema = z.object({
@@ -37,12 +41,6 @@ export const createPatientBodySchema = z.object({
 })
 export type CreatePatientBody = z.infer<typeof createPatientBodySchema>
 
-export const PatientByIdParamsSchema = z.object({
-  id: z.string(),
-})
-
-export type PatientByIdParams = z.infer<typeof PatientByIdParamsSchema>
-
 export const updatePatientBodySchema = z.object({
   DMI: z.number().optional(),
   index: z.number().optional(),
@@ -60,41 +58,24 @@ export const updatePatientBodySchema = z.object({
   comment: z.string().optional().optional(),
   serviceType: z.string().optional().optional(),
 })
-
 export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>
 
 export const createMoleculeBodySchema = z.object({
   name: z.string(),
   dose: z.number(),
-  formula: z.string(),
   unite: z.string(),
-  prodDay: z.number(),
   way: z.string(),
   perfusionType: z.string(),
-  perfusionDuration: z.string(),
-  vehicule: z.string(),
-  finalVolume: z.number(),
   comment: z.string().optional(),
 })
-
 export type CreateMoleculeBody = z.infer<typeof createMoleculeBodySchema>
-
-export const MoleculeByIdSchema = z.object({
-  id: z.string(),
-})
-export type MoleculeByIdParams = z.infer<typeof MoleculeByIdSchema>
 
 export const UpdateMoleculeBodySchema = z.object({
   name: z.string().optional(),
   dose: z.number().optional(),
-  formula: z.string().optional(),
   unite: z.string().optional(),
-  prodDay: z.number().optional(),
   way: z.string().optional(),
   perfusionType: z.string().optional(),
-  perfusionDuration: z.string().optional(),
-  vehicule: z.string().optional(),
-  finalVolume: z.number().optional(),
   comment: z.string().optional(),
 })
 export type UpdateMoleculeBody = z.infer<typeof UpdateMoleculeBodySchema>
@@ -107,17 +88,26 @@ export const createProtocolBodySchema = z.object({
   details: z.string(),
   indications: z.string(),
   histotype: z.string(),
-  iscreated: z.boolean(),
   molecules: z.array(
     z.object({
-      moleculeid: z.number(),
-      journey: z.number(),
+      moleculeid: z.number().positive(),
+      day: z.number().positive(),
     }),
   ),
 })
 export type CreateProtocolBody = z.infer<typeof createProtocolBodySchema>
 
-export const ProtocolByIdSchema = z.object({
-  id: z.string(),
+export const createPrescriptionBodySchema = z.object({
+  prescriber: z.string(),
+  intercure: z.number(),
+  nbCures: z.number().positive(),
+  startDate: z.string(),
+  clinicalTest: z.boolean(),
+  comment: z.string().optional(),
+  serviceType: z.string(),
+  patientId: z.number(),
+  protocolId: z.number(),
 })
-export type ProtocolByIdParams = z.infer<typeof ProtocolByIdSchema>
+export type CreatePrescriptionBody = z.infer<
+  typeof createPrescriptionBodySchema
+>

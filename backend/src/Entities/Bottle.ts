@@ -7,6 +7,7 @@ import {
 } from "typeorm"
 import { Molecule } from "./Molecule"
 import { BottleUsed } from "./BottleUsed"
+
 @Entity()
 export class Bottle {
   @PrimaryGeneratedColumn()
@@ -20,9 +21,6 @@ export class Bottle {
 
   @Column("decimal")
   volume: number
-
-  @Column()
-  quantity: number
 
   @ManyToOne(() => Molecule, (m) => m.bottles)
   molecule: Molecule

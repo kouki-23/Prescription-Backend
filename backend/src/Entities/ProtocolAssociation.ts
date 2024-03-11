@@ -1,22 +1,18 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
 import { Protocol } from "./Protocol"
-import { ParentProtocol } from "./ParentProtocol"
+import { GroupProtocol } from "./ParentProtocol"
+
 @Entity()
 export class ProtocolAssociation {
+  @PrimaryGeneratedColumn()
+  id: number
+
   @Column()
   order: number
 
-  @PrimaryColumn({ type: "int" })
-  @ManyToOne(() => ParentProtocol, (parent) => parent.protocolAssociation)
-  parentProtocol: ParentProtocol
+  @ManyToOne(() => GroupProtocol, (group) => group.protocolAssociation)
+  parentProtocol: GroupProtocol
 
-  @PrimaryColumn({ type: "int" })
   @ManyToOne(() => Protocol, (pro) => pro.protocolAssociation)
   protocol: Protocol
 }

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Patient } from "../../types/patient"
+import { Patient } from "@helpers/types"
 
 export async function getAllPatients() {
   const response = await axios.get("/patient/")
@@ -8,4 +8,8 @@ export async function getAllPatients() {
 
 export async function addPatient(data: any) {
   await axios.post("/patient/", data)
+}
+
+export async function deletePatient(id: number) {
+  return await axios.delete(`/patient/${id}`)
 }

@@ -7,13 +7,14 @@ import LabledInput from "@components/molecules/LabledInput"
 import { handleError } from "@helpers/apis"
 import { addPatient } from "@helpers/apis/patient"
 import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
+import { Option } from "@helpers/types"
 import {
   isEmpty,
   isFloat,
   isInteger,
   isOnlyLetter,
   isPositif,
-  isValidDate,
+  isDateInPast,
 } from "@helpers/validation"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -38,11 +39,20 @@ type TData = {
 
 type Props = {}
 
-const formuleClairanceOptions = ["mdrd", "cockroft"]
+const formuleClairanceOptions: Option<string>[] = [
+  { label: "mdrd", value: "mdrd" },
+  { label: "cockroft", value: "cockroft" },
+]
 
-const matrimonialOptions = ["marié", "célibataire"]
+const matrimonialOptions: Option<string>[] = [
+  { label: "marié", value: "marié" },
+  { label: "célibataire", value: "célibataire" },
+]
 
-const genderOptions = ["homme", "femme"]
+const genderOptions: Option<string>[] = [
+  { label: "homme", value: "homme" },
+  { label: "femme", value: "femme" },
+]
 
 export default function AddPatient({}: Props) {
   const [data, setData] = useState<TData>({
@@ -62,7 +72,7 @@ export default function AddPatient({}: Props) {
   })
   const [pageN, setPageN] = useState<1 | 2>(1)
   return (
-    <div>
+    <div className="px-24">
       {pageN === 1 ? (
         <AddPatientPage1 data={data} setData={setData} setPageN={setPageN} />
       ) : (
@@ -122,7 +132,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Selectionner Date de naissance")
       return false
     }
-    if (!isValidDate(data.birthDate)) {
+    if (!isDateInPast(data.birthDate)) {
       toast.error("Veuillez selectionner un date valid")
       return false
     }
@@ -131,11 +141,11 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
 
   return (
     <div>
-      <div className="container mx-auto my-16">
+      <div className="container mx-auto my-12">
         <Title text="Données du patient" />
       </div>
       <div className="container mx-auto flex justify-around">
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabledInput
             text="DMI"
             value={String(data.DMI)}
@@ -161,25 +171,33 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) => setData({ ...data, firstName: value })}
           />
         </div>
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabelOption
             text="Genre"
-            value={data.gender}
-            setValue={(value: string) => setData({ ...data, gender: value })}
+            selected={
+              data.gender ? { label: data.gender, value: data.gender } : null
+            }
+            setSelected={(selected) =>
+              setData({ ...data, gender: selected.value })
+            }
             options={genderOptions}
           />
           <LabelOption
             text="Etat Civil"
-            value={data.matrimonial}
-            setValue={(value: string) =>
-              setData({ ...data, matrimonial: value })
+            selected={
+              data.matrimonial
+                ? { label: data.matrimonial, value: data.matrimonial }
+                : null
+            }
+            setSelected={(selected) =>
+              setData({ ...data, matrimonial: selected.value })
             }
             options={matrimonialOptions}
           />
           <div>
-            <label className="block mb-2 text-2xl">Date naissance</label>
+            <label className="block mb-2 text-xl">Date naissance</label>
             <DateInput
-              className="w-96 py-3"
+              className="w-96"
               value={data.birthDate}
               setValue={(value: string) =>
                 setData({ ...data, birthDate: value })
@@ -187,7 +205,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             />
           </div>
           <div>
-            <label className="block mb-2 text-2xl">commentaire</label>
+            <label className="block mb-2 text-xl">commentaire</label>
             <textarea
               className="bg-primary-gray w-96 rounded-lg py-2 px-2 focus:outline-secondary-blue shadow-md"
               value={data.comment}
@@ -196,7 +214,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
           </div>
         </div>
       </div>
-      <div className="container mx-auto flex justify-center mt-14 gap-36">
+      <div className="container mx-auto flex justify-center mt-12 gap-36">
         <SecondaryBtn text="Annuler" clickFn={() => navigator(-1)} />
         <PrimaryBtn
           text="Suivant"
@@ -274,17 +292,18 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
 
   return (
     <div>
-      <div className="container mx-auto my-20">
+      <div className="container mx-auto my-14">
         <Title text="Informtions Cliniques" />
       </div>
       <div className="container mx-auto flex justify-around">
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabledInput
             text="Poids (Kg)"
             value={String(data.weight)}
             setValue={(value: string) =>
               setData({ ...data, weight: Number(value) })
             }
+            isNumber={true}
           />
           <LabledInput
             text="Taille (cm)"
@@ -292,6 +311,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) =>
               setData({ ...data, height: Number(value) })
             }
+            isNumber={true}
           />
           <LabledInput
             text="Surface corporelle (m²)"
@@ -299,21 +319,27 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) =>
               setData({ ...data, bodySurface: Number(value) })
             }
+            isNumber={true}
           />
         </div>
-        <div className="space-y-9">
+        <div className="space-y-8">
           <LabledInput
             text="Créatinine (µmol/l)"
             value={String(data.creatinine)}
             setValue={(value: string) =>
               setData({ ...data, creatinine: Number(value) })
             }
+            isNumber={true}
           />
           <LabelOption
             text="Formule Clairance"
-            value={data.clairanceFormula}
-            setValue={(value: string) => {
-              setData({ ...data, clairanceFormula: value })
+            selected={
+              data.clairanceFormula
+                ? { label: data.clairanceFormula, value: data.clairanceFormula }
+                : null
+            }
+            setSelected={(selected) => {
+              setData({ ...data, clairanceFormula: selected.value })
             }}
             options={formuleClairanceOptions}
           />
@@ -324,10 +350,11 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
               setData({ ...data, clairance: Number(value) })
             }
             disabled={true}
+            isNumber={true}
           />
         </div>
       </div>
-      <div className="container mx-auto flex justify-center mt-28 gap-36">
+      <div className="container mx-auto flex justify-center mt-16 gap-36">
         <SecondaryBtn text="Précédent" clickFn={() => setPageN(1)} />
         <PrimaryBtn
           text="Ajouter"
@@ -349,16 +376,20 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
 
 type OptionProps = {
   text: string
-  value: string
-  setValue: (s: string) => void
-  options: string[]
+  selected: Option<string> | null
+  setSelected: (s: Option<string>) => void
+  options: Option<string>[]
 }
 
-function LabelOption({ text, value, options, setValue }: OptionProps) {
+function LabelOption({ text, selected, options, setSelected }: OptionProps) {
   return (
     <div>
-      <label className="block mb-2 text-2xl">{text}</label>
-      <OptionInput options={options} value={value} setValue={setValue} />
+      <label className="block mb-2 text-xl">{text}</label>
+      <OptionInput
+        options={options}
+        selected={selected}
+        setSelected={setSelected}
+      />
     </div>
   )
 }

@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryColumn, OneToMany, ManyToOne } from "typeorm"
-import { Protocol } from "./Protocol"
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm"
 import { ProtocolAssociation } from "./ProtocolAssociation"
+
 @Entity()
-export class ParentProtocol {
+export class GroupProtocol {
   @PrimaryColumn()
   id: number
 

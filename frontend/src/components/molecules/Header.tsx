@@ -7,20 +7,23 @@ type Props = {}
 export default function Header({}: Props) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  function goToHome() {
+    navigate("/")
+  }
   function logoutClick() {
     logout()
     navigate("/login")
   }
   return (
-    <div className="w-screen h-20 bg-primary-blue flex items-center px-7 justify-between">
-      <img className="h-14" src={logo} />
+    <div className="w-screen bg-primary-blue flex items-center px-7 py-3 justify-between">
+      <img className="size-12 cursor-pointer" onClick={goToHome} src={logo} />
       <div className="flex gap-1 items-center">
         <div className="text-white-shade flex flex-col items-end">
           <p className="font-bold text-lg">{user?.name}</p>
           <p>{user?.role}</p>
         </div>
         <img
-          className="h-10 w-10 cursor-pointer"
+          className="size-10 cursor-pointer"
           onClick={logoutClick}
           src={logoutIcon}
         />

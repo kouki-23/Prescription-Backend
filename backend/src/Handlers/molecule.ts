@@ -1,7 +1,7 @@
 import { Request, NextFunction } from "express"
 import {
   CreateMoleculeBody,
-  MoleculeByIdParams,
+  IdParams,
   UpdateMoleculeBody,
 } from "../Middlewares/validation/schema"
 import {
@@ -13,7 +13,6 @@ import {
 } from "../Services/moleculeService"
 import { Response } from "express"
 import { HttpError, StatusCode } from "../Utils/HttpError"
-import { nextTick } from "process"
 
 export async function createMoleculeHandler(
   req: Request<never, never, CreateMoleculeBody, never>,
@@ -52,7 +51,7 @@ export async function getAllMoleculesHandler(
 }
 
 export async function getMoleculeByIdHandler(
-  req: Request<MoleculeByIdParams, never, never, never>,
+  req: Request<IdParams, never, never, never>,
   res: Response,
   next: NextFunction,
 ) {
@@ -65,8 +64,8 @@ export async function getMoleculeByIdHandler(
   }
 }
 
-export async function UpdateMoleculeBodyHandler(
-  req: Request<MoleculeByIdParams, never, UpdateMoleculeBody, never>,
+export async function updateMoleculeHandler(
+  req: Request<IdParams, never, UpdateMoleculeBody, never>,
   res: Response,
   next: NextFunction,
 ) {
@@ -83,8 +82,8 @@ export async function UpdateMoleculeBodyHandler(
   }
 }
 
-export async function DeleteMoleculeHandler(
-  req: Request<MoleculeByIdParams, never, never, never>,
+export async function deleteMoleculeHandler(
+  req: Request<IdParams, never, never, never>,
   res: Response,
   next: NextFunction,
 ) {

@@ -1,22 +1,29 @@
 import scrollIcon from "@assets/icons/iconscroll.svg"
 import checkIcon from "@assets/icons/CheckIcon.svg"
 import { Listbox } from "@headlessui/react"
-type Props = {
-  value: string
-  setValue: (s: string) => void
-  options: string[]
+import { Option } from "@helpers/types"
+
+type Props<keyT> = {
+  selected: Option<keyT> | null | undefined
+  setSelected: (option: Option<keyT>) => void
+  options: Option<keyT>[]
 }
-export default function ({ options, value, setValue }: Props) {
+
+export default function OptionInput<keyT>({
+  options,
+  selected,
+  setSelected,
+}: Props<keyT>) {
   return (
-    <Listbox value={value} onChange={setValue}>
-      <Listbox.Button className="relative w-96 py-2 min-h-12 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md">
+    <Listbox value={selected} onChange={setSelected}>
+      <Listbox.Button className="relative w-96 py-2 min-h-10 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md">
         <img className="absolute end-1" src={scrollIcon} />
-        {value}
+        {selected ? selected.label : "Sélectionnez"}
       </Listbox.Button>
       <Listbox.Options className="absolute z-10 bg-white-shade overflow-auto max-h-60 w-96 rounded-lg bg-white text-base shadow-md text-center sm:text-sm">
         {options.map((option) => (
           <Listbox.Option
-            key={option}
+            key={String(option.value)}
             value={option}
             className="hover:bg-light-blue transition-colors opacity-75 cursor-pointer py-1"
           >
@@ -27,7 +34,7 @@ export default function ({ options, value, setValue }: Props) {
                     selected ? "font-medium" : "font-normal"
                   }`}
                 >
-                  {option}
+                  {option.label}
                 </span>
                 {selected && (
                   <img

@@ -10,18 +10,14 @@ import { In } from "typeorm"
 const repo = db.getRepository(Molecule)
 
 export async function createMolecule(moleculeB: CreateMoleculeBody) {
-  const molecule = new Molecule()
-  molecule.name = moleculeB.name
-  molecule.dose = moleculeB.dose
-  molecule.formula = moleculeB.formula
-  molecule.unite = moleculeB.unite
-  molecule.prodDay = moleculeB.prodDay
-  molecule.way = moleculeB.way
-  molecule.perfusionType = moleculeB.perfusionType
-  molecule.perfusionDuration = moleculeB.perfusionDuration
-  molecule.vehicule = moleculeB.vehicule
-  molecule.finalVolume = moleculeB.finalVolume
-  molecule.comment = moleculeB.comment
+  const molecule = new Molecule(
+    moleculeB.name,
+    moleculeB.dose,
+    moleculeB.unite,
+    moleculeB.way,
+    moleculeB.perfusionType,
+    moleculeB.comment,
+  )
   return await repo.save(molecule)
 }
 
@@ -58,17 +54,12 @@ export async function UpdateMolecule(id: number, molecule: UpdateMoleculeBody) {
     },
     molecule,
   )
-  if (!result.affected || result.affected === 0) {
-    return false
-  }
-  return true
+  return result.affected && result.affected !== 0
 }
 
 export async function deleteMolecule(id: number) {
   const result = await repo.delete({
     id,
   })
-  if (!result.affected || result.affected === 0) {
-    return false
-  } else return true
+  return result.affected && result.affected !== 0
 }

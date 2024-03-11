@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import {
   CreatePatientBody,
-  PatientByIdParams,
+  IdParams,
   UpdatePatientBody,
 } from "../Middlewares/validation/schema"
 import {
@@ -44,7 +44,7 @@ export async function getAllPatientsHandler(
 }
 
 export async function getPatientByIdHandler(
-  req: Request<PatientByIdParams, never, never, never>,
+  req: Request<IdParams, never, never, never>,
   res: Response,
   next: NextFunction,
 ) {
@@ -58,7 +58,7 @@ export async function getPatientByIdHandler(
 }
 
 export async function updatePatientHandler(
-  req: Request<PatientByIdParams, never, UpdatePatientBody, never>,
+  req: Request<IdParams, never, UpdatePatientBody, never>,
   res: Response,
   next: NextFunction,
 ) {
@@ -76,7 +76,7 @@ export async function updatePatientHandler(
 }
 
 export async function deletePatientHandler(
-  req: Request<PatientByIdParams>,
+  req: Request<IdParams>,
   res: Response,
   next: NextFunction,
 ) {

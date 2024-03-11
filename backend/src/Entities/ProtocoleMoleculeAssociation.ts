@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Molecule } from "./Molecule"
 import { Protocol } from "./Protocol"
 
@@ -15,16 +8,14 @@ export class ProtocoleMoleculeAssociation {
   id: number
 
   @Column()
-  journey: number
+  day: number
 
-  @JoinColumn({ name: "moleculeId" })
   @ManyToOne(
     () => Molecule,
     (molecule) => molecule.protocoleMoleculeAssociation,
   )
   molecule: Molecule
 
-  @JoinColumn({ name: "protocolId" })
   @ManyToOne(() => Protocol, (protocol) => protocol.protocolMoleculeAssociation)
   protocol: Protocol
 }

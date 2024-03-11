@@ -1,3 +1,8 @@
+export type Option<keyT> = {
+  value: keyT
+  label: string
+}
+
 export interface Patient {
   id: number
   DMI: number
