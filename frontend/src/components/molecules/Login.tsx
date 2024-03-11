@@ -36,14 +36,14 @@ export default function Login({}: Props) {
     <div className="flex flex-col gap-4 items-center">
       <Title className="mb-12" text="CONNEXION" />
       <LoginInput
-        label="Nom d'utilisateur"
+        placeholder="Nom d'utilisateur"
         icon={userIcon}
         value={username}
         setValue={setUsername}
       />
       <LoginInput
         type="password"
-        label="Mot de passe"
+        placeholder="Mot de passe"
         icon={passwordIcon}
         value={password}
         setValue={setPassword}
