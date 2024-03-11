@@ -1,6 +1,6 @@
 FROM node:18.19-alpine3.19
 
-RUN mkdir -p /app/dist
+RUN mkdir /app
 
 WORKDIR /app
 

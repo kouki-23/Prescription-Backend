@@ -23,7 +23,7 @@ export default function OptionInput<keyT>({
       <Listbox.Options className="absolute z-10 bg-white-shade overflow-auto max-h-60 w-96 rounded-lg bg-white text-base shadow-md text-center sm:text-sm">
         {options.map((option) => (
           <Listbox.Option
-            key={option.label}
+            key={String(option.value)}
             value={option}
             className="hover:bg-light-blue transition-colors opacity-75 cursor-pointer py-1"
           >

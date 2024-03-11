@@ -14,7 +14,7 @@ services:
     ports:
       - "3006:5000"
     environment:
-      - DB_HOST=db
+      DB_HOST: db
     networks:
       - postgres_network
       - prescription
@@ -27,10 +27,10 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: prescription
     volumes:
-      - db:/var/lib/postgresql
+      - db_volume:/var/lib/postgresql
 
 volumes:
-  db:
+  db_volume:
 
 networks:
   prescription: {}

@@ -4,7 +4,6 @@ import { CreateProtocolBody } from "../Middlewares/validation/schema"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import { ProtocoleMoleculeAssociation } from "../Entities/ProtocoleMoleculeAssociation"
 import { getMoleculeById } from "./moleculeService"
-import { Molecule } from "../Entities/Molecule"
 
 const repo = db.getRepository(Protocol)
 

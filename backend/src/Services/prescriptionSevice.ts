@@ -5,8 +5,10 @@ import { getPatientById } from "./patientService"
 import { getProtocolWithMolecules } from "./protocolService"
 
 /*export async function createPrescrptition(data: CreatePrescriptionBody) {
-  let patient = await getPatientById(data.patientId)
-  let protocol = await getProtocolWithMolecules(data.protocolId)
+  const [patient, protocol] = await Promise.all([
+    getPatientById(data.patientId),
+    getProtocolWithMolecules(data.protocolId),
+  ])
   let prescription = new Prescription(
     data.prescriber,
     data.nbCures,
@@ -18,7 +20,7 @@ import { getProtocolWithMolecules } from "./protocolService"
     protocol,
     [],
   )
-  for (let i = 0 ; i<data.nbCures ; i++ ){
+  for (let i = 0; i < data.nbCures; i++) {
     let cure = new Cure()
   }
 }*/

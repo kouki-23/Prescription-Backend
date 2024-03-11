@@ -38,15 +38,16 @@ export class Cure {
   prepMolecule: PrepMolecule[]
 
   constructor(
-    moleculeId: number[],
     order: number,
     startDate: Date,
     state: CureState,
     prescription: Prescription,
+    molecules: PrepMolecule[],
   ) {
     this.order = order
     this.prescription = prescription
     this.startDate = startDate
     this.state = state
+    this.prepMolecule = molecules
   }
 }

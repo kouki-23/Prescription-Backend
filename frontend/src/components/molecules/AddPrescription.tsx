@@ -139,13 +139,13 @@ function Step2({
   if (isLoading) return <Loading />
   let protocolOptions: Option<number>[] = []
   if (data) {
-    protocolOptions = data.data.map((v: any) => {
-      return { key: v.id, value: v.name }
+    protocolOptions = data.data.map((v: any): Option<number> => {
+      return { value: v.id, label: v.name }
     })
+    console.log(protocolOptions)
   }
   return (
     <>
-      {}
       <div className="space-y-5">
         <div className="grid grid-cols-2 gap-4 items-center">
           <p>Protocol</p>
