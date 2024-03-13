@@ -34,7 +34,10 @@ export class Cure {
   @ManyToOne(() => Prescription, (pres) => pres.cures)
   prescription: Prescription
 
-  @OneToMany(() => PrepMolecule, (b) => b.cure)
+  @OneToMany(() => PrepMolecule, (b) => b.cure, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   prepMolecule: PrepMolecule[]
 
   constructor(

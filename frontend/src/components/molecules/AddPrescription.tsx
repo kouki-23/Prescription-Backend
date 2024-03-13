@@ -7,7 +7,10 @@ import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import TextInput from "@components/atoms/TextInput"
 import Title from "@components/atoms/Title"
 import { TPatientData } from "@components/organisms/PatientTable"
-import { getAllProtocols } from "@helpers/apis/protocol"
+import {
+  getAllProtocols,
+  getProtocolWithMolecules,
+} from "@helpers/apis/protocol"
 import { useAuth } from "@helpers/auth/auth"
 import { Option } from "@helpers/types"
 import { useQuery } from "@tanstack/react-query"
@@ -36,7 +39,6 @@ export default function AddPrescription({ patient, setIsOpen, isOpen }: Props) {
     protocolId: undefined,
     startDate: new Date().toISOString().split("T")[0],
   })
-  console.log(data.startDate)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   return (
     <Model
@@ -59,6 +61,7 @@ export default function AddPrescription({ patient, setIsOpen, isOpen }: Props) {
       {step === 2 && (
         <Step2 dataP={data} setDataP={setData} setStep={setStep} />
       )}
+      {step === 3 && <Step3 dataP={data} setStep={setStep} />}
     </Model>
   )
 }
@@ -142,7 +145,6 @@ function Step2({
     protocolOptions = data.data.map((v: any): Option<number> => {
       return { value: v.id, label: v.name }
     })
-    console.log(protocolOptions)
   }
   return (
     <>
@@ -173,5 +175,29 @@ function Step2({
         <PrimaryBtn text="Suivant" clickFn={() => setStep(3)} />
       </div>
     </>
+  )
+}
+
+function Step3({
+  setStep,
+  dataP,
+}: {
+  setStep: (step: 1 | 2 | 3) => void
+  dataP: Prescription
+}) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["protocol", dataP.protocolId],
+    queryFn: async () => getProtocolWithMolecules(Number(dataP.protocolId)),
+  })
+
+  if (isLoading) return <Loading />
+
+  return (
+    <div>
+      <div className="flex justify-center mt-16 gap-8">
+        <SecondaryBtn text="Annuler" clickFn={() => setStep(2)} />
+        <PrimaryBtn text="Suivant" clickFn={() => setStep(3)} />
+      </div>
+    </div>
   )
 }

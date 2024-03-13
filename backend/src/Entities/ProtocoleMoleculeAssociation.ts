@@ -10,6 +10,12 @@ export class ProtocoleMoleculeAssociation {
   @Column()
   day: number
 
+  @Column("decimal")
+  dose: number
+
+  @Column()
+  unite: String
+
   @ManyToOne(
     () => Molecule,
     (molecule) => molecule.protocoleMoleculeAssociation,

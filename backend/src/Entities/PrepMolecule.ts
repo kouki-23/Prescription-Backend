@@ -12,14 +12,11 @@ import { DetailPrepMolecule } from "./DetailPrepMolecule"
 import { BottleUsed } from "./BottleUsed"
 import { Cure } from "./Cure"
 
+// TODO : possiblite to add unite for dose
 @Entity()
 export class PrepMolecule {
   @PrimaryGeneratedColumn()
   id: number
-
-  //imkaniya titna7a
-  @Column("decimal")
-  dilutionVolume: number
 
   @Column()
   finalCond: string
@@ -36,6 +33,9 @@ export class PrepMolecule {
   @Column("decimal")
   dose: number
 
+  @Column()
+  day: number
+
   @OneToOne(() => Vehicule)
   @JoinColumn()
   vehicule: Vehicule
@@ -48,4 +48,20 @@ export class PrepMolecule {
 
   @ManyToOne(() => Cure, (b) => b.prepMolecule)
   cure: Cure
+
+  constructor(
+    day: number,
+    dose: number,
+    cure: Cure,
+    details: DetailPrepMolecule,
+  ) {
+    this.day = day
+    this.finalCond = ""
+    this.solventVolume = 0
+    this.finalVolume = 0
+    this.VolumePA = 0
+    this.dose = dose
+    this.details = details
+    this.cure = cure
+  }
 }

@@ -12,8 +12,6 @@ const repo = db.getRepository(Molecule)
 export async function createMolecule(moleculeB: CreateMoleculeBody) {
   const molecule = new Molecule(
     moleculeB.name,
-    moleculeB.dose,
-    moleculeB.unite,
     moleculeB.way,
     moleculeB.perfusionType,
     moleculeB.comment,
