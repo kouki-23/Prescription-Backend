@@ -47,7 +47,7 @@ export default function AddPrescription({ patient, setIsOpen, isOpen }: Props) {
       }}
       isOpen={isOpen}
     >
-      <Title className="text-4xl mb-14" text="NOUVELLE PRESCRIPTION" />
+      <Title className="text-4xl" text="NOUVELLE PRESCRIPTION" />
       {step === 1 && (
         <Step1
           dataP={data}
@@ -89,6 +89,7 @@ function Step1({
 }) {
   return (
     <>
+      <StepBar />
       <div className="flex gap-28">
         <div>
           <PatientInfo
@@ -150,6 +151,7 @@ function Step2({
   }
   return (
     <>
+      <StepBar2 />
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <span>Protocol:</span>
@@ -225,3 +227,61 @@ function Step2({
     </div>
   )
 }*/
+
+function StepBar() {
+  return (
+    <div className="my-12 relative">
+      <span className="absolute left-8 top-4 w-44 bg-secondary-gray h-[2px]"></span>
+      <span className="absolute left-60 top-4 w-44 bg-secondary-gray h-[2px]"></span>
+      <div className="flex items-center justify-between space-x-44 text-center">
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-blue text-white-shade font-bold text-lg ">
+          ✔
+        </span>
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-gray mr-0 text-white-shade">
+          2
+        </span>
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-gray mr-1  text-white-shade">
+          3
+        </span>
+      </div>
+    </div>
+  )
+}
+function StepBar2() {
+  return (
+    <div className="my-12 relative">
+      <span className="absolute left-8 top-4 w-44 bg-secondary-gray h-[2px]"></span>
+      <span className="absolute left-60 top-4 w-44 bg-secondary-gray h-[2px]"></span>
+      <div className="flex items-center justify-between space-x-44 text-center">
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-gray text-white-shade font-bold text-lg ">
+          1
+        </span>
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-blue mr-0 text-white-shade">
+          ✔
+        </span>
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-gray mr-1  text-white-shade">
+          3
+        </span>
+      </div>
+    </div>
+  )
+}
+function StepBar3() {
+  return (
+    <div className="my-12 relative">
+      <span className="absolute left-8 top-4 w-44 bg-secondary-gray h-[2px]"></span>
+      <span className="absolute left-60 top-4 w-44 bg-secondary-gray h-[2px]"></span>
+      <div className="flex items-center justify-between space-x-44 text-center">
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-gray text-white-shade font-bold text-lg ">
+          1
+        </span>
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-gray mr-0 text-white-shade">
+          2
+        </span>
+        <span className="flex justify-center items-center size-8 rounded-full bg-secondary-blue mr-1  text-white-shade">
+          ✔
+        </span>
+      </div>
+    </div>
+  )
+}
