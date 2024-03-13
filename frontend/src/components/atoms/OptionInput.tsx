@@ -2,25 +2,38 @@ import scrollIcon from "@assets/icons/iconscroll.svg"
 import checkIcon from "@assets/icons/CheckIcon.svg"
 import { Listbox } from "@headlessui/react"
 import { Option } from "@helpers/types"
+import { twMerge } from "tailwind-merge"
 
 type Props<keyT> = {
   selected: Option<keyT> | null | undefined
   setSelected: (option: Option<keyT>) => void
   options: Option<keyT>[]
+  width?: number
 }
 
 export default function OptionInput<keyT>({
   options,
   selected,
   setSelected,
+  width,
 }: Props<keyT>) {
   return (
     <Listbox value={selected} onChange={setSelected}>
-      <Listbox.Button className="relative w-96 py-2 min-h-10 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md">
+      <Listbox.Button
+        className={twMerge(
+          "relative w-96 py-2 min-h-10 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md",
+          `w-${width} w-64`,
+        )}
+      >
         <img className="absolute end-1" src={scrollIcon} />
         {selected ? selected.label : "Sélectionnez"}
       </Listbox.Button>
-      <Listbox.Options className="absolute z-10 bg-white-shade overflow-auto max-h-60 w-96 rounded-lg bg-white text-base shadow-md text-center sm:text-sm">
+      <Listbox.Options
+        className={twMerge(
+          "absolute z-10 bg-white-shade overflow-auto max-h-60 w-96 rounded-lg bg-white text-base shadow-md text-center sm:text-sm",
+          `w-${width}`,
+        )}
+      >
         {options.map((option) => (
           <Listbox.Option
             key={String(option.value)}
