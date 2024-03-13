@@ -19,7 +19,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import LabledInput from "./LabledInput"
 
 type Props = {
   patient: TPatientData
@@ -154,25 +153,26 @@ function Step2({
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <span>Protocol:</span>
-          <OptionInput
-            width={72}
-            options={protocolOptions}
-            selected={
-              dataP.protocolId
-                ? protocolOptions.find((p) => p.value === dataP.protocolId)
-                : null
-            }
-            setSelected={(selected) => {
-              const protocol = data?.data.find(
-                (v: any) => (v.id = selected.value),
-              )
-              setDataP({
-                ...dataP,
-                protocolId: selected.value,
-                nbCures: protocol.nbCures,
-              })
-            }}
-          />
+          <div>
+            <OptionInput
+              options={protocolOptions}
+              selected={
+                dataP.protocolId
+                  ? protocolOptions.find((p) => p.value === dataP.protocolId)
+                  : null
+              }
+              setSelected={(selected) => {
+                const protocol = data?.data.find(
+                  (v: any) => (v.id = selected.value),
+                )
+                setDataP({
+                  ...dataP,
+                  protocolId: selected.value,
+                  nbCures: protocol.nbCures,
+                })
+              }}
+            />
+          </div>
         </div>
         <div className="flex items-center gap-12">
           <p>numbre cure :</p>
@@ -191,7 +191,7 @@ function Step2({
           clickFn={async () => {
             try {
               await createPrescription(dataP)
-              navigator(`/prescription/${dataP.patientId}`)
+              navigator(`prescription/${dataP.patientId}`)
             } catch (e) {
               toast.error(handleError(e))
             }

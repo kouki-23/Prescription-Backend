@@ -40,7 +40,7 @@ type PropsElement = {
   size: number
 }
 
-function NavElement({ icon, text, isSelected, size }: PropsElement) {
+function NavElement({ icon, text, size }: PropsElement) {
   return (
     <div>
       <button className="flex justify-between w-44 items-center p-3 font-normal cursor-pointer hover:bg-light-blue hover:opacity-20 ">

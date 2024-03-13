@@ -74,3 +74,21 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
   }
   repo.save(prescription)
 }
+
+export async function getPrescriptionWithEverythingByPatientId(
+  patientId: number,
+) {
+  return repo.find({
+    where: {
+      patient: {
+        id: patientId,
+      },
+    },
+    relations: {
+      patient: true,
+      cures: {
+        prepMolecule: true,
+      },
+    },
+  })
+}

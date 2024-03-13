@@ -14,3 +14,7 @@ export type CreatePrescriptionData = {
 export function createPrescription(data: CreatePrescriptionData) {
   return axios.post("/prescription", data)
 }
+
+export function getPrescriptionByPatientId(id: number) {
+  return axios.get(`/prescription/${id}`)
+}
