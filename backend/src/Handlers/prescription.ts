@@ -13,7 +13,10 @@ export async function createPrescriptionHandler(
     res.sendStatus(200)
   } catch (e) {
     return next(
-      new HttpError("cannot create patient", StatusCode.InternalServerError),
+      new HttpError(
+        "cannot create prescription",
+        StatusCode.InternalServerError,
+      ),
     )
   }
 }

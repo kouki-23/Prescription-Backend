@@ -9,5 +9,8 @@ export function getDetailByMolecule(molecule: Molecule) {
     where: {
       molecule,
     },
+    relations: {
+      molecule: true,
+    },
   })
 }

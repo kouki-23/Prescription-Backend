@@ -22,7 +22,7 @@ export class Cure {
   @Column()
   order: number
 
-  @Column()
+  @Column("date")
   startDate: Date
 
   @Column({
@@ -48,9 +48,10 @@ export class Cure {
     molecules: PrepMolecule[],
   ) {
     this.order = order
-    this.prescription = prescription
-    this.startDate = startDate
+    // i am creating new Date to avoid refrence problem and changing of date after construction of Cure
+    this.startDate = new Date(startDate)
     this.state = state
+    this.prescription = prescription
     this.prepMolecule = molecules
   }
 }
