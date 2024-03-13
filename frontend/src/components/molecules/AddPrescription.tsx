@@ -247,6 +247,7 @@ function StepBar() {
     </div>
   )
 }
+
 function StepBar2() {
   return (
     <div className="my-12 relative">
@@ -266,7 +267,8 @@ function StepBar2() {
     </div>
   )
 }
-function StepBar3() {
+
+/*function StepBar3() {
   return (
     <div className="my-12 relative">
       <span className="absolute left-8 top-4 w-44 bg-secondary-gray h-[2px]"></span>
@@ -284,4 +286,4 @@ function StepBar3() {
       </div>
     </div>
   )
-}
+}*/

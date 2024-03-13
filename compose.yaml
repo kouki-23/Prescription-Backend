@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: prescription
     volumes:
-      - db_volume:/var/lib/postgresql
+      - db_volume:/var/lib/postgresql/data
 
 volumes:
   db_volume:
