@@ -27,12 +27,13 @@ export class Prescription {
   @Column()
   serviceType: string
 
-  @ManyToOne(() => Patient, (p) => p.prescription)
+  @ManyToOne(() => Patient, (p) => p.prescription, {
+    onDelete: "CASCADE",
+  })
   patient: Patient
 
   @OneToMany(() => Cure, (c) => c.prescription, {
     cascade: true,
-    onDelete: "CASCADE",
   })
   cures: Cure[]
 

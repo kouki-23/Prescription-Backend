@@ -46,7 +46,9 @@ export class PrepMolecule {
   @OneToMany(() => BottleUsed, (b) => b.prepMolecule)
   bottlesUsed: BottleUsed[]
 
-  @ManyToOne(() => Cure, (b) => b.prepMolecule)
+  @ManyToOne(() => Cure, (b) => b.prepMolecule, {
+    onDelete: "CASCADE",
+  })
   cure: Cure
 
   constructor(
