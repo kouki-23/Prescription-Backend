@@ -37,6 +37,9 @@ export async function getPrescriptionWithEverythingByPatientIdHandler(
     const pres = await getPrescriptionWithEverythingByPatientId(
       Number(patientId),
     )
+    pres.forEach((p) => {
+      p.cures.sort((a, b) => a.order - b.order)
+    })
     res.json(pres)
   } catch (e) {
     return next(
