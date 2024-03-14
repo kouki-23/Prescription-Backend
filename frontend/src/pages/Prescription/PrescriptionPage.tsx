@@ -5,6 +5,7 @@ import ErrorPage from "@pages/Error/ErrorPage"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams } from "react-router-dom"
 import backIcon from "@assets/icons/back.svg"
+import PatientSideInfo from "@components/organisms/PatientSideInfo"
 
 type Props = {}
 
@@ -30,7 +31,9 @@ export default function PrescriptionPage({}: Props) {
         {data?.data && <ListPrescription prescriptions={data?.data} />}
       </div>
       <div className="w-1/3">
-        <pre>{JSON.stringify(data?.data[0].patient, null, 2)}</pre>
+        {data?.data[0].patient && (
+          <PatientSideInfo patient={data.data[0].patient} />
+        )}
       </div>
     </div>
   )
