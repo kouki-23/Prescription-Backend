@@ -97,3 +97,22 @@ export async function getPrescriptionWithEverythingByPatientId(
     },
   })
 }
+
+export async function getPrescriptionById(id: number) {
+  return repo.findOne({
+    where: {
+      id,
+    },
+    relations: {
+      protocol: true,
+      patient: true,
+      cures: {
+        prepMolecule: {
+          details: {
+            molecule: true,
+          },
+        },
+      },
+    },
+  })
+}

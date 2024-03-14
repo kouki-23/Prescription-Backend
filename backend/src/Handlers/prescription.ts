@@ -5,6 +5,7 @@ import {
 import { NextFunction, Request, Response } from "express"
 import {
   createPrescrptition,
+  getPrescriptionById,
   getPrescriptionWithEverythingByPatientId,
 } from "../Services/prescriptionSevice"
 import { HttpError, StatusCode } from "../Utils/HttpError"
@@ -27,7 +28,7 @@ export async function createPrescriptionHandler(
   }
 }
 
-export async function getPrescriptionWithEverythingByPatientIdHandler(
+export async function getPrescriptionsWithEverythingByPatientIdHandler(
   req: Request<IdParams, never, never, never>,
   res: Response,
   next: NextFunction,
@@ -41,6 +42,25 @@ export async function getPrescriptionWithEverythingByPatientIdHandler(
       p.cures.sort((a, b) => a.order - b.order)
     })
     res.json(pres)
+  } catch (e) {
+    return next(
+      new HttpError("cannot get prescription", StatusCode.InternalServerError),
+    )
+  }
+}
+
+export async function getPrescriptionByIdHandler(
+  req: Request<IdParams, never, never, never>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    const prescription = await getPrescriptionById(Number(id))
+    if (!prescription) {
+      return next(new HttpError("invalid id", StatusCode.NotFound))
+    }
+    return res.send(prescription)
   } catch (e) {
     return next(
       new HttpError("cannot get prescription", StatusCode.InternalServerError),

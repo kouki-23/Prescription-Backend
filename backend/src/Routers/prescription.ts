@@ -1,4 +1,4 @@
-import e, { Router } from "express"
+import { Router } from "express"
 import {
   validateRequestBody,
   validateRequestParams,
@@ -9,8 +9,10 @@ import {
 } from "../Middlewares/validation/schema"
 import {
   createPrescriptionHandler,
-  getPrescriptionWithEverythingByPatientIdHandler,
+  getPrescriptionByIdHandler,
+  getPrescriptionsWithEverythingByPatientIdHandler,
 } from "../Handlers/prescription"
+import { getPrescriptionById } from "../Services/prescriptionSevice"
 
 const router = Router()
 
@@ -23,7 +25,13 @@ router.post(
 router.get(
   "/:id",
   validateRequestParams(IdParamsSchema),
-  getPrescriptionWithEverythingByPatientIdHandler,
+  getPrescriptionByIdHandler,
+)
+
+router.get(
+  "/patient/:id",
+  validateRequestParams(IdParamsSchema),
+  getPrescriptionsWithEverythingByPatientIdHandler,
 )
 
 export default router

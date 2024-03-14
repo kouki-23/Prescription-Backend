@@ -17,5 +17,5 @@ export function createPrescription(data: CreatePrescriptionData) {
 }
 
 export function getPrescriptionByPatientId(id: number) {
-  return axios.get<Prescription[]>(`/prescription/${id}`)
+  return axios.get<Prescription[]>(`/prescription/patient/${id}`)
 }

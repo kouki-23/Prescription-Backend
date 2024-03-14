@@ -12,7 +12,7 @@ export default function PrescriptionPage({}: Props) {
   const naviagator = useNavigate()
   const { patientId } = useParams()
   const { isLoading, error, data } = useQuery({
-    queryKey: ["prescription"],
+    queryKey: ["prescription", patientId],
     queryFn: () => getPrescriptionByPatientId(Number(patientId)),
   })
 
@@ -30,7 +30,7 @@ export default function PrescriptionPage({}: Props) {
         {data?.data && <ListPrescription prescriptions={data?.data} />}
       </div>
       <div className="w-1/3">
-        <pre>{JSON.stringify(data?.data, null, 2)}</pre>
+        <pre>{JSON.stringify(data?.data[0].patient, null, 2)}</pre>
       </div>
     </div>
   )
