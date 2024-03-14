@@ -16,6 +16,7 @@ import { deletePatient } from "@helpers/apis/patient"
 import { toast } from "react-toastify"
 import { useState } from "react"
 import AddPrescription from "@components/molecules/AddPrescription"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   data: TPatientData[]
@@ -153,6 +154,7 @@ type PrescriptionActionsProps = {
 }
 
 function PrescriptionActions({ patient }: PrescriptionActionsProps) {
+  const navigator = useNavigate()
   const [isPrescriptionOpen, setIsPrescriptionOpen] = useState(false)
   return (
     <>
@@ -163,7 +165,10 @@ function PrescriptionActions({ patient }: PrescriptionActionsProps) {
       />
       <div className="flex justify-center gap-4">
         <Icon src={addIcon} onCLick={() => setIsPrescriptionOpen(true)} />
-        <Icon src={listIcon} />
+        <Icon
+          src={listIcon}
+          onCLick={() => navigator(`${patient.id}/prescription`)}
+        />
       </div>
     </>
   )

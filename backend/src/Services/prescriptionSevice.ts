@@ -85,9 +85,14 @@ export async function getPrescriptionWithEverythingByPatientId(
       },
     },
     relations: {
+      protocol: true,
       patient: true,
       cures: {
-        prepMolecule: true,
+        prepMolecule: {
+          details: {
+            molecule: true,
+          },
+        },
       },
     },
   })

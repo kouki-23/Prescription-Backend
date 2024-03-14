@@ -19,6 +19,7 @@ export class Cure {
   @PrimaryGeneratedColumn()
   id: number
 
+  // it can be deleted we can know order by startDate
   @Column()
   order: number
 

@@ -191,7 +191,7 @@ function Step2({
           clickFn={async () => {
             try {
               await createPrescription(dataP)
-              navigator(`prescription/${dataP.patientId}`)
+              navigator(`${dataP.patientId}/prescription`)
             } catch (e) {
               toast.error(handleError(e))
             }

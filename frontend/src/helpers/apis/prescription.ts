@@ -1,3 +1,4 @@
+import { Prescription } from "@helpers/types"
 import axios from "axios"
 
 export type CreatePrescriptionData = {
@@ -16,5 +17,5 @@ export function createPrescription(data: CreatePrescriptionData) {
 }
 
 export function getPrescriptionByPatientId(id: number) {
-  return axios.get(`/prescription/${id}`)
+  return axios.get<Prescription[]>(`/prescription/${id}`)
 }

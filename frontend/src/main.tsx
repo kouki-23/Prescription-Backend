@@ -13,7 +13,7 @@ import Layout from "@components/organisms/Layout"
 
 import ListPatient from "@pages/Patient/ListPatient"
 import AddPatient from "@pages/Patient/AddPatient"
-import ListPrescription from "@pages/Prescription/ListPrescription"
+import PrescriptionPage from "@pages/Prescription/PrescriptionPage"
 
 globalDefault()
 
@@ -33,8 +33,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Route path="" element={<ListPatient />} />
                 <Route path="addPatient" element={<AddPatient />} />
                 <Route
-                  path="prescription/:patientId"
-                  element={<ListPrescription />}
+                  path=":patientId/prescription"
+                  element={<PrescriptionPage />}
                 />
               </Route>
             </Route>
