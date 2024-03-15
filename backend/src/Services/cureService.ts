@@ -22,7 +22,8 @@ export async function addMoleculetoCure(
   cureid: number,
   day: number,
 ) {
-  const cure = getCureById(cureid)
-  const detailsPrepMolecule = getDetailsPrepMoleculeByMoleculeId(moleculeid)
-  const prepMolecule = new PrepMolecule()
+  const cure = await getCureById(cureid)
+  const detailsPrepMolecule = await getDetailsPrepMoleculeByMoleculeId(
+    moleculeid,
+  )
 }

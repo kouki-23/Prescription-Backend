@@ -24,7 +24,9 @@ export async function getDetailsPrepMoleculeByMoleculeId(moleculeId: number) {
       },
     },
     relations: {
-      molecule: true,
+      molecule: {
+        protocoleMoleculeAssociation: true,
+      },
     },
   })
   if (!prepMoleculedetails) {
