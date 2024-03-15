@@ -32,7 +32,9 @@ export class Cure {
   })
   state: CureState
 
-  @ManyToOne(() => Prescription, (pres) => pres.cures)
+  @ManyToOne(() => Prescription, (pres) => pres.cures, {
+    onDelete: "CASCADE",
+  })
   prescription: Prescription
 
   @OneToMany(() => PrepMolecule, (b) => b.cure, {

@@ -7,6 +7,7 @@ import plusIcon from "@assets/icons/plus.svg"
 import minusIcon from "@assets/icons/minus.svg"
 import moleculeIcon from "@assets/icons/molecule.svg"
 import { useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   prescriptions: Prescription[]
@@ -34,6 +35,7 @@ type CardProps = {
   state?: string
   isExpended?: boolean
   setIsExpended?: (b: boolean) => void
+  onClick?: () => void
 }
 
 function Card({
@@ -43,19 +45,25 @@ function Card({
   state,
   isExpended,
   setIsExpended,
+  onClick,
 }: CardProps) {
   return (
     <div className="flex w-full m-2 gap-3 items-center">
       {isExpended !== undefined && setIsExpended !== undefined && (
         <img
-          className="cursor-pointer size-6"
+          className="cursor-pointer size-5"
           onClick={() => setIsExpended(!isExpended)}
           src={isExpended ? minusIcon : plusIcon}
         />
       )}
-      <div className="flex w-full items-center bg-light-blue bg-opacity-10 rounded-lg p-2 px-5 shadow-sm justify-between">
+      <div
+        className={`flex w-full items-center bg-light-blue bg-opacity-10 rounded-lg p-2 px-5 shadow-sm justify-between ${
+          onClick ? "cursor-pointer" : ""
+        }`}
+        onClick={onClick}
+      >
         <div className="flex items-center gap-3">
-          <img className="size-9" src={icon} />
+          <img className="size-6" src={icon} />
           <span className="text-primary-blue font-semibold text-xl">
             {title}
           </span>
@@ -76,6 +84,7 @@ function PrescriptionCard({
   prescription: Prescription
   index: number
 }) {
+  const naviagator = useNavigate()
   const [isExpended, setIsExpended] = useState(false)
   return (
     <>
@@ -87,6 +96,7 @@ function PrescriptionCard({
         state={"En cours"}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
+        onClick={() => naviagator(`/medecin/prescription/${prescription.id}`)}
       />
       {isExpended && (
         <div className="ml-10">

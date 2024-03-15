@@ -13,7 +13,7 @@ export default function PrescriptionPage({}: Props) {
   const naviagator = useNavigate()
   const { patientId } = useParams()
   const { isLoading, error, data } = useQuery({
-    queryKey: ["prescription", patientId],
+    queryKey: ["prescription", "patient", patientId],
     queryFn: () => getPrescriptionByPatientId(Number(patientId)),
   })
 
