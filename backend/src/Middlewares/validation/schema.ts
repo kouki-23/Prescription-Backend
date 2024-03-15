@@ -62,8 +62,6 @@ export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>
 
 export const createMoleculeBodySchema = z.object({
   name: z.string(),
-  dose: z.number(),
-  unite: z.string(),
   way: z.string(),
   perfusionType: z.string(),
   comment: z.string().optional(),
@@ -72,8 +70,6 @@ export type CreateMoleculeBody = z.infer<typeof createMoleculeBodySchema>
 
 export const UpdateMoleculeBodySchema = z.object({
   name: z.string().optional(),
-  dose: z.number().optional(),
-  unite: z.string().optional(),
   way: z.string().optional(),
   perfusionType: z.string().optional(),
   comment: z.string().optional(),
@@ -99,7 +95,6 @@ export type CreateProtocolBody = z.infer<typeof createProtocolBodySchema>
 
 export const createPrescriptionBodySchema = z.object({
   prescriber: z.string(),
-  intercure: z.number(),
   nbCures: z.number().positive(),
   startDate: z.string(),
   clinicalTest: z.boolean(),
@@ -108,6 +103,7 @@ export const createPrescriptionBodySchema = z.object({
   patientId: z.number(),
   protocolId: z.number(),
 })
+
 export type CreatePrescriptionBody = z.infer<
   typeof createPrescriptionBodySchema
 >

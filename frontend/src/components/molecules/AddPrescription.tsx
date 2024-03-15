@@ -7,19 +7,18 @@ import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import TextInput from "@components/atoms/TextInput"
 import Title from "@components/atoms/Title"
 import { TPatientData } from "@components/organisms/PatientTable"
+import { handleError } from "@helpers/apis"
+import {
+  CreatePrescriptionData,
+  createPrescription,
+} from "@helpers/apis/prescription"
 import { getAllProtocols } from "@helpers/apis/protocol"
 import { useAuth } from "@helpers/auth/auth"
 import { Option } from "@helpers/types"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
-
-type Prescription = {
-  prescriber: string
-  startDate: string
-  clincalTest: boolean
-  protocolId: number | undefined
-  nbCure: number
-}
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 type Props = {
   patient: TPatientData
@@ -29,14 +28,16 @@ type Props = {
 
 export default function AddPrescription({ patient, setIsOpen, isOpen }: Props) {
   const { user } = useAuth()
-  const [data, setData] = useState<Prescription>({
-    clincalTest: false,
-    nbCure: 0,
+  const [data, setData] = useState<CreatePrescriptionData>({
     prescriber: user ? user.name : "",
-    protocolId: undefined,
+    nbCures: 0,
+    clinicalTest: false,
+    protocolId: 0,
     startDate: new Date().toISOString().split("T")[0],
+    patientId: patient.id,
+    serviceType: "",
+    comment: "",
   })
-  console.log(data.startDate)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   return (
     <Model
@@ -59,6 +60,7 @@ export default function AddPrescription({ patient, setIsOpen, isOpen }: Props) {
       {step === 2 && (
         <Step2 dataP={data} setDataP={setData} setStep={setStep} />
       )}
+      {/*step === 3 && <Step3 dataP={data} setStep={setStep} />*/}
     </Model>
   )
 }
@@ -79,8 +81,8 @@ function Step1({
   setStep,
   setIsOpen,
 }: {
-  dataP: Prescription
-  setDataP: (p: Prescription) => void
+  dataP: CreatePrescriptionData
+  setDataP: (p: CreatePrescriptionData) => void
   patient: TPatientData
   setStep: (step: 1 | 2 | 3) => void
   setIsOpen: (b: boolean) => void
@@ -123,15 +125,18 @@ function Step1({
   )
 }
 
+// TODO : remeber to give type to protocol and change option to be of type protocol
 function Step2({
   setStep,
   dataP,
   setDataP,
 }: {
   setStep: (step: 1 | 2 | 3) => void
-  dataP: Prescription
-  setDataP: (p: Prescription) => void
+  dataP: CreatePrescriptionData
+  setDataP: (p: CreatePrescriptionData) => void
 }) {
+  const navigator = useNavigate()
+
   const { data, isLoading } = useQuery({
     queryKey: ["protocols"],
     queryFn: getAllProtocols,
@@ -143,40 +148,86 @@ function Step2({
     protocolOptions = data.data.map((v: any): Option<number> => {
       return { value: v.id, label: v.name }
     })
-    console.log(protocolOptions)
   }
   return (
     <>
       <StepBar2 />
       <div className="space-y-5">
-        <div className="grid grid-cols-2 gap-4 items-center">
-          <p>Protocol</p>
-          <OptionInput
-            options={protocolOptions}
-            selected={
-              dataP.protocolId
-                ? protocolOptions.find((p) => p.value === dataP.protocolId)
-                : null
-            }
-            setSelected={(selected) =>
-              setDataP({ ...dataP, protocolId: selected.value })
-            }
-          />
-          <p>Date de la prescription :</p>
-          <DateInput
-            className="w-45"
-            value={dataP.startDate}
-            setValue={(v) => setDataP({ ...dataP, startDate: v })}
+        <div className="flex items-center justify-between">
+          <span>Protocol:</span>
+          <div>
+            <OptionInput
+              options={protocolOptions}
+              selected={
+                dataP.protocolId
+                  ? protocolOptions.find((p) => p.value === dataP.protocolId)
+                  : null
+              }
+              setSelected={(selected) => {
+                const protocol = data?.data.find(
+                  (v: any) => (v.id = selected.value),
+                )
+                setDataP({
+                  ...dataP,
+                  protocolId: selected.value,
+                  nbCures: protocol.nbCures,
+                })
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-12">
+          <p>numbre cure :</p>
+          <TextInput
+            setValue={(value) => setDataP({ ...dataP, nbCures: Number(value) })}
+            value={String(dataP.nbCures)}
+            isNumber={true}
+            className="w-64"
           />
         </div>
       </div>
       <div className="flex justify-center mt-8 gap-8">
         <SecondaryBtn text="Précédent" clickFn={() => setStep(1)} />
-        <PrimaryBtn text="Suivant" clickFn={() => setStep(3)} />
+        <PrimaryBtn
+          text="Suivant"
+          clickFn={async () => {
+            try {
+              await createPrescription(dataP)
+              navigator(`${dataP.patientId}/prescription`)
+            } catch (e) {
+              toast.error(handleError(e))
+            }
+          }}
+        />
       </div>
     </>
   )
 }
+
+/*function Step3({
+  setStep,
+  dataP,
+}: {
+  setStep: (step: 1 | 2 | 3) => void
+  dataP: CreatePrescriptionData
+}) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["protocol", dataP.protocolId],
+    queryFn: async () => getProtocolWithMolecules(Number(dataP.protocolId)),
+  })
+
+  if (isLoading) return <Loading />
+
+  return (
+    <div>
+      <div className="flex justify-center mt-16 gap-8">
+        <SecondaryBtn text="Annuler" clickFn={() => setStep(2)} />
+        <PrimaryBtn text="Suivant" clickFn={() => setStep(3)} />
+      </div>
+    </div>
+  )
+}*/
+
 function StepBar() {
   return (
     <div className="my-12 relative">
@@ -196,6 +247,7 @@ function StepBar() {
     </div>
   )
 }
+
 function StepBar2() {
   return (
     <div className="my-12 relative">
@@ -215,7 +267,8 @@ function StepBar2() {
     </div>
   )
 }
-function StepBar3() {
+
+/*function StepBar3() {
   return (
     <div className="my-12 relative">
       <span className="absolute left-8 top-4 w-44 bg-secondary-gray h-[2px]"></span>
@@ -233,4 +286,4 @@ function StepBar3() {
       </div>
     </div>
   )
-}
+}*/

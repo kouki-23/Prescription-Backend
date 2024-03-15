@@ -17,12 +17,6 @@ export class Molecule {
   @Column({ unique: true })
   name: String
 
-  @Column("decimal")
-  dose: number
-
-  @Column()
-  unite: String
-
   @Column()
   way: String
 
@@ -45,15 +39,11 @@ export class Molecule {
 
   constructor(
     name: string,
-    dose: number,
-    unite: string,
     way: string,
     perfusionType: string,
     comment?: string,
   ) {
     this.name = name
-    this.dose = dose
-    this.unite = unite
     this.way = way
     this.perfusionType = perfusionType
     this.comment = comment

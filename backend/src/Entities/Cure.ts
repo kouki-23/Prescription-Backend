@@ -19,10 +19,11 @@ export class Cure {
   @PrimaryGeneratedColumn()
   id: number
 
+  // it can be deleted we can know order by startDate
   @Column()
   order: number
 
-  @Column()
+  @Column("date")
   startDate: Date
 
   @Column({
@@ -31,10 +32,15 @@ export class Cure {
   })
   state: CureState
 
-  @ManyToOne(() => Prescription, (pres) => pres.cures)
+  @ManyToOne(() => Prescription, (pres) => pres.cures, {
+    onDelete: "CASCADE",
+  })
   prescription: Prescription
 
-  @OneToMany(() => PrepMolecule, (b) => b.cure)
+  @OneToMany(() => PrepMolecule, (b) => b.cure, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   prepMolecule: PrepMolecule[]
 
   constructor(
@@ -45,9 +51,10 @@ export class Cure {
     molecules: PrepMolecule[],
   ) {
     this.order = order
-    this.prescription = prescription
-    this.startDate = startDate
+    // i am creating new Date to avoid refrence problem and changing of date after construction of Cure
+    this.startDate = new Date(startDate)
     this.state = state
+    this.prescription = prescription
     this.prepMolecule = molecules
   }
 }

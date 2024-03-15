@@ -1,14 +1,26 @@
 import db from "../Config/db"
 import { DetailPrepMolecule } from "../Entities/DetailPrepMolecule"
 import { HttpError, StatusCode } from "../Utils/HttpError"
+import { Molecule } from "../Entities/Molecule"
 
 const repo = db.getRepository(DetailPrepMolecule)
 
-export async function getDetailsPrepMoleculeByMoleculeId(moleculeid: number) {
+export function getDetailByMolecule(molecule: Molecule) {
+  return repo.findOne({
+    where: {
+      molecule,
+    },
+    relations: {
+      molecule: true,
+    },
+  })
+}
+
+export async function getDetailsPrepMoleculeByMoleculeId(moleculeId: number) {
   const prepMoleculedetails = await repo.findOne({
     where: {
       molecule: {
-        id: moleculeid,
+        id: moleculeId,
       },
     },
     relations: {

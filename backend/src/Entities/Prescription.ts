@@ -9,6 +9,7 @@ import { Patient } from "./Patient"
 import { Protocol } from "./Protocol"
 import { Cure } from "./Cure"
 
+// UPDATE : removed startDate because we can get it from the first cure
 @Entity()
 export class Prescription {
   @PrimaryGeneratedColumn()
@@ -16,15 +17,6 @@ export class Prescription {
 
   @Column()
   prescriber: string
-
-  @Column()
-  intercure: number
-
-  @Column()
-  nbCures: number
-
-  @Column("date")
-  startDate: Date
 
   @Column()
   clinicalTest: boolean
@@ -35,12 +27,13 @@ export class Prescription {
   @Column()
   serviceType: string
 
-  @ManyToOne(() => Patient, (p) => p.prescription)
+  @ManyToOne(() => Patient, (p) => p.prescription, {
+    onDelete: "CASCADE",
+  })
   patient: Patient
 
   @OneToMany(() => Cure, (c) => c.prescription, {
     cascade: true,
-    onDelete: "CASCADE",
   })
   cures: Cure[]
 
@@ -49,9 +42,6 @@ export class Prescription {
 
   constructor(
     prescriber: string,
-    intercure: number,
-    nbCures: number,
-    startDate: Date,
     clinicalTest: boolean,
     serviceType: string,
     patient: Patient,
@@ -60,9 +50,6 @@ export class Prescription {
     comment?: string,
   ) {
     this.prescriber = prescriber
-    this.nbCures = nbCures
-    this.intercure = intercure
-    this.startDate = startDate
     this.clinicalTest = clinicalTest
     this.comment = comment
     this.serviceType = serviceType

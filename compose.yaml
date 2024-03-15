@@ -12,7 +12,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "3006:5000"
+      - "3006:3006"
     environment:
       DB_HOST: db
     networks:
@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: prescription
     volumes:
-      - db_volume:/var/lib/postgresql
+      - db_volume:/var/lib/postgresql/data
 
 volumes:
   db_volume:
