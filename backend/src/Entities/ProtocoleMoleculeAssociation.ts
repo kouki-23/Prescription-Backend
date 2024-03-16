@@ -14,7 +14,7 @@ export class ProtocoleMoleculeAssociation {
   dose: number
 
   @Column()
-  unite: String
+  unite: string
 
   @ManyToOne(
     () => Molecule,

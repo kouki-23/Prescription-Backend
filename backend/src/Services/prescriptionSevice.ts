@@ -45,6 +45,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
       const prepMolecule: PrepMolecule = new PrepMolecule(
         p.day,
         p.dose,
+        p.unite,
         cure,
         detail,
       )
@@ -64,6 +65,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
         const prepMolecule: PrepMolecule = new PrepMolecule(
           p.day,
           p.dose,
+          p.unite,
           cure,
           detail,
         )

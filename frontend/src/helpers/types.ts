@@ -58,10 +58,13 @@ export interface Details {
 export interface PrepMolecule {
   day: number
   finalCond: string
-  solventVolume: string
-  finalVolume: string
-  VolumePA: string
-  dose: string
+  solventVolume: number
+  finalVolume: number
+  VolumePA: number
+  dose: number
+  unite: string
+  time: string
+  duration: number
   details: Details
   id: number
 }
@@ -94,14 +97,14 @@ export interface PatientData {
   gender: string
   matrimonial: string
   birthDate: string
-  weight: string
-  height: string
-  bodySurface: string
-  creatinine: string
+  weight: number
+  height: number
+  bodySurface: number
+  creatinine: number
   clairanceFormula: string
-  clairance: string
-  comment: null
-  serviceType: null
+  clairance: number
+  comment: string
+  serviceType: string
 }
 
 export interface Prescription {

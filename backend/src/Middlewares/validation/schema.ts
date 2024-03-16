@@ -55,8 +55,8 @@ export const updatePatientBodySchema = z.object({
   creatinine: z.number().nonnegative().optional(),
   clairanceFormula: z.string().optional(),
   clairance: z.number().optional(),
-  comment: z.string().optional().optional(),
-  serviceType: z.string().optional().optional(),
+  comment: z.string().optional(),
+  serviceType: z.string().optional(),
 })
 export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>
 

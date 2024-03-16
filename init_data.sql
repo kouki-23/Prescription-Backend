@@ -81,7 +81,7 @@ INSERT INTO public.detail_prep_molecule (id, dci, specialite, volume, "volumeUni
 INSERT INTO public.detail_prep_molecule (id, dci, specialite, volume, "volumeUnite", "isReconstruct", "solventReconstitution", "volumeReconstitution", "volumeReconstitutionUnity", "conservationReconstitutionFridge", "dilutionVolume", "dilutionVolumeUnite", "minConcentrarion", "maxConcentrarion", "concentrationUnite", "conservrationDilutionFridge", "concervationtionPeriodDilution", "lightShelter", "SensivityPVC", "moleculeId") VALUES (3, '', '', 0, '', false, '', 0, '', false, 0, '', 0, 0, '', false, 0, false, false, 27);
 
 -- relation between 
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (1, 1, 19, 1, 85, 'mg/m');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (2, 1, 26, 1, 400, 'mg/m');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (3, 1, 27, 1, 1250, 'mg/m');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (4, 2, 27, 1, 1250, 'mg/m');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (1, 1, 19, 1, 85, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (2, 1, 26, 1, 400, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (3, 1, 27, 1, 1250, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (4, 2, 27, 1, 1250, 'mg/m²');

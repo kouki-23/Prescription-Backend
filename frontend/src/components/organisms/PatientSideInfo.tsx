@@ -16,14 +16,17 @@ export default function PatientSideInfo({ patient }: Props) {
         </p>
         <div className="space-y-3">
           <div className="grid grid-cols-3  gap-5 pt-4">
-            <InfoText label="Poids" value={patient.weight} />
-            <InfoText label="Taille" value={patient.height} />
+            <InfoText label="Poids" value={String(patient.weight)} />
+            <InfoText label="Taille" value={String(patient.height)} />
             <InfoText
               label="Age"
               value={String(getAge(new Date(patient.birthDate)))}
             />
           </div>
-          <InfoText label="Surface Corporelle" value={patient.bodySurface} />
+          <InfoText
+            label="Surface Corporelle"
+            value={String(patient.bodySurface)}
+          />
           <p className="text-primary-blue font-medium pt-1">Commentaire:</p>
           <p className="text-light-black font-light py-2">{patient.comment}</p>
         </div>

@@ -8,6 +8,7 @@ import minusIcon from "@assets/icons/minus.svg"
 import moleculeIcon from "@assets/icons/molecule.svg"
 import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { addDaysToDate } from "@helpers/utils"
 
 type Props = {
   prescriptions: Prescription[]
@@ -163,11 +164,10 @@ function JourneyCard({
   startDate: string
 }) {
   const [isExpended, setIsExpended] = useState(false)
-  const date = useMemo(() => {
-    const d = new Date(startDate)
-    d.setDate(d.getDate() + prepMolecules[0].day - 1)
-    return d
-  }, [startDate])
+  const date = useMemo(
+    () => addDaysToDate(startDate, prepMolecules[0].day - 1),
+    [startDate],
+  )
   return (
     <>
       <Card
@@ -182,7 +182,11 @@ function JourneyCard({
       {isExpended && (
         <div className="ml-16">
           {prepMolecules.map((m) => (
-            <Card icon={moleculeIcon} title={m.details.molecule.name} />
+            <Card
+              icon={moleculeIcon}
+              title={m.details.molecule.name}
+              subTitle={m.dose + " " + m.unite}
+            />
           ))}
         </div>
       )}

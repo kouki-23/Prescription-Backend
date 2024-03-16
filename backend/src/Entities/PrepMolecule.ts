@@ -34,7 +34,17 @@ export class PrepMolecule {
   dose: number
 
   @Column()
+  unite: string
+
+  @Column()
   day: number
+
+  @Column()
+  duration: number
+
+  //it need to be changed
+  @Column()
+  time: string
 
   @OneToOne(() => Vehicule)
   @JoinColumn()
@@ -54,6 +64,7 @@ export class PrepMolecule {
   constructor(
     day: number,
     dose: number,
+    unite: string,
     cure: Cure,
     details: DetailPrepMolecule,
   ) {
@@ -62,7 +73,10 @@ export class PrepMolecule {
     this.solventVolume = 0
     this.finalVolume = 0
     this.VolumePA = 0
+    this.duration = 1
+    this.time = "10:00PM"
     this.dose = dose
+    this.unite = unite
     this.details = details
     this.cure = cure
   }

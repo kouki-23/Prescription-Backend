@@ -31,9 +31,7 @@ export default function PrescriptionPage({}: Props) {
         {data?.data && <ListPrescription prescriptions={data?.data} />}
       </div>
       <div className="w-1/3">
-        {data?.data[0].patient && (
-          <PatientSideInfo patient={data.data[0].patient} />
-        )}
+        {data?.data[0] && <PatientSideInfo patient={data.data[0].patient} />}
       </div>
     </div>
   )

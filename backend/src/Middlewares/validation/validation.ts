@@ -9,6 +9,7 @@ export function validateRequestBody(schema: z.Schema) {
       await schema.parseAsync(req.body)
       next()
     } catch (error) {
+      console.log(error)
       next(new HttpError("Invalid Request", StatusCode.BadRequest))
     }
   }
