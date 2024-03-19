@@ -101,7 +101,7 @@ export async function getPrescriptionWithEverythingByPatientId(
 }
 
 export async function getPrescriptionById(id: number) {
-  return repo.findOne({
+  const result = await repo.findOne({
     where: {
       id,
     },
@@ -111,10 +111,29 @@ export async function getPrescriptionById(id: number) {
       cures: {
         prepMolecule: {
           details: {
-            molecule: true,
+            molecule: {
+              protocoleMoleculeAssociation: {
+                protocol: true,
+              },
+            },
           },
         },
       },
     },
   })
+  if (!result) {
+    return result
+  }
+  const protocolId = result.protocol.id
+  result.cures.forEach((c) => {
+    c.prepMolecule.forEach((p) => {
+      const a = p.details.molecule.protocoleMoleculeAssociation.find(
+        (p) => p.protocol.id === protocolId,
+      )
+      if (a) {
+        p.details.molecule.protocoleMoleculeAssociation = [a]
+      }
+    })
+  })
+  return result
 }

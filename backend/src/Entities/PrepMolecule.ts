@@ -74,7 +74,7 @@ export class PrepMolecule {
     this.finalVolume = 0
     this.VolumePA = 0
     this.duration = 1
-    this.time = "10:00PM"
+    this.time = "10:00"
     this.dose = dose
     this.unite = unite
     this.details = details

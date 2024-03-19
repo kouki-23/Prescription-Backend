@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { HttpError, StatusCode } from "../Utils/HttpError"
-import jwt, { JwtPayload } from "jsonwebtoken"
-import { getSecretJWT, verifyJWT } from "../Utils/jwt"
+import { verifyJWT } from "../Utils/jwt"
 import db from "../Config/db"
 import { User, UserRole } from "../Entities/User"
 

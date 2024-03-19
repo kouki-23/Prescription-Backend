@@ -30,6 +30,14 @@ export interface Molecule {
   perfusionType: string
   comment: string
   id: number
+  protocoleMoleculeAssociation: ProtocoleMoleculeAssociation[]
+}
+
+export interface ProtocoleMoleculeAssociation {
+  id: number
+  day: number
+  dose: number
+  unite: string
 }
 
 export interface Details {

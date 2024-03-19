@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query"
 import PatientTable, { TPatientData } from "@components/organisms/PatientTable"
 import { getAllPatients } from "@helpers/apis/patient"
-import Loading from "@components/atoms/Loading"
 import ErrorPage from "@pages/Error/ErrorPage"
 import { Patient } from "@helpers/types"
 import PatientFilter from "@components/organisms/PatientFilter"
 import Title from "@components/atoms/Title"
 import addIcon from "@assets/icons/add.svg"
 import { useNavigate } from "react-router-dom"
+import LoadingInterface from "@components/organisms/LoadingInterface"
 
 type Props = {}
 
@@ -17,7 +17,7 @@ export default function PatientPage({}: Props) {
     queryKey: ["patients"],
     queryFn: getAllPatients,
   })
-  if (isLoading) return <Loading />
+  if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
   const patients = data ? data : []
   return (

@@ -6,6 +6,8 @@ type Props = {
   className?: string
   disabled?: boolean
   isNumber?: boolean
+  isPassword?: boolean
+  onBlur?: () => void
 }
 
 export default function TextInput({
@@ -14,10 +16,12 @@ export default function TextInput({
   className,
   disabled,
   isNumber,
+  isPassword,
+  onBlur,
 }: Props) {
   return (
     <input
-      type={isNumber ? "number" : "text"}
+      type={isNumber ? "number" : isPassword ? "password" : "text"}
       className={twMerge(
         "bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md",
         className,
@@ -25,6 +29,7 @@ export default function TextInput({
       value={value}
       onChange={(e) => setValue(e.target.value)}
       disabled={disabled}
+      onBlur={onBlur}
     />
   )
 }

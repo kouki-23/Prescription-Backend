@@ -1,4 +1,3 @@
-import Loading from "@components/atoms/Loading"
 import { getPrescriptionById } from "@helpers/apis/prescription"
 import ErrorPage from "@pages/Error/ErrorPage"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -7,9 +6,7 @@ import backIcon from "@assets/icons/back.svg"
 import { PatientData, Prescription } from "@helpers/types"
 import Title from "@components/atoms/Title"
 import { useEffect, useMemo, useState } from "react"
-import { getAge } from "@helpers/personInfo"
-import addIcon from "@assets/icons/add.svg"
-import listIcon from "@assets/icons/list.svg"
+import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
 import PrepMoleculeTable from "@components/organisms/PrepMoleculeTable"
 import editIcon from "@assets/icons/edit.svg"
 import checkIcon from "@assets/icons/CheckIcon.svg"
@@ -17,6 +14,7 @@ import TextInput from "@components/atoms/TextInput"
 import { toast } from "react-toastify"
 import { updatePatient } from "@helpers/apis/patient"
 import { diffObjects } from "@helpers/utils"
+import LoadingInterface from "@components/organisms/LoadingInterface"
 
 type Props = {}
 
@@ -34,7 +32,7 @@ export default function PrescriptionDetailsPage({}: Props) {
   useEffect(() => {
     setPrescription(data?.data)
   }, [data])
-  if (isLoading) return <Loading />
+  if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
   return (
     <div className="px-8">
@@ -45,7 +43,7 @@ export default function PrescriptionDetailsPage({}: Props) {
       />
       {prescription && (
         <div>
-          <div className="flex gap-24">
+          <div className="container mx-auto flex gap-24">
             <PrescriptionInfoCard
               prescription={prescription}
               selectedCure={selectedCure}
@@ -58,21 +56,17 @@ export default function PrescriptionDetailsPage({}: Props) {
               }
             />
           </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4 my-8">
-              <Title className="font-semibold" text="Produits" />
-              <span className="text-2xl font-semibold text-primary-blue opacity-85">
-                Cure {selectedCure + 1}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              {/*<PrimaryBtn className="p-1 text-sm" text="Enregistrer" />*/}
-              <img className="size-8" src={listIcon} />
-              <img className="size-8" src={addIcon} />
-            </div>
-          </div>
           <div>
-            <PrepMoleculeTable cure={prescription.cures[selectedCure]} />
+            <PrepMoleculeTable
+              selectedCure={selectedCure}
+              cure={prescription.cures[selectedCure]}
+              patient={prescription.patient}
+              setCure={(c) => {
+                let newCures = [...prescription.cures]
+                newCures[selectedCure] = c
+                setPrescription({ ...prescription, cures: newCures })
+              }}
+            />
           </div>
         </div>
       )}
@@ -117,6 +111,7 @@ function PrescriptionInfoCard({
         <div className="flex gap-5">
           {prescription.cures.map((c) => (
             <div
+              key={c.id}
               onClick={() => setSelectedCure(c.order - 1)}
               className={`size-9 border-2 border-secondary-blue flex justify-center items-center rounded-full cursor-pointer ${
                 c.order - 1 === selectedCure
@@ -155,6 +150,24 @@ function PatientInfoCard({
       setUpdateOldPatient(!updateOldPatient)
     },
   })
+  useEffect(() => {
+    setPatient({
+      ...patient,
+      bodySurface: getBodySurf(patient.weight, patient.height),
+    })
+  }, [patient.height, patient.weight])
+  useEffect(() => {
+    setPatient({
+      ...patient,
+      clairance: getClairance(
+        patient.clairanceFormula,
+        patient.gender,
+        patient.creatinine,
+        getAge(new Date(patient.birthDate)),
+        patient.weight,
+      ),
+    })
+  }, [patient.clairanceFormula, patient.creatinine, patient.weight])
   return (
     <div className="relative p-4 px-6 bg-gray-table shadow-lg w-full rounded-3xl">
       <div className="flex items-center gap-6">
