@@ -327,7 +327,6 @@ export default function PrepMoleculeTable({
           </tbody>
         </table>
       </div>
-      <pre>{JSON.stringify(cure, null, 2)}</pre>
     </>
   )
 }
