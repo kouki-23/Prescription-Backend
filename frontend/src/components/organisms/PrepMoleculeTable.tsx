@@ -129,7 +129,7 @@ export default function PrepMoleculeTable({
     }),
     columnHelper.accessor((row) => row.dose * patient.bodySurface, {
       id: "doseT",
-      cell: (info) => info.getValue(),
+      cell: (info) => info.getValue() + " mg",
       header: "Dose théorique",
     }),
     columnHelper.accessor((row) => row.doseAdaptee, {
@@ -164,15 +164,15 @@ export default function PrepMoleculeTable({
           </div>
         )
       },
-      header: "Dose Adaptee - Unite",
+      header: "Dose Adaptée - Unité",
       size: 50,
     }),
     columnHelper.accessor(
       (row) => Math.round(row.doseAdaptee * patient.bodySurface * 100) / 100,
       {
         id: "doseAdaptee",
-        cell: (info) => info.getValue(),
-        header: "Dose Adaptee",
+        cell: (info) => info.getValue() + " mg",
+        header: "Dose Adaptée",
       },
     ),
     columnHelper.accessor(
@@ -236,12 +236,12 @@ export default function PrepMoleculeTable({
     columnHelper.accessor((row) => row.duration, {
       id: "duree",
       cell: (info) => info.getValue() + "h",
-      header: "Duree",
+      header: "Durée",
     }),
     columnHelper.display({
       id: "Action",
       cell: () => <Action />,
-      header: "Action",
+      header: "Validation",
     }),
   ]
   const table = useReactTable({

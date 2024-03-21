@@ -109,6 +109,7 @@ function Step1({
         <TextInput
           setValue={(value) => setDataP({ ...dataP, prescriber: value })}
           value={dataP.prescriber}
+          disabled={true}
         />
         <p>Date de la prescription :</p>
         <DateInput
@@ -154,7 +155,7 @@ function Step2({
       <StepBar2 />
       <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <span>Protocol:</span>
+          <span>Protocole:</span>
           <div>
             <OptionInput
               options={protocolOptions}

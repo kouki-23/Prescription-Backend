@@ -17,6 +17,7 @@ import { toast } from "react-toastify"
 import { useState } from "react"
 import AddPrescription from "@components/molecules/AddPrescription"
 import { useNavigate } from "react-router-dom"
+import { getDate } from "@helpers/utils"
 
 type Props = {
   data: TPatientData[]
@@ -51,7 +52,7 @@ export default function PatientTable({ data, refetch }: Props) {
     columnHelper.accessor((row) => row.firstName, {
       id: "firstName",
       cell: (info) => info.getValue(),
-      header: "prenom",
+      header: "Prénom",
     }),
     columnHelper.accessor((row) => row.lastName, {
       id: "lastName",
@@ -61,7 +62,7 @@ export default function PatientTable({ data, refetch }: Props) {
     columnHelper.accessor((row) => row.birthDate, {
       id: "birthDate",
       header: "Date de Naissance",
-      cell: (info) => info.getValue(),
+      cell: (info) => getDate(new Date(info.getValue())),
     }),
     columnHelper.accessor((row) => row.gender, {
       id: "gender",

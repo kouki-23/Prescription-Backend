@@ -45,7 +45,7 @@ export default function PrescriptionFilePage({}: Props) {
             <h3 className="font-semibold py-3 text-2xl">Patient :</h3>
             <div className="grid grid-cols-3 w-fit">
               <Info label="Nom" text={prescription.patient.lastName} />
-              <Info label="Prenom" text={prescription.patient.firstName} />
+              <Info label="Prénom" text={prescription.patient.firstName} />
               <Info
                 label="Agé"
                 text={getAge(new Date(prescription.patient.birthDate))}
