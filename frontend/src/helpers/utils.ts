@@ -30,3 +30,7 @@ export function diffObjects(obj1: any, obj2: any) {
 
   return diff
 }
+
+export function getDate(date: Date): string {
+  return date.toISOString().split("T")[0].split("-").reverse().join("-")
+}

@@ -7,6 +7,7 @@ import {
   createPrescrptition,
   getPrescriptionById,
   getPrescriptionWithEverythingByPatientId,
+  updatePrescription,
 } from "../Services/prescriptionSevice"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 
@@ -64,6 +65,26 @@ export async function getPrescriptionByIdHandler(
   } catch (e) {
     return next(
       new HttpError("cannot get prescription", StatusCode.InternalServerError),
+    )
+  }
+}
+
+export async function updatePrescriptionHandler(
+  req: Request<IdParams>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    const result = await updatePrescription(Number(id), req.body)
+    return res.json(result.generatedMaps)
+  } catch (e) {
+    console.log(e)
+    return next(
+      new HttpError(
+        "cannot update prescription",
+        StatusCode.InternalServerError,
+      ),
     )
   }
 }

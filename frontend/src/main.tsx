@@ -15,6 +15,7 @@ import ListPatient from "@pages/Patient/ListPatient"
 import AddPatient from "@pages/Patient/AddPatient"
 import PrescriptionPage from "@pages/Prescription/PrescriptionPage"
 import PrescriptionDetailsPage from "@pages/Prescription/PrescriptionDetailsPage"
+import PrescriptionFilePage from "@pages/Prescription/PrescriptionFilePage"
 
 globalDefault()
 
@@ -37,10 +38,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   path=":patientId/prescription"
                   element={<PrescriptionPage />}
                 />
-                <Route
-                  path="prescription/:id"
-                  element={<PrescriptionDetailsPage />}
-                />
+                <Route path="prescription/:id">
+                  <Route path="" element={<PrescriptionDetailsPage />} />
+                  <Route
+                    path="file/:cureorder"
+                    element={<PrescriptionFilePage />}
+                  />
+                </Route>
               </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />

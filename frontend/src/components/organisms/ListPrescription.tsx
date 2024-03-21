@@ -92,7 +92,7 @@ function PrescriptionCard({
       <Card
         key={prescription.id}
         icon={prescriptionIcon}
-        title={`prescription ${index + 1}:`}
+        title={`Prescription ${index + 1}:`}
         subTitle={prescription.protocol.name}
         state={"En cours"}
         isExpended={isExpended}

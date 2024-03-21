@@ -25,3 +25,7 @@ export async function getPrescriptionById(id: number) {
   res.data.cures.sort((a, b) => a.order - b.order)
   return res
 }
+
+export async function updatePrescription(id: Number, prescription: any) {
+  return axios.patch(`/prescription/${id}`, prescription)
+}

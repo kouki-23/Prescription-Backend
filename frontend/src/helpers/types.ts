@@ -118,7 +118,7 @@ export interface PatientData {
 export interface Prescription {
   prescriber: string
   clinicalTest: boolean
-  comment: null
+  comment?: string
   serviceType: string
   patient: PatientData
   protocol: Protocol

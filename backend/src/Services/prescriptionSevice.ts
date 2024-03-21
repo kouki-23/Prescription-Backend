@@ -137,3 +137,7 @@ export async function getPrescriptionById(id: number) {
   })
   return result
 }
+
+export async function updatePrescription(id: number, prescription: any) {
+  return repo.update({ id }, prescription)
+}

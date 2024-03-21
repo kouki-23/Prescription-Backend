@@ -1,4 +1,7 @@
-import { getPrescriptionById } from "@helpers/apis/prescription"
+import {
+  getPrescriptionById,
+  updatePrescription,
+} from "@helpers/apis/prescription"
 import ErrorPage from "@pages/Error/ErrorPage"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams } from "react-router-dom"
@@ -28,6 +31,7 @@ export default function PrescriptionDetailsPage({}: Props) {
   const [prescription, setPrescription] = useState<Prescription | undefined>(
     undefined,
   )
+
   const [selectedCure, setSelectedCure] = useState(0)
   useEffect(() => {
     setPrescription(data?.data)
@@ -67,6 +71,20 @@ export default function PrescriptionDetailsPage({}: Props) {
                 setPrescription({ ...prescription, cures: newCures })
               }}
             />
+          </div>
+          <div className="container mx-auto my-10">
+            <Title className="text-3xl font-semibold mb-2" text="Commentaire" />
+            <textarea
+              className="w-full bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue"
+              onChange={(e) =>
+                setPrescription({ ...prescription, comment: e.target.value })
+              }
+              onBlur={() =>
+                updatePrescription(prescription.id, {
+                  comment: prescription.comment,
+                })
+              }
+            ></textarea>
           </div>
         </div>
       )}

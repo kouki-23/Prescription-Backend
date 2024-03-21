@@ -11,6 +11,7 @@ import {
   createPrescriptionHandler,
   getPrescriptionByIdHandler,
   getPrescriptionsWithEverythingByPatientIdHandler,
+  updatePrescriptionHandler,
 } from "../Handlers/prescription"
 import { getPrescriptionById } from "../Services/prescriptionSevice"
 
@@ -32,6 +33,12 @@ router.get(
   "/patient/:id",
   validateRequestParams(IdParamsSchema),
   getPrescriptionsWithEverythingByPatientIdHandler,
+)
+
+router.patch(
+  "/:id",
+  validateRequestParams(IdParamsSchema),
+  updatePrescriptionHandler,
 )
 
 export default router

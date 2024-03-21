@@ -13,12 +13,14 @@ import { useEffect, useState } from "react"
 import addIcon from "@assets/icons/add.svg"
 import plusIcon from "@assets/icons/plus-green.svg"
 import minusIcon from "@assets/icons/minus-red.svg"
+import fileIcon from "@assets/icons/file-download.svg"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { updatePrepMolecules } from "@helpers/apis/prepMolcule"
 import Model from "@components/atoms/Model"
 import { login } from "@helpers/apis/user"
 import { useAuth } from "@helpers/auth/auth"
+import { getDate } from "../../helpers/utils"
 
 type Props = {
   cure: Cure
@@ -283,8 +285,15 @@ export default function PrepMoleculeTable({
               text="Enregistrer"
               clickFn={() => setIsOpen(true)}
             />
-            {/*<img className="size-8" src={listIcon} />*/}
-            <img className="size-8" src={addIcon} />
+            <img className="size-8 cursor-pointer" src={addIcon} />
+            <img
+              className="size-8 cursor-pointer"
+              src={fileIcon}
+              onClick={() => {
+                const url = window.location
+                window.open(`${url}/file/${cure.order}`)
+              }}
+            />
           </div>
         </div>
         <table className="container mx-auto text-sm border-collapse rounded-xl border-hidden shadow">
@@ -371,11 +380,7 @@ function DayCell({
         src={minusIcon}
         onClick={() => setDay(day - 1)}
       />
-      {`J${day} ( ${
-        addDaysToDate(startDate, day - 1)
-          .toISOString()
-          .split("T")[0]
-      } )`}
+      {`J${day} ( ${getDate(addDaysToDate(startDate, day - 1))} )`}
       <img
         className="size-5 cursor-pointer"
         src={plusIcon}

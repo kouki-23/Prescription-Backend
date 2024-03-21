@@ -15,7 +15,7 @@ export default function Header({}: Props) {
     navigate("/login")
   }
   return (
-    <div className="w-screen bg-primary-blue flex items-center px-7 py-3 justify-between">
+    <header className="w-screen bg-primary-blue flex items-center px-7 py-3 justify-between">
       <img className="size-12 cursor-pointer" onClick={goToHome} src={logo} />
       <div className="flex gap-1 items-center">
         <div className="text-white-shade flex flex-col items-end">
@@ -28,6 +28,6 @@ export default function Header({}: Props) {
           src={logoutIcon}
         />
       </div>
-    </div>
+    </header>
   )
 }
