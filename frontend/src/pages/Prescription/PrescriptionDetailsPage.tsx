@@ -16,7 +16,7 @@ import checkIcon from "@assets/icons/CheckIcon.svg"
 import TextInput from "@components/atoms/TextInput"
 import { toast } from "react-toastify"
 import { updatePatient } from "@helpers/apis/patient"
-import { diffObjects } from "@helpers/utils"
+import { diffObjects, getDate } from "@helpers/utils"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 
 type Props = {}
@@ -108,18 +108,20 @@ function PrescriptionInfoCard({
         text="Prescription / Cure"
       />
       <div className="grid grid-cols-2">
-        <InfoText label="N Cure" value={String(selectedCure + 1)} />
+        <InfoText
+          label="N Cure"
+          value={`${String(selectedCure + 1)} / ${prescription.cures.length}`}
+        />
         <InfoText
           label="Status"
           value={prescription.cures[selectedCure].state}
         />
         <InfoText
           label="Date debut"
-          value={prescription.cures[selectedCure].startDate}
+          value={getDate(new Date(prescription.cures[selectedCure].startDate))}
         />
-        <InfoText label="Nbr Cure" value={String(prescription.cures.length)} />
+        <InfoText label="Protocole" value={prescription.protocol.name} />
       </div>
-      <InfoText label="Protocole" value={prescription.protocol.name} />
       <InfoText
         label="Intercure"
         value={`${prescription.protocol.intercure} jours`}
@@ -217,6 +219,7 @@ function PatientInfoCard({
           }
           editFn={() => patientMutation.mutate()}
           isNumber={true}
+          unite="µmol/l"
         />
         <InfoText
           label="Poids"
@@ -238,6 +241,7 @@ function PatientInfoCard({
           }
           editFn={() => patientMutation.mutate()}
           isNumber={true}
+          unite="m²"
         />
       </div>
     </div>

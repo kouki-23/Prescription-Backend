@@ -39,18 +39,19 @@ type TData = {
 type Props = {}
 
 const formuleClairanceOptions: Option<string>[] = [
-  { label: "mdrd", value: "mdrd" },
-  { label: "cockroft", value: "cockroft" },
+  { label: "MRDR", value: "MDRD" },
+  { label: "Cockroft", value: "Cockroft" },
 ]
 
 const matrimonialOptions: Option<string>[] = [
-  { label: "marié", value: "marié" },
-  { label: "célibataire", value: "célibataire" },
+  { label: "Marié", value: "Marié" },
+  { label: "Célibataire", value: "Célibataire" },
+  { label: "Veuf", value: "Veuf" },
 ]
 
 const genderOptions: Option<string>[] = [
-  { label: "homme", value: "homme" },
-  { label: "femme", value: "femme" },
+  { label: "Homme", value: "Homme" },
+  { label: "Femme", value: "Femme" },
 ]
 
 export default function AddPatient({}: Props) {
@@ -153,7 +154,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             setValue={(value: string) => setData({ ...data, lastName: value })}
           />
           <LabledInput
-            text="Prenom"
+            text="Prénom"
             value={data.firstName}
             setValue={(value: string) => setData({ ...data, firstName: value })}
           />
@@ -182,7 +183,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             options={matrimonialOptions}
           />
           <div>
-            <label className="block mb-2 text-xl">Date naissance</label>
+            <label className="block mb-2 text-xl">Date de naissance</label>
             <DateInput
               className="w-96"
               value={data.birthDate}
@@ -192,7 +193,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
             />
           </div>
           <div>
-            <label className="block mb-2 text-xl">commentaire</label>
+            <label className="block mb-2 text-xl">Commentaire</label>
             <textarea
               className="bg-primary-gray w-96 rounded-lg py-2 px-2 focus:outline-secondary-blue shadow-md"
               value={data.comment}
@@ -256,7 +257,8 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
     return true
   }
   useEffect(() => {
-    setData({ ...data, bodySurface: getBodySurf(data.weight, data.height) })
+    let newBodySurface = getBodySurf(data.weight, data.height)
+    setData({ ...data, bodySurface: newBodySurface > 2 ? 2 : newBodySurface })
   }, [data.height, data.weight])
   useEffect(() => {
     setData({
@@ -300,14 +302,20 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             }
             isNumber={true}
           />
-          <LabledInput
-            text="Surface corporelle (m²)"
-            value={String(data.bodySurface)}
-            setValue={(value: string) =>
-              setData({ ...data, bodySurface: Number(value) })
-            }
-            isNumber={true}
-          />
+          <div>
+            <LabledInput
+              text="Surface corporelle (m²)"
+              value={String(data.bodySurface)}
+              setValue={(value: string) =>
+                setData({ ...data, bodySurface: Number(value) })
+              }
+              isNumber={true}
+              disabled={true}
+            />
+            {getBodySurf(data.weight, data.height) > 2 && (
+              <p className="text-orange-shade">le SC dépasse 2</p>
+            )}
+          </div>
         </div>
         <div className="space-y-8">
           <LabledInput

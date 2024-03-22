@@ -23,7 +23,9 @@ export default function TextInput({
     <input
       type={isNumber ? "number" : isPassword ? "password" : "text"}
       className={twMerge(
-        "bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md",
+        `bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md ${
+          disabled ? "bg-secondary-gray" : null
+        }`,
         className,
       )}
       value={value}

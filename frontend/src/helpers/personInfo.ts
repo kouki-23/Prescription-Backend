@@ -23,20 +23,20 @@ export function getClairance(
   weight: number,
 ): number {
   let clcr: number = 0
-  if (formula == "mdrd") {
-    if (gender == "homme") {
+  if (formula == "MDRD") {
+    if (gender == "Homme") {
       clcr = 186 * Math.pow(creatinine / 88.4, -1.154) * Math.pow(age, -0.203)
-    } else if (gender == "femme") {
+    } else if (gender == "Femme") {
       clcr =
         186 *
         Math.pow(creatinine / 88.4, -1.154) *
         Math.pow(age, -0.203) *
         0.742
     }
-  } else if (formula == "cockroft") {
-    if (gender == "homme") {
+  } else if (formula == "Cockroft") {
+    if (gender == "Homme") {
       clcr = (1.23 * weight * (140 - age)) / creatinine
-    } else if (gender == "femme") {
+    } else if (gender == "Femme") {
       clcr = (1.04 * weight * (140 - age)) / creatinine
     }
   } else {

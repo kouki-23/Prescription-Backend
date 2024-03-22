@@ -110,6 +110,7 @@ function Step1({
         <TextInput
           setValue={(value) => setDataP({ ...dataP, prescriber: value })}
           value={dataP.prescriber}
+          disabled={true}
         />
         <p>Date de la prescription :</p>
         <DateInput
@@ -173,7 +174,7 @@ function Step2({
             setValue={(value) => setDataP({ ...dataP, histoType: value })}
             value={dataP.histoType}
           />
-          <p>Protocol:</p>
+          <p>Protocole:</p>
           <select
             className="w-52 py-3 px-2 rounded-lg bg-primary-gray"
             onChange={(e) => {
