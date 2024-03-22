@@ -73,6 +73,7 @@ export interface PrepMolecule {
   unite: string
   time: string
   duration: number
+  validation: number
   details: Details
   id: number
 }

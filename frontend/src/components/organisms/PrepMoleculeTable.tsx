@@ -9,7 +9,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import addIcon from "@assets/icons/add.svg"
 import plusIcon from "@assets/icons/plus-green.svg"
 import minusIcon from "@assets/icons/minus-red.svg"
@@ -37,6 +37,7 @@ type TCureData = {
   unite: string
   duration: number
   time: string
+  validation: number
 }
 
 export default function PrepMoleculeTable({
@@ -88,6 +89,7 @@ export default function PrepMoleculeTable({
         dose: data[i].doseAdaptee,
         time: data[i].time,
         day: data[i].day,
+        validation: data[i].validation,
       }
     })
     setCure(newCure)
@@ -241,7 +243,19 @@ export default function PrepMoleculeTable({
     }),
     columnHelper.display({
       id: "Action",
-      cell: () => <Action />,
+      cell: (info) => (
+        <Action
+          validation={info.row.original.validation}
+          setValidation={(validation) => {
+            let newData = [...data]
+            newData[info.row.index] = {
+              ...newData[info.row.index],
+              validation,
+            }
+            setData(newData)
+          }}
+        />
+      ),
       header: "Validation",
     }),
   ]
@@ -346,10 +360,29 @@ export default function PrepMoleculeTable({
   )
 }
 
-function Action() {
+function Action({
+  validation,
+  setValidation,
+}: {
+  validation: number
+  setValidation: (a: number) => void
+}) {
+  const valid = useMemo(() => {
+    if (validation === 0) {
+      return "bg-primary-red border-primary-red bg-opacity-50"
+    } else if (validation === 1) {
+      return "bg-green-shade  border-green-shade bg-opacity-30"
+    } else if (validation === 2) {
+      return "bg-green-shade  border-green-shade"
+    }
+  }, [validation])
+
   return (
     <div className="flex justify-center">
-      <div className="size-7 bg-primary-red bg-opacity-50 border-primary-red border-2 rounded-full"></div>
+      <div
+        onClick={() => setValidation(validation === 0 ? 1 : 0)}
+        className={`cursor-pointer size-7 ${valid} border-2 rounded-full`}
+      ></div>
     </div>
   )
 }
@@ -365,6 +398,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
         unite: p.unite,
         duration: p.duration,
         time: p.time,
+        validation: p.validation,
       } as TCureData
     })
     .sort((a, b) => a.day - b.day)

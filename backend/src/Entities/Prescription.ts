@@ -22,9 +22,6 @@ export class Prescription {
   clinicalTest: boolean
 
   @Column()
-  validation: number // 0 : no validation | 1 : medecin | 2 : medecin && pharmacien
-
-  @Column()
   primitif: string
 
   @Column()
@@ -69,6 +66,5 @@ export class Prescription {
     this.cures = cures
     this.primitif = primitif
     this.histoType = histoType
-    this.validation = 0
   }
 }

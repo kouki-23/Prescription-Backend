@@ -171,9 +171,10 @@ function PatientInfoCard({
     },
   })
   useEffect(() => {
+    let newBodySurface = getBodySurf(patient.weight, patient.height)
     setPatient({
       ...patient,
-      bodySurface: getBodySurf(patient.weight, patient.height),
+      bodySurface: newBodySurface > 2 ? 2 : newBodySurface,
     })
   }, [patient.height, patient.weight])
   useEffect(() => {
@@ -212,16 +213,6 @@ function PatientInfoCard({
           isNumber={true}
         />
         <InfoText
-          label="Creatine"
-          value={String(patient.creatinine)}
-          setValue={(value) =>
-            setPatient({ ...patient, creatinine: Number(value) })
-          }
-          editFn={() => patientMutation.mutate()}
-          isNumber={true}
-          unite="µmol/l"
-        />
-        <InfoText
           label="Poids"
           value={String(patient.weight)}
           setValue={(value) =>
@@ -231,18 +222,27 @@ function PatientInfoCard({
           editFn={() => patientMutation.mutate()}
           isNumber={true}
         />
-        <InfoText label="Formule" value={patient.clairanceFormula} />
-        <InfoText label="Clcr" value={`${patient.clairance} ml/min`} />
         <InfoText
           label="SC"
           value={String(patient.bodySurface)}
           setValue={(value) =>
             setPatient({ ...patient, bodySurface: Number(value) })
           }
-          editFn={() => patientMutation.mutate()}
           isNumber={true}
           unite="m²"
         />
+        <InfoText
+          label="Creatine"
+          value={String(patient.creatinine)}
+          setValue={(value) =>
+            setPatient({ ...patient, creatinine: Number(value) })
+          }
+          editFn={() => patientMutation.mutate()}
+          isNumber={true}
+          unite="µmol/l"
+        />
+        <InfoText label="Formule" value={patient.clairanceFormula} />
+        <InfoText label="Clcr" value={`${patient.clairance} ml/min`} />
       </div>
     </div>
   )

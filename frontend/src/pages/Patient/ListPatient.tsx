@@ -5,7 +5,7 @@ import ErrorPage from "@pages/Error/ErrorPage"
 import { Patient } from "@helpers/types"
 import PatientFilter from "@components/organisms/PatientFilter"
 import Title from "@components/atoms/Title"
-import addIcon from "@assets/icons/add.svg"
+import addIcon from "@assets/icons/person-add.svg"
 import { useNavigate } from "react-router-dom"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 
@@ -27,9 +27,10 @@ export default function PatientPage({}: Props) {
       <div className="container mx-auto my-10 flex justify-between">
         <Title text="Liste des patients" />
         <img
-          className="size-11 cursor-pointer"
+          className="size-10 cursor-pointer"
           src={addIcon}
           onClick={() => navigator("/medecin/addPatient")}
+          alt="ajouter patient"
         />
       </div>
       <PatientTable
