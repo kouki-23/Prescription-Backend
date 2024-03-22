@@ -20,6 +20,8 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
   let prescription = new Prescription(
     data.prescriber,
     data.clinicalTest,
+    data.primitif,
+    data.histoType,
     data.serviceType,
     patient,
     protocol,

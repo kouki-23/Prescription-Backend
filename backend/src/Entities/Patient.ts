@@ -8,10 +8,10 @@ export class Patient {
   id: number
 
   @Column()
-  DMI: number
+  DMI: string
 
   @Column()
-  index: number
+  index: string
 
   @Column()
   firstName: string

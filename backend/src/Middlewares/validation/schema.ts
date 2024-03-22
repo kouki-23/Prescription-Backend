@@ -23,8 +23,8 @@ export const createUserSchemaBody = z.object({
 export type CreateUserBody = z.infer<typeof createUserSchemaBody>
 
 export const createPatientBodySchema = z.object({
-  DMI: z.number(),
-  index: z.number(),
+  DMI: z.string(),
+  index: z.string(),
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(1).max(50),
   gender: z.string().min(1).max(20),
@@ -42,8 +42,8 @@ export const createPatientBodySchema = z.object({
 export type CreatePatientBody = z.infer<typeof createPatientBodySchema>
 
 export const updatePatientBodySchema = z.object({
-  DMI: z.number().optional(),
-  index: z.number().optional(),
+  DMI: z.string().optional(),
+  index: z.string().optional(),
   firstName: z.string().min(1).max(50).optional(),
   lastName: z.string().min(1).max(50).optional(),
   gender: z.string().min(1).max(20).optional(),
@@ -102,6 +102,8 @@ export const createPrescriptionBodySchema = z.object({
   serviceType: z.string(),
   patientId: z.number(),
   protocolId: z.number(),
+  primitif: z.string(),
+  histoType: z.string(),
 })
 
 export type CreatePrescriptionBody = z.infer<

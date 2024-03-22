@@ -21,6 +21,15 @@ export class Prescription {
   @Column()
   clinicalTest: boolean
 
+  @Column()
+  validation: number // 0 : no validation | 1 : medecin | 2 : medecin && pharmacien
+
+  @Column()
+  primitif: string
+
+  @Column()
+  histoType: string
+
   @Column({ nullable: true })
   comment?: string
 
@@ -43,6 +52,8 @@ export class Prescription {
   constructor(
     prescriber: string,
     clinicalTest: boolean,
+    primitif: string,
+    histoType: string,
     serviceType: string,
     patient: Patient,
     protocol: Protocol,
@@ -56,5 +67,8 @@ export class Prescription {
     this.patient = patient
     this.protocol = protocol
     this.cures = cures
+    this.primitif = primitif
+    this.histoType = histoType
+    this.validation = 0
   }
 }

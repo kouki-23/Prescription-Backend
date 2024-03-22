@@ -1,7 +1,6 @@
 import DateInput from "@components/atoms/DateInput"
 import Loading from "@components/atoms/Loading"
 import Model from "@components/atoms/Model"
-import OptionInput from "@components/atoms/OptionInput"
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import TextInput from "@components/atoms/TextInput"
@@ -16,7 +15,7 @@ import { getAllProtocols } from "@helpers/apis/protocol"
 import { useAuth } from "@helpers/auth/auth"
 import { Option } from "@helpers/types"
 import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
@@ -30,9 +29,11 @@ export default function AddPrescription({ patient, setIsOpen, isOpen }: Props) {
   const { user } = useAuth()
   const [data, setData] = useState<CreatePrescriptionData>({
     prescriber: user ? user.name : "",
+    primitif: "",
+    histoType: "",
     nbCures: 0,
     clinicalTest: false,
-    protocolId: 0,
+    protocolId: -1,
     startDate: new Date().toISOString().split("T")[0],
     patientId: patient.id,
     serviceType: "",
@@ -141,21 +142,68 @@ function Step2({
     queryKey: ["protocols"],
     queryFn: getAllProtocols,
   })
-
-  if (isLoading) return <Loading />
+  useEffect(() => {
+    if (data && dataP.protocolId !== -1) {
+      const protocol = data.data.find((v: any) => v.id === dataP.protocolId)
+      console.log(protocol)
+      setDataP({ ...dataP, nbCures: protocol.nbCures })
+    }
+  }, [dataP.protocolId])
   let protocolOptions: Option<number>[] = []
   if (data) {
     protocolOptions = data.data.map((v: any): Option<number> => {
       return { value: v.id, label: v.name }
     })
   }
+  if (isLoading) return <Loading />
   return (
     <>
       <StepBar2 />
       <div className="space-y-5">
-        <div className="flex items-center justify-between">
-          <span>Protocol:</span>
-          <div>
+        <div className="grid grid-cols-2 gap-3 items-center">
+          <p>Primitif :</p>
+          <TextInput
+            className="w-52"
+            setValue={(value) => setDataP({ ...dataP, primitif: value })}
+            value={dataP.primitif}
+          />
+          <p>Type Histologique :</p>
+          <TextInput
+            className="w-52"
+            setValue={(value) => setDataP({ ...dataP, histoType: value })}
+            value={dataP.histoType}
+          />
+          <p>Protocol:</p>
+          <select
+            className="w-52 py-3 px-2 rounded-lg bg-primary-gray"
+            onChange={(e) => {
+              const selected = e.target.value
+              console.log("value" + selected)
+              setDataP({
+                ...dataP,
+                protocolId: Number(selected),
+              })
+            }}
+            value={dataP.protocolId}
+          >
+            <option value={-1} disabled hidden>
+              Sélectionnez
+            </option>
+            {protocolOptions.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+          <p>numbre cure :</p>
+          <TextInput
+            className="w-52"
+            setValue={(value) => setDataP({ ...dataP, nbCures: Number(value) })}
+            value={String(dataP.nbCures)}
+            isNumber={true}
+          />
+        </div>
+        {/*<div>
             <OptionInput
               options={protocolOptions}
               selected={
@@ -174,17 +222,8 @@ function Step2({
                 })
               }}
             />
-          </div>
-        </div>
-        <div className="flex items-center gap-12">
-          <p>numbre cure :</p>
-          <TextInput
-            setValue={(value) => setDataP({ ...dataP, nbCures: Number(value) })}
-            value={String(dataP.nbCures)}
-            isNumber={true}
-            className="w-64"
-          />
-        </div>
+          </div>*/}
+        <div className="flex items-center gap-12"></div>
       </div>
       <div className="flex justify-center mt-8 gap-8">
         <SecondaryBtn text="Précédent" clickFn={() => setStep(1)} />

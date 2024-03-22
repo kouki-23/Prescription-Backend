@@ -3,6 +3,8 @@ import axios from "axios"
 
 export type CreatePrescriptionData = {
   prescriber: string
+  primitif: string
+  histoType: string
   nbCures: number
   startDate: string
   clinicalTest: boolean

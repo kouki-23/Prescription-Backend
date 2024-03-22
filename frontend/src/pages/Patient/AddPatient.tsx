@@ -11,7 +11,6 @@ import { Option } from "@helpers/types"
 import {
   isEmpty,
   isFloat,
-  isInteger,
   isOnlyLetter,
   isPositif,
   isDateInPast,
@@ -21,8 +20,8 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
 type TData = {
-  DMI: number
-  index: number
+  DMI: string
+  index: string
   firstName: string
   lastName: string
   gender: string
@@ -56,8 +55,8 @@ const genderOptions: Option<string>[] = [
 
 export default function AddPatient({}: Props) {
   const [data, setData] = useState<TData>({
-    DMI: 0,
-    index: 0,
+    DMI: "",
+    index: "",
     firstName: "",
     lastName: "",
     gender: "",
@@ -95,16 +94,8 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error(" Veuillez saisir le DMI ")
       return false
     }
-    if (!isPositif(data.DMI) || !isInteger(data.DMI)) {
-      toast.error("Le DMI doit etre un entier positif ")
-      return false
-    }
     if (!data.index) {
       toast.error(" Veuillez saisir l'index ")
-      return false
-    }
-    if (!isPositif(data.index) || !isInteger(data.index)) {
-      toast.error("L'index doit etre un entier positif")
       return false
     }
     if (isEmpty(data.lastName)) {
@@ -148,17 +139,13 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
         <div className="space-y-8">
           <LabledInput
             text="DMI"
-            value={String(data.DMI)}
-            setValue={(value: string) =>
-              setData({ ...data, DMI: Number(value) })
-            }
+            value={data.DMI}
+            setValue={(value: string) => setData({ ...data, DMI: value })}
           />
           <LabledInput
             text="Index"
-            value={String(data.index)}
-            setValue={(value: string) =>
-              setData({ ...data, index: Number(value) })
-            }
+            value={data.index}
+            setValue={(value: string) => setData({ ...data, index: value })}
           />
           <LabledInput
             text="Nom"
