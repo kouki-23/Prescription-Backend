@@ -11,6 +11,8 @@ import { twMerge } from "tailwind-merge"
 import TextInput from "@components/atoms/TextInput"
 import { useEffect, useState } from "react"
 import OptionInput from "@components/atoms/OptionInput"
+import { useQuery } from "@tanstack/react-query"
+import { getAllMolecules } from "@helpers/apis/molecule"
 
 type Props = {
   data: TMolecule[]
@@ -24,16 +26,28 @@ export type TMolecule = {
 
 export default function MoleculeTable({ data, setData }: Props) {
   const columnHelperProtocol = createColumnHelper<TMolecule>()
-
+  const query = useQuery({
+    queryKey: ["molecules"],
+    queryFn: getAllMolecules,
+  })
+  const options = [
+    { label: "mg/kg", value: "mg/kg" },
+    { label: "mg", value: "mg" },
+    { label: "mg/m²", value: "mg/m²" },
+    { label: "AUC", value: "AUC" },
+  ]
   const columns = [
     columnHelperProtocol.accessor((row) => row.name, {
       id: "name",
       header: "Nom Molécule",
       cell: (info) => {
-        const options = [
-          { label: "label1", value: "value1" },
-          { label: "label2", value: "value2" },
-        ]
+        const options = query.data
+          ? query.data.map((molecule) => ({
+              label: molecule.name,
+              value: molecule.name,
+            }))
+          : []
+
         return (
           <div className="flex justify-center items-center ">
             <OptionInput
@@ -77,12 +91,6 @@ export default function MoleculeTable({ data, setData }: Props) {
       id: "unite",
       header: "Unité",
       cell: (info) => {
-        const options = [
-          { label: "mg/kg", value: "mg/kg" },
-          { label: "mg", value: "mg" },
-          { label: "mg/m²", value: "mg/m²" },
-          { label: "AUC", value: "AUC" },
-        ]
         return (
           <div className="flex justify-center items-center ">
             <OptionInput
