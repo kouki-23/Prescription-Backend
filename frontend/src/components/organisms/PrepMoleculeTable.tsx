@@ -47,6 +47,7 @@ export default function PrepMoleculeTable({
 }: Props) {
   const { user } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const [isAddProduitOpen, setIsAddProduitOpen] = useState(false)
   const [data, setData] = useState(transformCureToDataTable(cure))
   const [isCureChanged, setIsCureChanged] = useState(false)
   const [password, setPassword] = useState("")
@@ -271,6 +272,7 @@ export default function PrepMoleculeTable({
           clickFn={() => cureMut.mutate()}
         />
       </Model>
+      <AddProduit isOpen={isAddProduitOpen} setIsOpen={setIsAddProduitOpen} />
       <div>
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4 my-8">
@@ -285,7 +287,11 @@ export default function PrepMoleculeTable({
               text="Enregistrer"
               clickFn={() => setIsOpen(true)}
             />
-            <img className="size-8 cursor-pointer" src={addIcon} />
+            <img
+              className="size-8 cursor-pointer"
+              src={addIcon}
+              onClick={() => {}}
+            />
             <img
               className="size-8 cursor-pointer"
               src={fileIcon}
@@ -387,5 +393,23 @@ function DayCell({
         onClick={() => setDay(day + 1)}
       />
     </div>
+  )
+}
+
+type PropsAddProduit = {
+  isOpen: boolean
+  setIsOpen: (b: boolean) => void
+}
+
+function AddProduit({ isOpen, setIsOpen }: PropsAddProduit) {
+  return (
+    <Model
+      isOpen={isOpen}
+      onClose={() => {
+        setIsOpen(false)
+      }}
+    >
+      <p></p>
+    </Model>
   )
 }

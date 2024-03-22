@@ -5,6 +5,7 @@ import {
 import { NextFunction, Request, Response } from "express"
 import {
   createPrescrptition,
+  deletePrescription,
   getPrescriptionById,
   getPrescriptionWithEverythingByPatientId,
   updatePrescription,
@@ -79,10 +80,28 @@ export async function updatePrescriptionHandler(
     const result = await updatePrescription(Number(id), req.body)
     return res.json(result.generatedMaps)
   } catch (e) {
-    console.log(e)
     return next(
       new HttpError(
         "cannot update prescription",
+        StatusCode.InternalServerError,
+      ),
+    )
+  }
+}
+
+export async function deletePrescriptionHandler(
+  req: Request<IdParams>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    await deletePrescription(Number(id))
+    return res.sendStatus(StatusCode.Ok)
+  } catch (e) {
+    return next(
+      new HttpError(
+        "cannot delete prescription",
         StatusCode.InternalServerError,
       ),
     )

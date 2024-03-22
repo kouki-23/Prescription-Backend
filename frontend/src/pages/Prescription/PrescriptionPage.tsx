@@ -12,7 +12,7 @@ type Props = {}
 export default function PrescriptionPage({}: Props) {
   const naviagator = useNavigate()
   const { patientId } = useParams()
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["prescription", "patient", patientId],
     queryFn: () => getPrescriptionByPatientId(Number(patientId)),
   })
@@ -28,7 +28,9 @@ export default function PrescriptionPage({}: Props) {
           src={backIcon}
           onClick={() => naviagator(-1)}
         />
-        {data?.data && <ListPrescription prescriptions={data?.data} />}
+        {data?.data && (
+          <ListPrescription prescriptions={data?.data} refetch={refetch} />
+        )}
       </div>
       <div className="w-1/3">
         {data?.data[0] && <PatientSideInfo patient={data.data[0].patient} />}

@@ -9,20 +9,24 @@ import moleculeIcon from "@assets/icons/molecule.svg"
 import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { addDaysToDate } from "@helpers/utils"
+import deleteIcon from "@assets/icons/delete.svg"
+import { deletePrescription } from "@helpers/apis/prescription"
 
 type Props = {
   prescriptions: Prescription[]
+  refetch: Function
 }
 
-export default function ListPrescription({ prescriptions }: Props) {
+export default function ListPrescription({ prescriptions, refetch }: Props) {
   return (
-    <div>
+    <div className="mr-8">
       <Title text="PLANIFICATION DES PRESCRIPTIONS" className="text-4xl ml-5" />
       {prescriptions.map((prescription, i) => (
         <PrescriptionCard
           key={prescription.id}
           prescription={prescription}
           index={i}
+          refetch={refetch}
         />
       ))}
     </div>
@@ -37,6 +41,8 @@ type CardProps = {
   isExpended?: boolean
   setIsExpended?: (b: boolean) => void
   onClick?: () => void
+  hover?: boolean
+  OnHoverClick?: () => void
 }
 
 function Card({
@@ -47,9 +53,11 @@ function Card({
   isExpended,
   setIsExpended,
   onClick,
+  hover,
+  OnHoverClick,
 }: CardProps) {
   return (
-    <div className="flex w-full m-2 gap-3 items-center">
+    <div className="relative flex w-full m-2 gap-3 items-center showImage">
       {isExpended !== undefined && setIsExpended !== undefined && (
         <img
           className="cursor-pointer size-5"
@@ -70,10 +78,19 @@ function Card({
           </span>
           <span className="text-sm ">{subTitle}</span>
         </div>
-        <span className="px-2 font-semibold text-xl text-secondary-blue">
-          {state}
-        </span>
+        <div className="flex items-center">
+          <span className="px-2 font-semibold text-xl transition-all text-secondary-blue">
+            {state}
+          </span>
+        </div>
       </div>
+      {hover && (
+        <img
+          className="cursor-pointer right-0 hidden size-7"
+          src={deleteIcon}
+          onClick={OnHoverClick ? OnHoverClick : () => {}}
+        />
+      )}
     </div>
   )
 }
@@ -81,9 +98,11 @@ function Card({
 function PrescriptionCard({
   prescription,
   index,
+  refetch,
 }: {
   prescription: Prescription
   index: number
+  refetch: Function
 }) {
   const naviagator = useNavigate()
   const [isExpended, setIsExpended] = useState(false)
@@ -98,6 +117,11 @@ function PrescriptionCard({
         isExpended={isExpended}
         setIsExpended={setIsExpended}
         onClick={() => naviagator(`/medecin/prescription/${prescription.id}`)}
+        hover={true}
+        OnHoverClick={async () => {
+          await deletePrescription(prescription.id)
+          refetch()
+        }}
       />
       {isExpended && (
         <div className="ml-10">

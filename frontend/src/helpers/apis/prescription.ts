@@ -31,3 +31,7 @@ export async function getPrescriptionById(id: number) {
 export async function updatePrescription(id: Number, prescription: any) {
   return axios.patch(`/prescription/${id}`, prescription)
 }
+
+export async function deletePrescription(id: Number) {
+  return axios.delete(`/prescription/${id}`)
+}

@@ -9,6 +9,7 @@ import {
 } from "../Middlewares/validation/schema"
 import {
   createPrescriptionHandler,
+  deletePrescriptionHandler,
   getPrescriptionByIdHandler,
   getPrescriptionsWithEverythingByPatientIdHandler,
   updatePrescriptionHandler,
@@ -39,6 +40,12 @@ router.patch(
   "/:id",
   validateRequestParams(IdParamsSchema),
   updatePrescriptionHandler,
+)
+
+router.delete(
+  "/:id",
+  validateRequestParams(IdParamsSchema),
+  deletePrescriptionHandler,
 )
 
 export default router
