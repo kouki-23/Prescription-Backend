@@ -15,7 +15,7 @@ import ListPatient from "@pages/Patient/ListPatient"
 import AddPatient from "@pages/Patient/AddPatient"
 import PrescriptionPage from "@pages/Prescription/PrescriptionPage"
 import PrescriptionDetailsPage from "@pages/Prescription/PrescriptionDetailsPage"
-
+import AddProtocolPage from "@pages/Protocol/AddProtocol"
 globalDefault()
 
 const queryClient = new QueryClient()
@@ -41,6 +41,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   path="prescription/:id"
                   element={<PrescriptionDetailsPage />}
                 />
+                <Route path="addProtocol" element={<AddProtocolPage />}></Route>
               </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />
