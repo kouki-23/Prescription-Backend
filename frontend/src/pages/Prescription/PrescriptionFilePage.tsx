@@ -163,7 +163,7 @@ function MoleculeTable({
       {
         id: "doseUniteT",
         cell: (info) => info.getValue(),
-        header: "Dose théorique - Unite",
+        header: "Dose théorique - Unité",
       },
     ),
     columnHelper.accessor((row) => `${row.dose * patient.bodySurface} mg`, {
@@ -174,7 +174,7 @@ function MoleculeTable({
     columnHelper.accessor((row) => `${row.dose} ${row.unite}`, {
       id: "doseAdapteeUnite",
       cell: (info) => info.getValue(),
-      header: "Dose Adaptee - Unite",
+      header: "Dose Adaptée - Unité",
       size: 50,
     }),
     columnHelper.accessor(
@@ -182,7 +182,7 @@ function MoleculeTable({
       {
         id: "doseAdaptee",
         cell: (info) => info.getValue(),
-        header: "Dose Adaptee",
+        header: "Dose Adaptée",
       },
     ),
     columnHelper.accessor(
@@ -204,9 +204,9 @@ function MoleculeTable({
       header: "Heure",
     }),
     columnHelper.accessor((row) => row.duration, {
-      id: "duree",
+      id: "duration",
       cell: (info) => info.getValue() + "h",
-      header: "Duree",
+      header: "Durée",
     }),
   ]
   const table = useReactTable({
