@@ -6,7 +6,16 @@ import { getDetailByMoleculeId } from "./detailPrepMoleculeService"
 const repo = db.getRepository(Cure)
 
 export async function getCureById(id: number) {
-  return repo.findOneBy({ id })
+  return repo.findOne({
+    where: { id },
+    relations: {
+      prepMolecule: {
+        details: {
+          molecule: true,
+        },
+      },
+    },
+  })
 }
 
 export async function updateCure(id: number, cure: any) {
@@ -41,5 +50,5 @@ export async function addPrepMoleculeToCure(idCure: number, prepMolecule: any) {
     )
   })
   cure.prepMolecule = [...cure.prepMolecule, ...preps]
-  repo.save(cure)
+  await repo.save(cure)
 }

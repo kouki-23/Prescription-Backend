@@ -68,7 +68,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   if (!error) {
     return
   }
-  console.log(error)
+  //console.log(error)
   res.status(500)
   if (error instanceof HttpError) res.status(error.code)
   res.json({ message: error.message || "Something broke" })

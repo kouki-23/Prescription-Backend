@@ -1,7 +1,6 @@
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import Title from "@components/atoms/Title"
 import MoleculeTable, { TMolecule } from "@components/organisms/MoleculeTable"
-import { Molecule } from "@helpers/types"
 import {
   isEmpty,
   isInteger,

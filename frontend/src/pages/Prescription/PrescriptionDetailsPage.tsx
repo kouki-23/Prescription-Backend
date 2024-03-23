@@ -70,6 +70,7 @@ export default function PrescriptionDetailsPage({}: Props) {
                 newCures[selectedCure] = c
                 setPrescription({ ...prescription, cures: newCures })
               }}
+              intercure={prescription.protocol.intercure}
             />
           </div>
           <div className="container mx-auto my-10">

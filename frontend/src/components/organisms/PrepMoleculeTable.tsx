@@ -21,15 +21,18 @@ import Model from "@components/atoms/Model"
 import { login } from "@helpers/apis/user"
 import { useAuth } from "@helpers/auth/auth"
 import { getDate } from "../../helpers/utils"
-import { getMolecules } from "@helpers/apis/molecule"
+import { getAllMolecules } from "@helpers/apis/molecule"
 import LoadingInterface from "./LoadingInterface"
 import ErrorPage from "@pages/Error/ErrorPage"
+import DayListCheckBox from "@components/atoms/DayListCheckBox"
+import { addPrepMoleculeToCure } from "@helpers/apis/cure"
 
 type Props = {
   cure: Cure
   setCure: (c: Cure) => void
   patient: PatientData
   selectedCure: number
+  intercure: number
 }
 
 type TCureData = {
@@ -48,6 +51,7 @@ export default function PrepMoleculeTable({
   setCure,
   patient,
   selectedCure,
+  intercure,
 }: Props) {
   const { user } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
@@ -289,7 +293,14 @@ export default function PrepMoleculeTable({
           clickFn={() => cureMut.mutate()}
         />
       </Model>
-      <AddProduit isOpen={isAddProduitOpen} setIsOpen={setIsAddProduitOpen} />
+      <AddProduit
+        isOpen={isAddProduitOpen}
+        setIsOpen={setIsAddProduitOpen}
+        intercure={intercure}
+        cureId={cure.id}
+        setCure={(cure) => setCure(cure)}
+        setDataTable={setData}
+      />
       <div>
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4 my-8">
@@ -433,28 +444,58 @@ function DayCell({
   )
 }
 
+const uniteOptions = [
+  { label: "mg/kg", value: "mg/kg" },
+  { label: "mg", value: "mg" },
+  { label: "mg/m²", value: "mg/m²" },
+  { label: "AUC", value: "AUC" },
+]
+
 type PropsAddProduit = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
+  intercure: number
+  cureId: number
+  setCure: (cure: Cure) => void
+  setDataTable: (cure: TCureData[]) => void
 }
 
-function AddProduit({ isOpen, setIsOpen }: PropsAddProduit) {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ["molecules"],
-    queryFn: getMolecules,
-  })
+function AddProduit({
+  isOpen,
+  setIsOpen,
+  intercure,
+  cureId,
+  setCure,
+  setDataTable,
+}: PropsAddProduit) {
   const [prepMolecule, setPrepMolecule] = useState({
-    day: 0,
+    days: [] as number[],
     dose: 0,
     unite: "",
     moleculeId: -1,
   })
 
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["molecules"],
+    queryFn: getAllMolecules,
+  })
+
+  const mutation = useMutation({
+    mutationKey: ["prepMolecule"],
+    mutationFn: () => addPrepMoleculeToCure(cureId, prepMolecule),
+    onError: (e) => toast.error(e.message),
+    onSuccess: (data) => {
+      toast.success("produit ajouter avec succès")
+      setCure(data.data)
+      setIsOpen(false)
+      setDataTable(transformCureToDataTable(data.data))
+    },
+  })
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
   let moleculesOption: Option<number>[] = []
   if (data) {
-    moleculesOption = data.data.map((m) => ({
+    moleculesOption = data.map((m) => ({
       value: m.id,
       label: m.name,
     }))
@@ -467,9 +508,9 @@ function AddProduit({ isOpen, setIsOpen }: PropsAddProduit) {
         setIsOpen(false)
       }}
     >
-      <Title className="text-3xl" text="Ajouter Produit" />
-      <div className="grid grid-cols-3 gap-2 items-center">
-        <p>Protocole:</p>
+      <Title className="text-3xl mb-10" text="Ajouter Produit" />
+      <div className="grid grid-cols-3 gap-3 items-center">
+        <p>Molecule:</p>
         <select
           className="col-span-2 w-52 py-3 px-2 rounded-lg bg-primary-gray"
           onChange={(e) =>
@@ -489,7 +530,44 @@ function AddProduit({ isOpen, setIsOpen }: PropsAddProduit) {
             </option>
           ))}
         </select>
+        <p>Dose:</p>
+        <TextInput
+          className="col-span-2 w-52"
+          value={String(prepMolecule.dose)}
+          setValue={(s) =>
+            setPrepMolecule({ ...prepMolecule, dose: Number(s) })
+          }
+          isNumber={true}
+        />
+        <p>Unité:</p>
+        <select
+          className="col-span-2 w-52 py-3 px-2 rounded-lg bg-primary-gray"
+          onChange={(e) =>
+            setPrepMolecule({
+              ...prepMolecule,
+              unite: e.target.value,
+            })
+          }
+          value={prepMolecule.unite}
+        >
+          <option value={""} disabled hidden>
+            Sélectionnez
+          </option>
+          {uniteOptions.map((p) => (
+            <option key={p.value} value={p.value}>
+              {p.label}
+            </option>
+          ))}
+        </select>
       </div>
+      <div className="max-w-80 my-3">
+        <DayListCheckBox
+          nbDays={intercure}
+          selectedDays={prepMolecule.days}
+          setSelectedDays={(days) => setPrepMolecule({ ...prepMolecule, days })}
+        />
+      </div>
+      <PrimaryBtn text="Ajouter" clickFn={() => mutation.mutate()} />
     </Model>
   )
 }

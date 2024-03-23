@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from "express"
-import { addPrepMoleculeToCure, updateCure } from "../Services/CureService"
+import {
+  addPrepMoleculeToCure,
+  getCureById,
+  updateCure,
+} from "../Services/cureService"
 import { HttpError, StatusCode } from "../Utils/HttpError"
-import { PrepMolecule } from "../Entities/PrepMolecule"
 
 export async function updateCureHandler(
   req: Request,
@@ -26,7 +29,12 @@ export async function addPrepMoleculeToCureHandler(
   const { id } = req.params
   try {
     await addPrepMoleculeToCure(Number(id), req.body)
-  } catch {
-    next(new HttpError("could not add prepMolecule", StatusCode.BadRequest))
+    const cure = await getCureById(Number(id))
+    return res.json(cure)
+  } catch (e) {
+    console.log(e)
+    return next(
+      new HttpError("could not add prepMolecule", StatusCode.BadRequest),
+    )
   }
 }
