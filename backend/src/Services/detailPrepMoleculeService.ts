@@ -14,3 +14,13 @@ export function getDetailByMolecule(molecule: Molecule) {
     },
   })
 }
+
+export function getDetailByMoleculeId(moleculeId: number) {
+  return repo.findOne({
+    where: {
+      molecule: {
+        id: moleculeId,
+      },
+    },
+  })
+}

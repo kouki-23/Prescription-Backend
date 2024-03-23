@@ -1,7 +1,7 @@
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import TextInput from "@components/atoms/TextInput"
 import Title from "@components/atoms/Title"
-import { Cure, PatientData } from "@helpers/types"
+import { Cure, Option, PatientData } from "@helpers/types"
 import { addDaysToDate } from "@helpers/utils"
 import {
   createColumnHelper,
@@ -14,13 +14,16 @@ import addIcon from "@assets/icons/add.svg"
 import plusIcon from "@assets/icons/plus-green.svg"
 import minusIcon from "@assets/icons/minus-red.svg"
 import fileIcon from "@assets/icons/file-download.svg"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { updatePrepMolecules } from "@helpers/apis/prepMolcule"
 import Model from "@components/atoms/Model"
 import { login } from "@helpers/apis/user"
 import { useAuth } from "@helpers/auth/auth"
 import { getDate } from "../../helpers/utils"
+import { getMolecules } from "@helpers/apis/molecule"
+import LoadingInterface from "./LoadingInterface"
+import ErrorPage from "@pages/Error/ErrorPage"
 
 type Props = {
   cure: Cure
@@ -304,7 +307,7 @@ export default function PrepMoleculeTable({
             <img
               className="size-8 cursor-pointer"
               src={addIcon}
-              onClick={() => {}}
+              onClick={() => setIsAddProduitOpen(true)}
             />
             <img
               className="size-8 cursor-pointer"
@@ -393,7 +396,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
       return {
         day: p.day,
         name: p.details.molecule.name,
-        dose: p.details.molecule.protocoleMoleculeAssociation[0].dose,
+        dose: p.theoreticalDose,
         doseAdaptee: p.dose,
         unite: p.unite,
         duration: p.duration,
@@ -436,6 +439,27 @@ type PropsAddProduit = {
 }
 
 function AddProduit({ isOpen, setIsOpen }: PropsAddProduit) {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["molecules"],
+    queryFn: getMolecules,
+  })
+  const [prepMolecule, setPrepMolecule] = useState({
+    day: 0,
+    dose: 0,
+    unite: "",
+    moleculeId: -1,
+  })
+
+  if (isLoading) return <LoadingInterface />
+  if (error) return <ErrorPage cause={error.message} />
+  let moleculesOption: Option<number>[] = []
+  if (data) {
+    moleculesOption = data.data.map((m) => ({
+      value: m.id,
+      label: m.name,
+    }))
+  }
+
   return (
     <Model
       isOpen={isOpen}
@@ -443,7 +467,29 @@ function AddProduit({ isOpen, setIsOpen }: PropsAddProduit) {
         setIsOpen(false)
       }}
     >
-      <p></p>
+      <Title className="text-3xl" text="Ajouter Produit" />
+      <div className="grid grid-cols-3 gap-2 items-center">
+        <p>Protocole:</p>
+        <select
+          className="col-span-2 w-52 py-3 px-2 rounded-lg bg-primary-gray"
+          onChange={(e) =>
+            setPrepMolecule({
+              ...prepMolecule,
+              moleculeId: Number(e.target.value),
+            })
+          }
+          value={prepMolecule.moleculeId}
+        >
+          <option value={-1} disabled hidden>
+            Sélectionnez
+          </option>
+          {moleculesOption.map((p) => (
+            <option key={p.value} value={p.value}>
+              {p.label}
+            </option>
+          ))}
+        </select>
+      </div>
     </Model>
   )
 }

@@ -74,6 +74,7 @@ export interface PrepMolecule {
   time: string
   duration: number
   validation: number
+  theoreticalDose: number
   details: Details
   id: number
 }

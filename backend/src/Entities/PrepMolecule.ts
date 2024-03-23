@@ -49,6 +49,9 @@ export class PrepMolecule {
   @Column()
   validation: number // 0 : no validation | 1 : medecin | 2 : medecin && pharmacien
 
+  @Column()
+  theoreticalDose: number
+
   @OneToOne(() => Vehicule)
   @JoinColumn()
   vehicule: Vehicule
@@ -83,5 +86,6 @@ export class PrepMolecule {
     this.details = details
     this.cure = cure
     this.validation = 0
+    this.theoreticalDose = dose
   }
 }

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { updatePrepMolecule } from "../Services/prepMolecule"
+import { updatePrepMolecule } from "../Services/prepMoleculeServices"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import { PrepMolecule } from "../Entities/PrepMolecule"
 
