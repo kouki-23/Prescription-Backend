@@ -155,17 +155,11 @@ function MoleculeTable({
       cell: (info) => info.getValue(),
       header: "Produit",
     }),
-    columnHelper.accessor(
-      (row) =>
-        row.details.molecule.protocoleMoleculeAssociation[0].dose +
-        " " +
-        row.unite,
-      {
-        id: "doseUniteT",
-        cell: (info) => info.getValue(),
-        header: "Dose théorique - Unité",
-      },
-    ),
+    columnHelper.accessor((row) => row.theoreticalDose + " " + row.unite, {
+      id: "doseUniteT",
+      cell: (info) => info.getValue(),
+      header: "Dose théorique - Unité",
+    }),
     columnHelper.accessor((row) => `${row.dose * patient.bodySurface} mg`, {
       id: "doseT",
       cell: (info) => info.getValue(),
@@ -186,12 +180,7 @@ function MoleculeTable({
       },
     ),
     columnHelper.accessor(
-      (row) =>
-        `${Math.round(
-          (row.dose /
-            row.details.molecule.protocoleMoleculeAssociation[0].dose) *
-            100,
-        )}%`,
+      (row) => `${Math.round((row.dose / row.theoreticalDose) * 100)}%`,
       {
         id: "dosepersentage",
         cell: (info) => info.getValue(),
@@ -203,10 +192,16 @@ function MoleculeTable({
       cell: (info) => info.getValue(),
       header: "Heure",
     }),
-    columnHelper.accessor((row) => row.duration, {
+    /* columnHelper.accessor((row) => row.duration, {
       id: "duration",
       cell: (info) => info.getValue() + "h",
       header: "Durée",
+    }),*/
+    columnHelper.accessor((row) => row.validation, {
+      id: "validation",
+      cell: (info) =>
+        info.getValue() === 1 ? "Validé par medecin" : "Non validée",
+      header: "Validation",
     }),
   ]
   const table = useReactTable({

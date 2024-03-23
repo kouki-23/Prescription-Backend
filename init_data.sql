@@ -2,14 +2,17 @@
 INSERT INTO public."user" (id, name, username, password, role, "serviceType") VALUES (1, 'Adem', 'medecin', '$2b$10$MgUrAjXg24ChRwvMR.9ji.dfQyCRRNdFp9dbG60CS9ob9UCFzPz9u', 'medecin', NULL);
 INSERT INTO public."user" (id, name, username, password, role, "serviceType") VALUES (2, 'Mohammed', 'admin', '$2b$10$JoWagb3KbcCNDuskbr4RAuZ3PKrNG4YPHtCHxYkZW7CpOj5VJAU86', 'admin', NULL);
 INSERT INTO public."user" (id, name, username, password, role, "serviceType") VALUES (3, 'Eya', 'pharmacien', '$2b$10$AAYFLnY1qfTzQGeoVWhuL.hrpqQmfz9Qnv3gzKYoIsByRotYq683e', 'pharmacien', NULL);
+INSERT INTO public."user" (id, name, username, password, role, "serviceType") VALUES (4, 'n.mejri', 'n.mejri', '$2a$10$6HcJMvP7QAMm/7V.dG.op.vw8bznGHx3OohEdkd8O8AMDlaFVWYYi', 'medecin', NULL);
+INSERT INTO public."user" (id, name, username, password, role, "serviceType") VALUES (5, 'a.hamdi', 'a.hamdi', '$2a$10$6g1i2iiKjTEwr2td/r64nO9BttMp208YSyG7kEWS/ZZPjZ0mDF6/6', 'medecin', NULL);
+INSERT INTO public."user" (id, name, username, password, role, "serviceType") VALUES (6, 'f.mghirbi', 'f.mghirbi', '$2a$10$7/xKgEQqXwjHu2dVOcS7Ee3EyOAkhXRPNYDWN9h78ONkZCnsXiEly', 'medecin', NULL);
 
 --protocol
 INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
         VALUES (1, 'FOLFOX', 14, 3, '', '', '', false);
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
         --VALUES (2, 'Taxol-Carboplatine', 21, 3, '', '', '', false);
---INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
-        --VALUES (3, 'EC', 21, 3, '', '', '', false);
+INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
+        VALUES (3, 'EC', 21, 3, '', '', '', false);
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
         --VALUES (4, 'Gemzar-Cisplatine', 21, 3, '', '', '', false);
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
@@ -26,8 +29,8 @@ INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications
         --VALUES (10, 'Folforinox', 14, 3, '', '', '', false);
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
         --VALUES (11, 'TC', 21, 3, '', '', '', false);
---INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
-        --VALUES (12, 'FLOT', 14, 3, '', '', '', false);
+INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
+        VALUES (12, 'FLOT', 14, 3, '', '', '', false);
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
         --VALUES (13, 'LV5FU2', 14, 3, '', '', '', false);
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
@@ -177,3 +180,11 @@ INSERT INTO public.detail_prep_molecule (id, dci, specialite, volume, "volumeUni
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (1, 1, 19, 1, 85, 'mg/m²');
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (2, 1, 26, 1, 400, 'mg/m²');
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (3, 1, 27, 1, 2500, 'mg/m²');
+
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (4, 1, 2, 12, 50, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (5, 1, 19, 12, 85, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 7, 12, 400, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 27, 12, 2600, 'mg/m²');
+
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 29, 3, 100, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 30, 3, 600, 'mg/m²');

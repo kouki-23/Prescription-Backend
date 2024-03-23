@@ -143,11 +143,14 @@ export default function PrepMoleculeTable({
       header: "Dose théorique - Unite",
       maxSize: 10,
     }),
-    columnHelper.accessor((row) => row.dose * patient.bodySurface, {
-      id: "doseT",
-      cell: (info) => info.getValue() + " mg",
-      header: "Dose théorique",
-    }),
+    columnHelper.accessor(
+      (row) => Math.round(row.dose * patient.bodySurface * 100) / 100,
+      {
+        id: "doseT",
+        cell: (info) => info.getValue() + " mg",
+        header: "Dose théorique",
+      },
+    ),
     columnHelper.accessor((row) => row.doseAdaptee, {
       id: "doseAdapteeUnite",
       cell: (info) => {
