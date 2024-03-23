@@ -254,7 +254,7 @@ export default function PrepMoleculeTable({
     }),
     columnHelper.accessor((row) => row.duration, {
       id: "duree",
-      cell: "XX minute",
+      cell: "XX minutes",
       header: "Durée",
     }),
     columnHelper.display({
