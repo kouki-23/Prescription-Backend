@@ -508,6 +508,13 @@ function AddProduit({
       setCure(data.data)
       setIsOpen(false)
       setDataTable(transformCureToDataTable(data.data))
+      setPrepMolecule({
+        days: [] as number[],
+        dose: 0,
+        unite: "",
+        moleculeId: -1,
+        perfusionType: "",
+      })
     },
   })
   if (isLoading) return <LoadingInterface />
@@ -525,6 +532,13 @@ function AddProduit({
       isOpen={isOpen}
       onClose={() => {
         setIsOpen(false)
+        setPrepMolecule({
+          days: [] as number[],
+          dose: 0,
+          unite: "",
+          moleculeId: -1,
+          perfusionType: "",
+        })
       }}
     >
       <Title className="text-3xl mb-10" text="Ajouter Produit" />
