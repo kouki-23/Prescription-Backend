@@ -184,7 +184,7 @@ INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "proto
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (4, 1, 2, 12, 50, 'mg/m²');
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (5, 1, 19, 12, 85, 'mg/m²');
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 7, 12, 400, 'mg/m²');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 27, 12, 2600, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (7, 1, 27, 12, 2600, 'mg/m²');
 
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 29, 3, 100, 'mg/m²');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (6, 1, 30, 3, 600, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (8, 1, 29, 3, 100, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (9, 1, 30, 3, 600, 'mg/m²');
