@@ -45,6 +45,7 @@ export async function addPrepMoleculeToCure(idCure: number, prepMolecule: any) {
       day,
       prepMolecule.dose,
       prepMolecule.unite,
+      prepMolecule.perfusionType,
       cure,
       detailPrepMolecule,
     )

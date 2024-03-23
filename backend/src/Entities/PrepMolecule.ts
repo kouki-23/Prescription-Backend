@@ -52,6 +52,9 @@ export class PrepMolecule {
   @Column()
   theoreticalDose: number
 
+  @Column()
+  perfusionType: string
+
   @OneToOne(() => Vehicule)
   @JoinColumn()
   vehicule: Vehicule
@@ -71,6 +74,7 @@ export class PrepMolecule {
     day: number,
     dose: number,
     unite: string,
+    perfusionType: string,
     cure: Cure,
     details: DetailPrepMolecule,
   ) {
@@ -84,6 +88,7 @@ export class PrepMolecule {
     this.dose = dose
     this.unite = unite
     this.details = details
+    this.perfusionType = perfusionType
     this.cure = cure
     this.validation = 0
     this.theoreticalDose = dose

@@ -52,94 +52,94 @@ INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications
 --molecules
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (1, 'Paclitaxel', 'IV', '', '');
+	VALUES (1, 'Paclitaxel', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (2, 'Docétaxel', 'IV', '', '');
+	VALUES (2, 'Docétaxel', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (3, 'Gemcitabine', 'IV', '', '');
+	VALUES (3, 'Gemcitabine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (4, 'Vinorelbine', 'IV', '', '');
+	VALUES (4, 'Vinorelbine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (5, 'Carboplatine', 'IV', '', '');
+	VALUES (5, 'Carboplatine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (6, 'Trastuzumab', 'IV', '', '');
+	VALUES (6, 'Trastuzumab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (7, 'Acide zolédronique', 'IV', '', '');
+	VALUES (7, 'Acide zolédronique', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (8, 'Cisplatine', 'IV', '', '');
+	VALUES (8, 'Cisplatine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (9, 'Pertuzumab', 'IV', '', '');
+	VALUES (9, 'Pertuzumab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (10, 'Bevacizumab', 'IV', '', '');
+	VALUES (10, 'Bevacizumab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (11, 'Cetuximab', 'IV', '', '');
+	VALUES (11, 'Cetuximab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (12, 'Adriamycine', 'IV', '', '');
+	VALUES (12, 'Adriamycine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (13, 'Pemetrexed', 'IV', '', '');
+	VALUES (13, 'Pemetrexed', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (14, 'Méthotrexate', 'IV', '', '');
+	VALUES (14, 'Méthotrexate', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (15, 'Bléomycine', 'IV', '', '');
+	VALUES (15, 'Bléomycine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (16, 'Actinomycine', 'IV', '', '');
+	VALUES (16, 'Actinomycine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (17, 'Vincristine', 'IV', '', '');
+	VALUES (17, 'Vincristine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (18, 'Vinblastine', 'IV', '', '');
+	VALUES (18, 'Vinblastine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (19, 'Oxaliplatine', 'IV', '', '');
+	VALUES (19, 'Oxaliplatine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (20, 'Etoposide', 'IV', '', '');
+	VALUES (20, 'Etoposide', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (21, 'Ifosfamide', 'IV', '', '');
+	VALUES (21, 'Ifosfamide', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (22, 'Mesna', 'IV', '', '');
+	VALUES (22, 'Mesna', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (23, 'Atezolizumab', 'IV', '', '');
+	VALUES (23, 'Atezolizumab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (24, 'Pembrolizumab', 'IV', '', '');
+	VALUES (24, 'Pembrolizumab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (25, 'Nivolumab', 'IV', '', '');
+	VALUES (25, 'Nivolumab', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (26, 'Acide folinique', 'IV', '', '');
+	VALUES (26, 'Acide folinique', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (27, 'Fluorouracile', 'IV', '', '');
+	VALUES (27, 'Fluorouracile', 'IV', 'Infuseur 48h', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (28, 'Irinotecan', 'IV', '', '');
+	VALUES (28, 'Irinotecan', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (29, 'Epirubicine', 'IV', '', '');
+	VALUES (29, 'Epirubicine', 'IV', 'Perf continue', '');
 INSERT INTO public.molecule(
 	id, name, way, "perfusionType", comment)
-	VALUES (30, 'Cyclophosphamide', 'IV', '', '');
+	VALUES (30, 'Cyclophosphamide', 'IV', 'Perf continue', '');
 
 -- details prep molecule
 INSERT INTO public.detail_prep_molecule (id, dci, specialite, volume, "volumeUnite", "isReconstruct", "solventReconstitution", "volumeReconstitution", "volumeReconstitutionUnity", "conservationReconstitutionFridge", "dilutionVolume", "dilutionVolumeUnite", "minConcentrarion", "maxConcentrarion", "concentrationUnite", "conservrationDilutionFridge", "concervationtionPeriodDilution", "lightShelter", "SensivityPVC", "moleculeId") VALUES (1, '', '', 0, '', false, '', 0, '', false, 0, '', 0, 0, '', false, 0, false, false, 1);
@@ -176,5 +176,4 @@ INSERT INTO public.detail_prep_molecule (id, dci, specialite, volume, "volumeUni
 -- relation between 
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (1, 1, 19, 1, 85, 'mg/m²');
 INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (2, 1, 26, 1, 400, 'mg/m²');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (3, 1, 27, 1, 1250, 'mg/m²');
-INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (4, 2, 27, 1, 1250, 'mg/m²');
+INSERT INTO public.protocole_molecule_association (id, day, "moleculeId", "protocolId", dose, unite) VALUES (3, 1, 27, 1, 2500, 'mg/m²');

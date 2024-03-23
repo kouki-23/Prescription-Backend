@@ -48,6 +48,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
         p.day,
         p.dose,
         p.unite,
+        detail.molecule.perfusionType,
         cure,
         detail,
       )
@@ -68,6 +69,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
           p.day,
           p.dose,
           p.unite,
+          detail.molecule.perfusionType,
           cure,
           detail,
         )

@@ -15,16 +15,16 @@ export class Molecule {
   id: number
 
   @Column({ unique: true })
-  name: String
+  name: string
 
   @Column()
-  way: String
+  way: string
 
   @Column()
-  perfusionType: String
+  perfusionType: string
 
   @Column({ nullable: true })
-  comment?: String
+  comment?: string
 
   @OneToOne(() => DetailPrepMolecule)
   detailsPrepMolecule: DetailPrepMolecule

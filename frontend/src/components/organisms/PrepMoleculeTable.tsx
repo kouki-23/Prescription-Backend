@@ -44,6 +44,7 @@ type TCureData = {
   duration: number
   time: string
   validation: number
+  perfusionType: string
 }
 
 export default function PrepMoleculeTable({
@@ -130,6 +131,11 @@ export default function PrepMoleculeTable({
       id: "name",
       cell: (info) => info.getValue(),
       header: "Produit",
+    }),
+    columnHelper.accessor((row) => row.perfusionType, {
+      id: "perfusionType",
+      cell: (info) => info.getValue(),
+      header: "Administration",
     }),
     columnHelper.accessor((row) => row.dose + " " + row.unite, {
       id: "doseUniteT",
@@ -245,7 +251,7 @@ export default function PrepMoleculeTable({
     }),
     columnHelper.accessor((row) => row.duration, {
       id: "duree",
-      cell: (info) => info.getValue() + "h",
+      cell: "XX minute",
       header: "Durée",
     }),
     columnHelper.display({
@@ -413,6 +419,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
         duration: p.duration,
         time: p.time,
         validation: p.validation,
+        perfusionType: p.perfusionType,
       } as TCureData
     })
     .sort((a, b) => a.day - b.day)
@@ -451,6 +458,14 @@ const uniteOptions = [
   { label: "AUC", value: "AUC" },
 ]
 
+const voieOptions = [
+  { label: "Bolus", value: "Bolus" },
+  { label: "Perf continue", value: "Perf continue" },
+  { label: "Infuseur 24h", value: " Infuseur 24h" },
+  { label: "Infuseur 48h", value: "Infuseur 48h" },
+  { label: "Infuseur 5j", value: "Infuseur 5j" },
+]
+
 type PropsAddProduit = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
@@ -473,6 +488,7 @@ function AddProduit({
     dose: 0,
     unite: "",
     moleculeId: -1,
+    perfusionType: "",
   })
 
   const { isLoading, error, data } = useQuery({
@@ -559,8 +575,28 @@ function AddProduit({
             </option>
           ))}
         </select>
+        <p>Administration:</p>
+        <select
+          className="col-span-2 w-52 py-3 px-2 rounded-lg bg-primary-gray"
+          onChange={(e) =>
+            setPrepMolecule({
+              ...prepMolecule,
+              perfusionType: e.target.value,
+            })
+          }
+          value={prepMolecule.perfusionType}
+        >
+          <option value={""} disabled hidden>
+            Sélectionnez
+          </option>
+          {voieOptions.map((p) => (
+            <option key={p.value} value={p.value}>
+              {p.label}
+            </option>
+          ))}
+        </select>
       </div>
-      <div className="max-w-80 my-3">
+      <div className="max-w-96 my-3">
         <DayListCheckBox
           nbDays={intercure}
           selectedDays={prepMolecule.days}
