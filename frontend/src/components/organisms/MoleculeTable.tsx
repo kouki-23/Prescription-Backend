@@ -9,7 +9,7 @@ import deleteIcon from "@assets/icons/delete.svg"
 import settingsIcon from "@assets/icons/settings.svg"
 import { twMerge } from "tailwind-merge"
 import TextInput from "@components/atoms/TextInput"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import OptionInput from "@components/atoms/OptionInput"
 import { useQuery } from "@tanstack/react-query"
 import { getAllMolecules } from "@helpers/apis/molecule"
@@ -115,7 +115,7 @@ export default function MoleculeTable({ data, setData }: Props) {
     columnHelperProtocol.display({
       id: "Actions",
       header: "Actions",
-      cell: (row) => (
+      cell: () => (
         <div className=" flex justify-center item gap-4">
           <Icon src={settingsIcon} />
           <Icon src={deleteIcon}></Icon>
@@ -201,7 +201,7 @@ function Icon({
     />
   )
 }
-type ActionProps = {
+/*type ActionProps = {
   deleteFn: Function
 }
 function Actions({ deleteFn }: ActionProps) {
@@ -210,4 +210,4 @@ function Actions({ deleteFn }: ActionProps) {
       <Icon src={addIcon} onCLick={() => deleteFn} />
     </div>
   )
-}
+}*/
