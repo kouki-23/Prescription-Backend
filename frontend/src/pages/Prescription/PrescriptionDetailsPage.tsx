@@ -110,7 +110,7 @@ function PrescriptionInfoCard({
       />
       <div className="grid grid-cols-2">
         <InfoText
-          label="N Cure"
+          label="N° Cure"
           value={`${String(selectedCure + 1)} / ${prescription.cures.length}`}
         />
         <InfoText
@@ -118,7 +118,7 @@ function PrescriptionInfoCard({
           value={prescription.cures[selectedCure].state}
         />
         <InfoText
-          label="Date debut"
+          label="Date de début"
           value={getDate(new Date(prescription.cures[selectedCure].startDate))}
         />
         <InfoText label="Protocole" value={prescription.protocol.name} />

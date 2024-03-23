@@ -155,6 +155,11 @@ function MoleculeTable({
       cell: (info) => info.getValue(),
       header: "Produit",
     }),
+    columnHelper.accessor((row) => row.perfusionType, {
+      id: "perfusionType",
+      cell: (info) => info.getValue(),
+      header: "Administration",
+    }),
     columnHelper.accessor((row) => row.theoreticalDose + " " + row.unite, {
       id: "doseUniteT",
       cell: (info) => info.getValue(),
