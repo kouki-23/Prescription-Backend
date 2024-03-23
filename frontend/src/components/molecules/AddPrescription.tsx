@@ -179,7 +179,6 @@ function Step2({
             className="w-52 py-3 px-2 rounded-lg bg-primary-gray"
             onChange={(e) => {
               const selected = e.target.value
-              console.log("value" + selected)
               setDataP({
                 ...dataP,
                 protocolId: Number(selected),

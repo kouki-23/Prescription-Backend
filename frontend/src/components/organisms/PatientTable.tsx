@@ -18,6 +18,7 @@ import { useState } from "react"
 import AddPrescription from "@components/molecules/AddPrescription"
 import { useNavigate } from "react-router-dom"
 import { getDate } from "@helpers/utils"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
   data: TPatientData[]
@@ -137,7 +138,7 @@ export default function PatientTable({ data, refetch }: Props) {
   )
 }
 
-type ActionsProps = {
+export type ActionsProps = {
   deleteFn: () => void
 }
 
@@ -175,10 +176,18 @@ function PrescriptionActions({ patient }: PrescriptionActionsProps) {
   )
 }
 
-function Icon({ src, onCLick }: { src: string; onCLick?: () => void }) {
+function Icon({
+  src,
+  onCLick,
+  className,
+}: {
+  src: string
+  onCLick?: () => void
+  className?: string
+}) {
   return (
     <img
-      className="w-7 h-7 cursor-pointer"
+      className={twMerge("w-7 h-7 cursor-pointer", className)}
       src={src}
       onClick={() => (onCLick ? onCLick() : null)}
     />
