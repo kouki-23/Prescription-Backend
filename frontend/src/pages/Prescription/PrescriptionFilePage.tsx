@@ -160,11 +160,17 @@ function MoleculeTable({
       cell: (info) => info.getValue(),
       header: "Dose théorique - Unité",
     }),
-    columnHelper.accessor((row) => `${row.dose * patient.bodySurface} mg`, {
-      id: "doseT",
-      cell: (info) => info.getValue(),
-      header: "Dose théorique",
-    }),
+    columnHelper.accessor(
+      (row) =>
+        `${
+          Math.round(row.theoreticalDose * patient.bodySurface * 100) / 100
+        } mg`,
+      {
+        id: "doseT",
+        cell: (info) => info.getValue(),
+        header: "Dose théorique",
+      },
+    ),
     columnHelper.accessor((row) => `${row.dose} ${row.unite}`, {
       id: "doseAdapteeUnite",
       cell: (info) => info.getValue(),
