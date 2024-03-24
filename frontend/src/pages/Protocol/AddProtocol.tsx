@@ -1,12 +1,14 @@
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import Title from "@components/atoms/Title"
 import MoleculeTable, { TMolecule } from "@components/organisms/MoleculeTable"
+import { addProtocol } from "@helpers/apis/protocol"
 import {
   isEmpty,
   isInteger,
   isOnlyLetter,
   isPositif,
 } from "@helpers/validation"
+import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import { twMerge } from "tailwind-merge"
@@ -62,6 +64,16 @@ export default function AddProtocolPage({}: Props) {
     histoType: "",
     molecules: [],
   })
+  const addProtocolMut = useMutation({
+    mutationKey: ["protocol"],
+    mutationFn: () => addProtocol(data),
+    onError: () => {
+      toast.error("Erreur survenue")
+    },
+    onSuccess: () => {
+      toast.success("Protocole ajouter avec succés")
+    },
+  })
   return (
     <div>
       <AddProtocol data={data} setData={setData} />
@@ -70,6 +82,7 @@ export default function AddProtocolPage({}: Props) {
         <MoleculeTable
           data={data.molecules}
           setData={(molecules) => setData({ ...data, molecules })}
+          intercure={data.intercure}
         />
       </div>
       <PrimaryBtn
@@ -77,7 +90,7 @@ export default function AddProtocolPage({}: Props) {
         text="Ajouter"
         clickFn={() => {
           if (verif(data)) {
-            toast.success("Protocole ajouter avec succés")
+            addProtocolMut.mutate()
           }
         }}
       />
@@ -125,7 +138,7 @@ export function AddProtocol({ data, setData }: ProtocolProps) {
           setValue={(value: string) => setData({ ...data, indications: value })}
         />
         <ProtocolInput
-          text="Histotype"
+          text="Type Histologique"
           isNumber={false}
           value={String(data.histoType)}
           setValue={(value: string) => setData({ ...data, histoType: value })}

@@ -39,7 +39,7 @@ export default function PrescriptionFilePage({}: Props) {
         <>
           <div className="text-sm" ref={ref}>
             <h3 className="font-semibold py-5">
-              Le {getDate(new Date())} par {prescription.prescriber}
+              Le {getDate(new Date())} par dr.{prescription.prescriber}
             </h3>
             <hr />
             <h3 className="font-semibold py-3 text-2xl">Patient :</h3>
@@ -85,7 +85,10 @@ export default function PrescriptionFilePage({}: Props) {
               Détails du traitements :
             </h3>
             <Info label="Protocole" text={prescription.protocol.name} />
-            <Info label="Intercure" text={prescription.protocol.intercure} />
+            <Info
+              label="Intercure"
+              text={prescription.protocol.intercure + " jours"}
+            />
             <Info
               label="Numéro de la cure"
               text={`${cure.order} / ${prescription.cures.length}`}

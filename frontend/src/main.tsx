@@ -50,7 +50,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   path="prescription/:id"
                   element={<PrescriptionDetailsPage />}
                 />
-                <Route path="addProtocol" element={<AddProtocolPage />}></Route>
+                <Route
+                  path="addProtocole"
+                  element={<AddProtocolPage />}
+                ></Route>
               </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />

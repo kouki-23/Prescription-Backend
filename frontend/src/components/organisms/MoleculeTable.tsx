@@ -13,18 +13,30 @@ import { useState } from "react"
 import OptionInput from "@components/atoms/OptionInput"
 import { useQuery } from "@tanstack/react-query"
 import { getAllMolecules } from "@helpers/apis/molecule"
+import DayListCheckBox from "@components/atoms/DayListCheckBox"
+
+const voieOptions = [
+  { label: "Bolus", value: "Bolus" },
+  { label: "Perf continue", value: "Perf continue" },
+  { label: "Infuseur 24h", value: " Infuseur 24h" },
+  { label: "Infuseur 48h", value: "Infuseur 48h" },
+  { label: "Infuseur 5j", value: "Infuseur 5j" },
+]
 
 type Props = {
   data: TMolecule[]
   setData: (data: TMolecule[]) => void
+  intercure: number
 }
 export type TMolecule = {
-  name: string
+  moleculeId: number
   dose: number
   unite: string
+  days: number[]
+  perfusionType: string
 }
 
-export default function MoleculeTable({ data, setData }: Props) {
+export default function MoleculeTable({ data, setData, intercure }: Props) {
   const columnHelperProtocol = createColumnHelper<TMolecule>()
   const query = useQuery({
     queryKey: ["molecules"],
@@ -37,14 +49,14 @@ export default function MoleculeTable({ data, setData }: Props) {
     { label: "AUC", value: "AUC" },
   ]
   const columns = [
-    columnHelperProtocol.accessor((row) => row.name, {
+    columnHelperProtocol.accessor((row) => row.moleculeId, {
       id: "name",
       header: "Nom Molécule",
       cell: (info) => {
         const options = query.data
           ? query.data.map((molecule) => ({
               label: molecule.name,
-              value: molecule.name,
+              value: molecule.id,
             }))
           : []
 
@@ -60,7 +72,7 @@ export default function MoleculeTable({ data, setData }: Props) {
                 let newMolecule = [...data]
                 newMolecule[info.row.index] = {
                   ...newMolecule[info.row.index],
-                  name: selected.value,
+                  moleculeId: selected.value,
                 }
                 setData(newMolecule)
               }}
@@ -68,6 +80,33 @@ export default function MoleculeTable({ data, setData }: Props) {
           </div>
         )
       },
+    }),
+    columnHelperProtocol.accessor((row) => row.perfusionType, {
+      id: "perfusionType",
+      header: "Administration",
+      cell: (info) => (
+        <select
+          className="text-center col-span-2 w-52 py-3 px-2 rounded-lg bg-primary-gray"
+          onChange={(e) => {
+            let newMolecule = [...data]
+            newMolecule[info.row.index] = {
+              ...newMolecule[info.row.index],
+              perfusionType: e.target.value,
+            }
+            setData(newMolecule)
+          }}
+          value={info.getValue()}
+        >
+          <option value={""} disabled hidden>
+            Sélectionnez
+          </option>
+          {voieOptions.map((p) => (
+            <option key={p.value} value={p.value}>
+              {p.label}
+            </option>
+          ))}
+        </select>
+      ),
     }),
     columnHelperProtocol.accessor((row) => row.dose, {
       id: "dose",
@@ -78,7 +117,7 @@ export default function MoleculeTable({ data, setData }: Props) {
         return (
           <div className="">
             <TextInput
-              className="focus:outline-secondary-blue shadow-none  border-primary-blue border-opacity-20"
+              className="focus:outline-secondary-blue shadow-none border-primary-blue border-opacity-20 w-24"
               value={String(value)}
               setValue={setValue}
               isNumber={true}
@@ -94,7 +133,7 @@ export default function MoleculeTable({ data, setData }: Props) {
         return (
           <div className="flex justify-center items-center ">
             <OptionInput
-              className="w-60"
+              className="w-32"
               options={options}
               selected={options.find(
                 (option) => option.value === info.getValue(),
@@ -112,13 +151,38 @@ export default function MoleculeTable({ data, setData }: Props) {
         )
       },
     }),
+    columnHelperProtocol.accessor((row) => row.days, {
+      id: "days",
+      header: "Jours",
+      cell: (info) => (
+        <div className="flex justify-center">
+          <div className="max-w-96">
+            <DayListCheckBox
+              nbDays={intercure}
+              selectedDays={info.getValue()}
+              setSelectedDays={(days) => {
+                let newMolecule = [...data]
+                newMolecule[info.row.index] = {
+                  ...newMolecule[info.row.index],
+                  days: days,
+                }
+                setData(newMolecule)
+              }}
+            />
+          </div>
+        </div>
+      ),
+    }),
     columnHelperProtocol.display({
       id: "Actions",
       header: "Actions",
-      cell: () => (
+      cell: (info) => (
         <div className=" flex justify-center item gap-4">
-          <Icon src={settingsIcon} />
-          <Icon src={deleteIcon}></Icon>
+          {/*<Icon src={settingsIcon} />*/}
+          <Icon
+            src={deleteIcon}
+            onCLick={() => setData(data.filter((_, i) => i !== info.row.index))}
+          />
         </div>
       ),
     }),
@@ -129,7 +193,10 @@ export default function MoleculeTable({ data, setData }: Props) {
     getCoreRowModel: getCoreRowModel(),
   })
   function OnIconClicked() {
-    setData([...data, { name: "heloo", dose: 0, unite: "mg" }])
+    setData([
+      ...data,
+      { moleculeId: 0, dose: 0, unite: "", days: [], perfusionType: "" },
+    ])
   }
 
   return (
@@ -172,7 +239,7 @@ export default function MoleculeTable({ data, setData }: Props) {
             </tr>
           ))}
           <tr className="text-center ">
-            <td colSpan={4} className="p-2 bg-gray-table ">
+            <td colSpan={10} className="p-2 bg-gray-table ">
               <div className={`flex justify-center items-center`}>
                 <Icon src={addIcon} onCLick={() => OnIconClicked()} />
               </div>

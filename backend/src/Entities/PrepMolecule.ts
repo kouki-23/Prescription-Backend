@@ -55,6 +55,9 @@ export class PrepMolecule {
   @Column()
   perfusionType: string
 
+  @Column({ nullable: true })
+  comment?: string
+
   @OneToOne(() => Vehicule)
   @JoinColumn()
   vehicule: Vehicule

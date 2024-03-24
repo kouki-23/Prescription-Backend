@@ -8,26 +8,42 @@ import { getMoleculeById } from "./moleculeService"
 const repo = db.getRepository(Protocol)
 
 export async function CreateProtocol(protocolb: CreateProtocolBody) {
+  const id = (
+    await repo.createQueryBuilder().select("MAX(id)", "maxId").getRawOne()
+  ).maxId
+  console.log(id)
   const protocole = new Protocol(
-    protocolb.id,
+    id + 1,
     protocolb.name,
     protocolb.intercure,
-    protocolb.nbcures,
+    protocolb.nbCures,
     protocolb.details,
     protocolb.indications,
-    protocolb.histotype,
+    protocolb.histoType,
     [],
     [],
   )
-  const associations: ProtocoleMoleculeAssociation[] = await Promise.all(
-    protocolb.molecules.map(async (molecule) => {
-      const association = new ProtocoleMoleculeAssociation()
-      association.protocol = protocole
-      association.day = molecule.day
-      association.molecule = await getMoleculeById(molecule.moleculeid)
-      return association
-    }),
-  )
+
+  const associations: ProtocoleMoleculeAssociation[] = (
+    await Promise.all(
+      protocolb.molecules.map(async (mol) => {
+        const molecule = await getMoleculeById(mol.moleculeId)
+        const association: ProtocoleMoleculeAssociation[] = mol.days.map(
+          (day) =>
+            new ProtocoleMoleculeAssociation(
+              day,
+              mol.unite,
+              mol.dose,
+              mol.perfusionType,
+              molecule,
+              protocole,
+            ),
+        )
+        return association
+      }),
+    )
+  ).flat()
+
   protocole.protocolMoleculeAssociation = associations
   return await repo.save(protocole)
 }

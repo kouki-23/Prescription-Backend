@@ -17,6 +17,7 @@ export default function DayListCheckBox({
             <input
               className="size-5"
               type="checkbox"
+              checked={selectedDays.find((a) => a === i + 1) ? true : false}
               onChange={(e) => {
                 if (e.target.checked) {
                   setSelectedDays([...selectedDays, i + 1])

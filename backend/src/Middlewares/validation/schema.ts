@@ -77,17 +77,19 @@ export const UpdateMoleculeBodySchema = z.object({
 export type UpdateMoleculeBody = z.infer<typeof UpdateMoleculeBodySchema>
 
 export const createProtocolBodySchema = z.object({
-  id: z.number(),
   name: z.string(),
   intercure: z.number(),
-  nbcures: z.number(),
+  nbCures: z.number(),
   details: z.string(),
   indications: z.string(),
-  histotype: z.string(),
+  histoType: z.string(),
   molecules: z.array(
     z.object({
-      moleculeid: z.number().positive(),
-      day: z.number().positive(),
+      moleculeId: z.number().positive(),
+      days: z.array(z.number().positive()),
+      unite: z.string(),
+      dose: z.number(),
+      perfusionType: z.string(),
     }),
   ),
 })

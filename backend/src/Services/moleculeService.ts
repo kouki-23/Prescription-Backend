@@ -13,7 +13,6 @@ export async function createMolecule(moleculeB: CreateMoleculeBody) {
   const molecule = new Molecule(
     moleculeB.name,
     moleculeB.way,
-    moleculeB.perfusionType,
     moleculeB.comment,
   )
   return await repo.save(molecule)

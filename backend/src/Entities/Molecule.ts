@@ -20,9 +20,6 @@ export class Molecule {
   @Column()
   way: string
 
-  @Column()
-  perfusionType: string
-
   @Column({ nullable: true })
   comment?: string
 
@@ -37,15 +34,9 @@ export class Molecule {
   })
   protocoleMoleculeAssociation: ProtocoleMoleculeAssociation[]
 
-  constructor(
-    name: string,
-    way: string,
-    perfusionType: string,
-    comment?: string,
-  ) {
+  constructor(name: string, way: string, comment?: string) {
     this.name = name
     this.way = way
-    this.perfusionType = perfusionType
     this.comment = comment
   }
 }
