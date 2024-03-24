@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-table"
 import addIcon from "@assets/icons/add.svg"
 import deleteIcon from "@assets/icons/delete.svg"
-import settingsIcon from "@assets/icons/settings.svg"
 import { twMerge } from "tailwind-merge"
 import TextInput from "@components/atoms/TextInput"
 import { useState } from "react"
