@@ -120,6 +120,14 @@ export default function MoleculeTable({ data, setData, intercure }: Props) {
               value={String(value)}
               setValue={setValue}
               isNumber={true}
+              onBlur={() => {
+                let newMolecule = [...data]
+                newMolecule[info.row.index] = {
+                  ...newMolecule[info.row.index],
+                  dose: Number(value),
+                }
+                setData(newMolecule)
+              }}
             />
           </div>
         )
