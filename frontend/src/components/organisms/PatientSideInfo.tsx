@@ -1,18 +1,20 @@
+import { updatePatient } from "@helpers/apis/patient"
 import { getAge } from "@helpers/personInfo"
 import { PatientData } from "@helpers/types"
+import { useState } from "react"
 
 type Props = {
   patient: PatientData
 }
 
 export default function PatientSideInfo({ patient }: Props) {
+  const [comment, setComment] = useState(patient.comment)
   return (
     <div className="bg-dark-gray bg-opacity-50 h-screen px-9 pt-20 w-full">
       <div>
         <p className="text-primary-blue font-bold text-2xl ">PATIENT:</p>
         <p className="text-primary-blue font-medium pt-2 text-xl ">
-          {patient.firstName}
-          {patient.lastName}
+          {patient.firstName + " " + patient.lastName}
         </p>
         <div className="space-y-3">
           <div className="grid grid-cols-3  gap-5 pt-4">
@@ -28,6 +30,15 @@ export default function PatientSideInfo({ patient }: Props) {
             value={String(patient.bodySurface)}
           />
           <p className="text-primary-blue font-medium pt-1">Commentaire:</p>
+          <textarea
+            className="bg-primary-gray bg-opacity-30 w-96 rounded-lg py-2 px-2 focus:outline-secondary-blue shadow"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            onBlur={() => {
+              if (comment) updatePatient(patient.id, { comment })
+            }}
+          />
+
           <p className="text-light-black font-light py-2">{patient.comment}</p>
         </div>
       </div>
