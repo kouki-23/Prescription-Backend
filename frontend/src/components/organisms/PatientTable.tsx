@@ -19,6 +19,7 @@ import AddPrescription from "@components/molecules/AddPrescription"
 import { useNavigate } from "react-router-dom"
 import { getDate } from "@helpers/utils"
 import { twMerge } from "tailwind-merge"
+import ConfirmModel from "@components/molecules/ConfirmModel"
 
 type Props = {
   data: TPatientData[]
@@ -77,9 +78,20 @@ export default function PatientTable({ data, refetch }: Props) {
     }),
     columnHelper.display({
       id: "Actions",
-      cell: (info) => (
-        <Actions deleteFn={() => mutation.mutate(info.row.original.id)} />
-      ),
+      cell: (info) => {
+        const [deleteConfirm, setDeleteConfirm] = useState(false)
+        return (
+          <>
+            <ConfirmModel
+              text="Voulez-vous vraiment supprimer cette patient?"
+              isOpen={deleteConfirm}
+              setIsOpen={setDeleteConfirm}
+              confirmFn={() => mutation.mutate(info.row.original.id)}
+            />
+            <Actions deleteFn={() => setDeleteConfirm(true)} />
+          </>
+        )
+      },
       header: "Actions",
     }),
   ]
