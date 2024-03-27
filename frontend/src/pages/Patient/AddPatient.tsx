@@ -313,7 +313,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
               disabled={true}
             />
             {getBodySurf(data.weight, data.height) > 2 && (
-              <p className="text-orange-shade">le SC dépasse 2</p>
+              <p className="text-orange-shade">la SC dépasse 2</p>
             )}
           </div>
         </div>
