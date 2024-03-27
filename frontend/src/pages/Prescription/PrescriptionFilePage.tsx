@@ -39,7 +39,7 @@ export default function PrescriptionFilePage({}: Props) {
         <>
           <div className="text-sm" ref={ref}>
             <h3 className="font-semibold py-5">
-              Le {getDate(new Date())} par dr.{prescription.prescriber}
+              Le {getDate(new Date())} par Dr.{prescription.prescriber}
             </h3>
             <hr />
             <h3 className="font-semibold py-3 text-2xl">Patient :</h3>
