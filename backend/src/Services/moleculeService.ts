@@ -19,7 +19,11 @@ export async function createMolecule(moleculeB: CreateMoleculeBody) {
 }
 
 export async function getAllMolecules() {
-  const molecules: Molecule[] = await repo.find()
+  const molecules: Molecule[] = await repo.find({
+    order: {
+      name: "ASC",
+    },
+  })
   return molecules
 }
 

@@ -250,7 +250,6 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
     }
     if (!data.clairanceFormula) {
       toast.error("Veuillez selectionner la formule clairance")
-
       return false
     }
 
@@ -258,7 +257,8 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
   }
   useEffect(() => {
     let newBodySurface = getBodySurf(data.weight, data.height)
-    setData({ ...data, bodySurface: newBodySurface > 2 ? 2 : newBodySurface })
+    data.bodySurface = newBodySurface > 2 ? 2 : newBodySurface
+    setData(data)
   }, [data.height, data.weight])
   useEffect(() => {
     setData({

@@ -173,11 +173,10 @@ function PatientInfoCard({
   })
   useEffect(() => {
     let newBodySurface = getBodySurf(patient.weight, patient.height)
-    setPatient({
-      ...patient,
-      bodySurface: newBodySurface > 2 ? 2 : newBodySurface,
-    })
-  }, [patient.height, patient.weight])
+    patient.bodySurface = newBodySurface > 2 ? 2 : newBodySurface
+    setPatient(patient)
+  }, [patient.weight, patient.height])
+
   useEffect(() => {
     setPatient({
       ...patient,
