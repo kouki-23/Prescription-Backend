@@ -8,6 +8,7 @@ import Title from "@components/atoms/Title"
 import addIcon from "@assets/icons/person-add.svg"
 import { useNavigate } from "react-router-dom"
 import LoadingInterface from "@components/organisms/LoadingInterface"
+import PrimaryBtn from "@components/atoms/PrimaryBtn"
 
 type Props = {}
 
@@ -26,12 +27,19 @@ export default function PatientPage({}: Props) {
       <PatientFilter />
       <div className="container mx-auto my-10 flex justify-between">
         <Title text="Liste des patients" />
-        <img
-          className="size-10 cursor-pointer"
-          src={addIcon}
-          onClick={() => navigator("/medecin/addPatient")}
-          alt="ajouter patient"
-        />
+        <div className="flex gap-2 items-center">
+          <PrimaryBtn
+            className="px-2 py-2"
+            text="Ajouter protcole"
+            clickFn={() => navigator("/medecin/addProtocole")}
+          />
+          <img
+            className="size-10 cursor-pointer"
+            src={addIcon}
+            onClick={() => navigator("/medecin/addPatient")}
+            alt="ajouter patient"
+          />
+        </div>
       </div>
       <PatientTable
         refetch={refetch}
