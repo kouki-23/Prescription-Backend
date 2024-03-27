@@ -2,7 +2,7 @@ import { PatientData } from "./types"
 
 export function addDaysToDate(date: Date | string, day: number): Date {
   const d = new Date(date)
-  d.setDate(d.getDate() + day - 1)
+  d.setDate(d.getDate() + day)
   return d
 }
 
