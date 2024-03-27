@@ -38,8 +38,6 @@ export default function PatientSideInfo({ patient }: Props) {
               if (comment) updatePatient(patient.id, { comment })
             }}
           />
-
-          <p className="text-light-black font-light py-2">{patient.comment}</p>
         </div>
       </div>
     </div>
