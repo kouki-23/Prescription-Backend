@@ -9,6 +9,7 @@ services:
       - VITE_BACK_URL=backend:3006
     networks:
       - prescription
+    restart: on-failure
   backend:
     build: ./backend
     ports:
@@ -26,6 +27,7 @@ services:
     environment:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: prescription
+    restart: on-failure
     volumes:
       - dbData:/var/lib/postgresql
 
