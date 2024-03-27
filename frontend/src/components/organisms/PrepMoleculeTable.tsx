@@ -2,7 +2,7 @@ import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import TextInput from "@components/atoms/TextInput"
 import Title from "@components/atoms/Title"
 import { Cure, Option, PatientData } from "@helpers/types"
-import { addDaysToDate } from "@helpers/utils"
+import { addDaysToDate, getDose } from "@helpers/utils"
 import {
   createColumnHelper,
   flexRender,
@@ -144,14 +144,14 @@ export default function PrepMoleculeTable({
       maxSize: 10,
     }),
     columnHelper.accessor(
-      (row) => Math.round(row.dose * patient.bodySurface * 100) / 100,
+      (row) => getDose(row.dose, row.unite, patient, row.name),
       {
         id: "doseT",
         cell: (info) => info.getValue() + " mg",
         header: "Dose théorique",
       },
     ),
-    columnHelper.accessor((row) => row.doseAdaptee, {
+    columnHelper.accessor((row) => Math.round(row.doseAdaptee * 100) / 100, {
       id: "doseAdapteeUnite",
       cell: (info) => {
         const initValue = info.getValue()
@@ -187,7 +187,7 @@ export default function PrepMoleculeTable({
       size: 50,
     }),
     columnHelper.accessor(
-      (row) => Math.round(row.doseAdaptee * patient.bodySurface * 100) / 100,
+      (row) => getDose(row.doseAdaptee, row.unite, patient, row.name),
       {
         id: "doseAdaptee",
         cell: (info) => info.getValue() + " mg",

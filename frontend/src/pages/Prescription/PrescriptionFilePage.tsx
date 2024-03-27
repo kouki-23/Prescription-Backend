@@ -1,6 +1,6 @@
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import { getPrescriptionById } from "@helpers/apis/prescription"
-import { addDaysToDate, getDate } from "@helpers/utils"
+import { addDaysToDate, getDate, getDose } from "@helpers/utils"
 import ErrorPage from "@pages/Error/ErrorPage"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
@@ -166,17 +166,20 @@ function MoleculeTable({
     columnHelper.accessor((row) => row.theoreticalDose + " " + row.unite, {
       id: "doseUniteT",
       cell: (info) => info.getValue(),
-      header: "Dose théorique - Unité",
+      header: "Dose Théorique - Unité",
     }),
     columnHelper.accessor(
       (row) =>
-        `${
-          Math.round(row.theoreticalDose * patient.bodySurface * 100) / 100
-        } mg`,
+        `${getDose(
+          row.theoreticalDose,
+          row.unite,
+          patient,
+          row.details.molecule.name,
+        )} mg`,
       {
         id: "doseT",
         cell: (info) => info.getValue(),
-        header: "Dose théorique",
+        header: "Dose Théorique",
       },
     ),
     columnHelper.accessor((row) => `${row.dose} ${row.unite}`, {
@@ -186,7 +189,13 @@ function MoleculeTable({
       size: 50,
     }),
     columnHelper.accessor(
-      (row) => `${Math.round(row.dose * patient.bodySurface * 100) / 100} mg`,
+      (row) =>
+        `${getDose(
+          row.dose,
+          row.unite,
+          patient,
+          row.details.molecule.name,
+        )} mg`,
       {
         id: "doseAdaptee",
         cell: (info) => info.getValue(),

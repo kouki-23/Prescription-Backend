@@ -1,3 +1,5 @@
+import { PatientData } from "./types"
+
 export function addDaysToDate(date: Date | string, day: number): Date {
   const d = new Date(date)
   d.setDate(d.getDate() + day - 1)
@@ -33,4 +35,28 @@ export function diffObjects(obj1: any, obj2: any) {
 
 export function getDate(date: Date): string {
   return date.toISOString().split("T")[0].split("-").reverse().join("-")
+}
+
+export function getDose(
+  dose: number,
+  unite: string,
+  patient: PatientData,
+  moleculeName: string,
+): string {
+  switch (unite) {
+    case "mg/kg":
+      return (dose * patient.weight).toFixed(2)
+    case "mg":
+      return dose.toFixed(2)
+    case "mg/m²":
+      let val = (dose * patient.bodySurface).toFixed(2)
+      if (moleculeName && moleculeName == "Vincristine" && Number(val) > 2) {
+        return "2"
+      }
+      return val
+    case "AUC":
+      return (dose * (Number(patient.clairance) + 25)).toFixed(2)
+    default:
+      return "-"
+  }
 }
