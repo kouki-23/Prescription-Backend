@@ -55,6 +55,9 @@ export class PrepMolecule {
   @Column()
   perfusionType: string
 
+  @Column()
+  isCustom: boolean
+
   @Column({ nullable: true })
   comment?: string
 
@@ -78,6 +81,7 @@ export class PrepMolecule {
     dose: number,
     unite: string,
     perfusionType: string,
+    isCustom: boolean,
     cure: Cure,
     details: DetailPrepMolecule,
   ) {
@@ -88,6 +92,7 @@ export class PrepMolecule {
     this.VolumePA = 0
     this.duration = 1
     this.time = "10:00"
+    this.isCustom = isCustom
     this.dose = dose
     this.unite = unite
     this.details = details

@@ -74,7 +74,10 @@ export default function PrescriptionDetailsPage({}: Props) {
             />
           </div>
           <div className="container mx-auto my-10">
-            <Title className="text-3xl font-semibold mb-2" text="Commentaire" />
+            <Title
+              className="text-3xl font-semibold mb-2"
+              text="Commentaire prescription"
+            />
             <textarea
               className="w-full bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue"
               onChange={(e) =>

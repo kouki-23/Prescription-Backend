@@ -26,6 +26,7 @@ import LoadingInterface from "./LoadingInterface"
 import ErrorPage from "@pages/Error/ErrorPage"
 import DayListCheckBox from "@components/atoms/DayListCheckBox"
 import { addPrepMoleculeToCure } from "@helpers/apis/cure"
+import PasswordConfirmation from "@components/molecules/PasswordConfirmation"
 
 type Props = {
   cure: Cure
@@ -45,6 +46,7 @@ type TCureData = {
   time: string
   validation: number
   perfusionType: string
+  isCustom: boolean
 }
 
 export default function PrepMoleculeTable({
@@ -59,10 +61,9 @@ export default function PrepMoleculeTable({
   const [isAddProduitOpen, setIsAddProduitOpen] = useState(false)
   const [data, setData] = useState(transformCureToDataTable(cure))
   const [isCureChanged, setIsCureChanged] = useState(false)
-  const [password, setPassword] = useState("")
   const cureMut = useMutation({
     mutationKey: ["prepMolecules", cure.order],
-    mutationFn: async () => {
+    mutationFn: async (password: string) => {
       if (user) {
         await login(user.username, password)
         updatePrepMolecules(cure.prepMolecule)
@@ -129,7 +130,8 @@ export default function PrepMoleculeTable({
     }),
     columnHelper.accessor((row) => row.name, {
       id: "name",
-      cell: (info) => info.getValue(),
+      cell: (info) =>
+        `${info.getValue()} ${info.row.original.isCustom ? "*" : ""}`,
       header: "Produit",
     }),
     columnHelper.accessor((row) => row.perfusionType, {
@@ -283,25 +285,11 @@ export default function PrepMoleculeTable({
 
   return (
     <>
-      <Model isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Title className="text-3xl" text="Entrez votre mot de passe" />
-        <p className="font-medium py-6">
-          Pour confirmer l'enregistrement , veuillez entrer votre mot de passe :
-        </p>
-        <div className="flex items-center gap-3">
-          <span className="font-medium">Mot de passe</span>
-          <TextInput
-            value={password}
-            setValue={(s) => setPassword(s)}
-            isPassword={true}
-          />
-        </div>
-        <PrimaryBtn
-          className="px-4 py-2 mt-8"
-          text="Enregistrer"
-          clickFn={() => cureMut.mutate()}
-        />
-      </Model>
+      <PasswordConfirmation
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        mutation={cureMut}
+      />
       <AddProduit
         isOpen={isAddProduitOpen}
         setIsOpen={setIsAddProduitOpen}
@@ -423,6 +411,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
         time: p.time,
         validation: p.validation,
         perfusionType: p.perfusionType,
+        isCustom: p.isCustom,
       } as TCureData
     })
     .sort((a, b) => a.day - b.day)

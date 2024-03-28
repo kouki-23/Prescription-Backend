@@ -49,6 +49,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
         p.dose,
         p.unite,
         p.perfusionType,
+        false,
         cure,
         detail,
       )
@@ -70,6 +71,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
           p.dose,
           p.unite,
           p.perfusionType,
+          false,
           cure,
           detail,
         )

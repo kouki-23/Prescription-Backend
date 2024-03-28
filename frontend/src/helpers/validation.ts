@@ -2,10 +2,10 @@ export function isEmpty(word: string): boolean {
   return word.trim() === ""
 }
 
-export function isOnlyLetter(word: string): boolean {
+export function isOnlyLetterWithSpaces(word: string): boolean {
   for (let i = 0; i < word.length; i++) {
     const char = word[i].toUpperCase()
-    if (!(char >= "A" && char <= "Z")) {
+    if (!((char >= "A" && char <= "Z") || char === " ")) {
       return false
     }
   }

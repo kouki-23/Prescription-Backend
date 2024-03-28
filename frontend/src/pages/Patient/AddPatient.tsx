@@ -11,7 +11,7 @@ import { Option } from "@helpers/types"
 import {
   isEmpty,
   isFloat,
-  isOnlyLetter,
+  isOnlyLetterWithSpaces,
   isPositif,
   isDateInPast,
 } from "@helpers/validation"
@@ -103,7 +103,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Le nom est obligatoire")
       return false
     }
-    if (!isOnlyLetter(data.lastName)) {
+    if (!isOnlyLetterWithSpaces(data.lastName)) {
       toast.error("Le nom doit contenir seulement des lettres ")
       return false
     }
@@ -111,7 +111,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Le prenom est obligatoire")
       return false
     }
-    if (!isOnlyLetter(data.firstName)) {
+    if (!isOnlyLetterWithSpaces(data.firstName)) {
       toast.error("Le prenom doit contenir seulement des lettres ")
       return false
     }
