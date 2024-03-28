@@ -26,6 +26,7 @@ export default new DataSource({
   //dropSchema: true,
   logging: true,
   //entities: ["./src/Entities/*.js"],
+  migrations: ["./src/migrations/*"],
   entities: [
     User,
     Bottle,

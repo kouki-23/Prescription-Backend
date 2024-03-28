@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { DataHistory } from "./DataHistory"
 import { Prescription } from "./Prescription"
 
@@ -7,7 +14,7 @@ export class Patient {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   DMI: string
 
   @Column()
@@ -57,4 +64,10 @@ export class Patient {
 
   @OneToMany(() => Prescription, (p) => p.patient)
   prescription: Prescription[]
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }
