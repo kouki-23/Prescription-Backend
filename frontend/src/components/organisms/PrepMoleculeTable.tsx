@@ -105,7 +105,7 @@ export default function PrepMoleculeTable({
   }, [data])
   useEffect(() => {
     setData(transformCureToDataTable(cure))
-  }, [selectedCure])
+  }, [selectedCure, patient])
   const columnHelper = createColumnHelper<TCureData>()
   const columns = [
     columnHelper.accessor((row) => row.day, {
