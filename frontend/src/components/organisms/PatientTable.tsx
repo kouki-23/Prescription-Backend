@@ -1,4 +1,5 @@
 import {
+  ColumnFilter,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -14,7 +15,7 @@ import editIcon from "@assets/icons/edit.svg"
 import { useMutation } from "@tanstack/react-query"
 import { deletePatient } from "@helpers/apis/patient"
 import { toast } from "react-toastify"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AddPrescription from "@components/molecules/AddPrescription"
 import { useNavigate } from "react-router-dom"
 import { getDate } from "@helpers/utils"
@@ -24,6 +25,7 @@ import ConfirmModel from "@components/molecules/ConfirmModel"
 type Props = {
   data: TPatientData[]
   refetch: Function
+  filters: ColumnFilter[]
 }
 
 export type TPatientData = {
@@ -35,7 +37,8 @@ export type TPatientData = {
   birthDate: string
   gender: string
 }
-export default function PatientTable({ data, refetch }: Props) {
+
+export default function PatientTable({ data, refetch, filters }: Props) {
   const mutation = useMutation({
     mutationKey: ["patients"],
     mutationFn: (id: number) => deletePatient(id),
@@ -95,7 +98,9 @@ export default function PatientTable({ data, refetch }: Props) {
       header: "Actions",
     }),
   ]
-
+  useEffect(() => {
+    console.log(columns)
+  }, [filters])
   const table = useReactTable({
     data,
     columns,
@@ -103,6 +108,9 @@ export default function PatientTable({ data, refetch }: Props) {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      columnFilters: filters,
+    },
   })
 
   return (
