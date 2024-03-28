@@ -10,7 +10,7 @@ import { PrepMolecule } from "./PrepMolecule"
 
 export enum CureState {
   EN_COURS = "En cours",
-  EN_PREVU = "En prévu",
+  PREVU = "Prévu",
   TERMINEE = "Terminée",
 }
 
