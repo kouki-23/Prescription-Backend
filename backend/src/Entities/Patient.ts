@@ -54,7 +54,7 @@ export class Patient {
   clairance: number
 
   @Column({ nullable: true })
-  FEVG: number
+  FEVG?: number
 
   @Column({ nullable: true })
   comment?: string

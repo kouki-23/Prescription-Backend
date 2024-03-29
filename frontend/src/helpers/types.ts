@@ -117,6 +117,7 @@ export interface PatientData {
   clairance: number
   comment: string
   serviceType: string
+  FEVG?: number
 }
 
 export interface Prescription {

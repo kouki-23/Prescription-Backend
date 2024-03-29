@@ -194,17 +194,28 @@ function PatientInfoCard({
   }, [patient.clairanceFormula, patient.creatinine, patient.weight])
   return (
     <div className="relative p-4 px-6 bg-gray-table shadow-lg w-full rounded-3xl">
-      <div className="flex items-center gap-6">
-        <Title className="text-3xl font-semibold" text="Patient:" />
-        <span className="text-xl text-primary-blue font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
+      <div className="flex justify-between items-center pr-5">
+        <div className="flex items-center gap-6">
+          <Title className="text-3xl font-semibold" text="Patient:" />
+          <span className="text-xl text-primary-blue font-medium">{`${patient.firstName} ${patient.lastName}`}</span>
+        </div>
+        <span className="text-xl text-primary-blue font-medium">
+          {patient.DMI}
+        </span>
       </div>
       <div className="grid grid-cols-3 gap-2 py-4 items-center">
-        <InfoText label="DMI" value={String(patient.DMI)} />
         <InfoText
           label="Age"
           value={`${getAge(new Date(patient.birthDate)).toString()} Ans`}
         />
         <InfoText label="Genre" value={patient.gender} />
+        <InfoText
+          label="FEVG"
+          value={String(patient.FEVG ? patient.FEVG : 0)}
+          setValue={(value) => setPatient({ ...patient, FEVG: Number(value) })}
+          editFn={() => patientMutation.mutate()}
+          unite="%"
+        />
         <InfoText
           label="Taille"
           value={String(patient.height)}
