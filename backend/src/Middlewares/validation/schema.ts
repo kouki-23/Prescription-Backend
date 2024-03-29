@@ -51,6 +51,7 @@ export const updatePatientBodySchema = z.object({
   birthDate: z.string().optional(),
   weight: z.number().positive().optional(),
   height: z.number().positive().optional(),
+  FEVG: z.number().positive().optional(),
   bodySurface: z.number().positive().optional(),
   creatinine: z.number().nonnegative().optional(),
   clairanceFormula: z.string().optional(),

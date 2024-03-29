@@ -49,6 +49,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
         p.dose,
         p.unite,
         p.perfusionType,
+        false,
         cure,
         detail,
       )
@@ -59,7 +60,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
 
   for (let i = 2; i <= data.nbCures; i++) {
     startDate.setDate(startDate.getDate() + protocol.intercure)
-    cure = new Cure(i, startDate, CureState.EN_PREVU, prescription, [])
+    cure = new Cure(i, startDate, CureState.PREVU, prescription, [])
     protocol.protocolMoleculeAssociation.map((p) => {
       const detail = detailsMolecules.find(
         (d) => d.molecule.id === p.molecule.id,
@@ -70,6 +71,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
           p.dose,
           p.unite,
           p.perfusionType,
+          false,
           cure,
           detail,
         )

@@ -76,6 +76,7 @@ export interface PrepMolecule {
   validation: number
   theoreticalDose: number
   perfusionType: string
+  isCustom: boolean
   details: Details
   id: number
 }
@@ -116,6 +117,7 @@ export interface PatientData {
   clairance: number
   comment: string
   serviceType: string
+  FEVG?: number
 }
 
 export interface Prescription {

@@ -9,8 +9,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { useEffect, useMemo, useState } from "react"
-import addIcon from "@assets/icons/add.svg"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import addIcon from "@assets/icons/add-molecule.svg"
 import plusIcon from "@assets/icons/plus-green.svg"
 import minusIcon from "@assets/icons/minus-red.svg"
 import fileIcon from "@assets/icons/file-download.svg"
@@ -26,6 +26,8 @@ import LoadingInterface from "./LoadingInterface"
 import ErrorPage from "@pages/Error/ErrorPage"
 import DayListCheckBox from "@components/atoms/DayListCheckBox"
 import { addPrepMoleculeToCure } from "@helpers/apis/cure"
+import PasswordConfirmation from "@components/molecules/PasswordConfirmation"
+import { isEmpty, isPositif } from "@helpers/validation"
 
 type Props = {
   cure: Cure
@@ -45,6 +47,7 @@ type TCureData = {
   time: string
   validation: number
   perfusionType: string
+  isCustom: boolean
 }
 
 export default function PrepMoleculeTable({
@@ -59,10 +62,9 @@ export default function PrepMoleculeTable({
   const [isAddProduitOpen, setIsAddProduitOpen] = useState(false)
   const [data, setData] = useState(transformCureToDataTable(cure))
   const [isCureChanged, setIsCureChanged] = useState(false)
-  const [password, setPassword] = useState("")
   const cureMut = useMutation({
     mutationKey: ["prepMolecules", cure.order],
-    mutationFn: async () => {
+    mutationFn: async (password: string) => {
       if (user) {
         await login(user.username, password)
         updatePrepMolecules(cure.prepMolecule)
@@ -105,7 +107,7 @@ export default function PrepMoleculeTable({
   }, [data])
   useEffect(() => {
     setData(transformCureToDataTable(cure))
-  }, [selectedCure])
+  }, [selectedCure, patient])
   const columnHelper = createColumnHelper<TCureData>()
   const columns = [
     columnHelper.accessor((row) => row.day, {
@@ -129,7 +131,8 @@ export default function PrepMoleculeTable({
     }),
     columnHelper.accessor((row) => row.name, {
       id: "name",
-      cell: (info) => info.getValue(),
+      cell: (info) =>
+        `${info.getValue()} ${info.row.original.isCustom ? "*" : ""}`,
       header: "Produit",
     }),
     columnHelper.accessor((row) => row.perfusionType, {
@@ -175,6 +178,7 @@ export default function PrepMoleculeTable({
                 setValue={setValue}
                 isNumber={true}
                 onBlur={() => setChanges(value)}
+                disabled={info.row.original.validation >= 1}
               />
               <span className="absolute right-2 text-primary-blue">
                 {info.row.original.unite}
@@ -217,6 +221,7 @@ export default function PrepMoleculeTable({
                   setValue={setValue}
                   isNumber={true}
                   onBlur={() => setChanges(value)}
+                  disabled={info.row.original.validation >= 1}
                 />
                 <span className="absolute right-2 text-primary-blue">%</span>
               </div>
@@ -241,11 +246,14 @@ export default function PrepMoleculeTable({
         return (
           <div className="flex justify-center">
             <input
-              className="bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md"
+              className={`bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md ${
+                info.row.original.validation >= 1 ? "bg-secondary-gray" : ""
+              }`}
               type="time"
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onBlur={() => setChanges(value)}
+              disabled={info.row.original.validation >= 1}
             />
           </div>
         )
@@ -283,25 +291,11 @@ export default function PrepMoleculeTable({
 
   return (
     <>
-      <Model isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Title className="text-3xl" text="Entrez votre mot de passe" />
-        <p className="font-medium py-6">
-          Pour confirmer l'enregistrement , veuillez entrer votre mot de passe :
-        </p>
-        <div className="flex items-center gap-3">
-          <span className="font-medium">Mot de passe</span>
-          <TextInput
-            value={password}
-            setValue={(s) => setPassword(s)}
-            isPassword={true}
-          />
-        </div>
-        <PrimaryBtn
-          className="px-4 py-2 mt-8"
-          text="Enregistrer"
-          clickFn={() => cureMut.mutate()}
-        />
-      </Model>
+      <PasswordConfirmation
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        mutation={cureMut}
+      />
       <AddProduit
         isOpen={isAddProduitOpen}
         setIsOpen={setIsAddProduitOpen}
@@ -423,6 +417,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
         time: p.time,
         validation: p.validation,
         perfusionType: p.perfusionType,
+        isCustom: p.isCustom,
       } as TCureData
     })
     .sort((a, b) => a.day - b.day)
@@ -493,7 +488,29 @@ function AddProduit({
     moleculeId: -1,
     perfusionType: "",
   })
-
+  const verif = useCallback(() => {
+    if (prepMolecule.moleculeId === -1) {
+      toast.error("Selectionner une molecule")
+      return false
+    }
+    if (!isPositif(prepMolecule.dose)) {
+      toast.error("Le dose doit etre une entier positif")
+      return false
+    }
+    if (isEmpty(prepMolecule.unite)) {
+      toast.error("Selectionner l'unite de dose")
+      return false
+    }
+    if (isEmpty(prepMolecule.perfusionType)) {
+      toast.error("Selectionner le type de perfusion")
+      return false
+    }
+    if (prepMolecule.days.length === 0) {
+      toast.error("Selectionner une jour")
+      return false
+    }
+    return true
+  }, [prepMolecule])
   const { isLoading, error, data } = useQuery({
     queryKey: ["molecules"],
     queryFn: getAllMolecules,
@@ -620,7 +637,12 @@ function AddProduit({
           setSelectedDays={(days) => setPrepMolecule({ ...prepMolecule, days })}
         />
       </div>
-      <PrimaryBtn text="Ajouter" clickFn={() => mutation.mutate()} />
+      <PrimaryBtn
+        text="Ajouter"
+        clickFn={() => {
+          if (verif()) mutation.mutate()
+        }}
+      />
     </Model>
   )
 }

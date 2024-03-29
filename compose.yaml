@@ -4,7 +4,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3005:80"
+      - "3005:443"
     environment:
       - VITE_BACK_URL=backend:3006
     networks:
@@ -29,7 +29,7 @@ services:
       POSTGRES_DB: prescription
     restart: on-failure
     volumes:
-      - dbData:/var/lib/postgresql
+      - dbData:/var/lib/postgresql/data
 
 volumes:
   dbData:
@@ -37,4 +37,3 @@ volumes:
 networks:
   prescription: {}
   postgres_network: {}
-

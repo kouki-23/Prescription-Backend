@@ -11,7 +11,7 @@ import { Option } from "@helpers/types"
 import {
   isEmpty,
   isFloat,
-  isOnlyLetter,
+  isOnlyLetterWithSpaces,
   isPositif,
   isDateInPast,
 } from "@helpers/validation"
@@ -103,7 +103,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Le nom est obligatoire")
       return false
     }
-    if (!isOnlyLetter(data.lastName)) {
+    if (!isOnlyLetterWithSpaces(data.lastName)) {
       toast.error("Le nom doit contenir seulement des lettres ")
       return false
     }
@@ -111,7 +111,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Le prenom est obligatoire")
       return false
     }
-    if (!isOnlyLetter(data.firstName)) {
+    if (!isOnlyLetterWithSpaces(data.firstName)) {
       toast.error("Le prenom doit contenir seulement des lettres ")
       return false
     }
@@ -217,6 +217,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
 
 function AddPatientPage2({ data, setData, setPageN }: PageProps) {
   const navigator = useNavigate()
+  const [bodySurf, setBodySurf] = useState<number>(0)
   function verif(): boolean {
     if (!data.weight) {
       toast.error("Veuillez saisir le poids")
@@ -257,8 +258,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
   }
   useEffect(() => {
     let newBodySurface = getBodySurf(data.weight, data.height)
-    data.bodySurface = newBodySurface > 2 ? 2 : newBodySurface
-    setData(data)
+    setBodySurf(newBodySurface > 2 ? 2 : newBodySurface)
   }, [data.height, data.weight])
   useEffect(() => {
     setData({
@@ -305,10 +305,8 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
           <div>
             <LabledInput
               text="Surface corporelle (m²)"
-              value={String(data.bodySurface)}
-              setValue={(value: string) =>
-                setData({ ...data, bodySurface: Number(value) })
-              }
+              value={String(bodySurf)}
+              setValue={() => {}}
               isNumber={true}
               disabled={true}
             />
@@ -356,7 +354,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
           clickFn={async () => {
             try {
               if (verif()) {
-                await addPatient(data)
+                await addPatient({ ...data, bodySurface: bodySurf })
                 navigator("/medecin")
               }
             } catch (e) {

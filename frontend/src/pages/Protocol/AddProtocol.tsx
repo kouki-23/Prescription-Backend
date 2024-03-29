@@ -2,12 +2,7 @@ import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import Title from "@components/atoms/Title"
 import MoleculeTable, { TMolecule } from "@components/organisms/MoleculeTable"
 import { addProtocol } from "@helpers/apis/protocol"
-import {
-  isEmpty,
-  isInteger,
-  isOnlyLetter,
-  isPositif,
-} from "@helpers/validation"
+import { isEmpty, isInteger, isPositif } from "@helpers/validation"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import { toast } from "react-toastify"
@@ -150,10 +145,6 @@ export function AddProtocol({ data, setData }: ProtocolProps) {
 function verif(data: TProtocol): boolean {
   if (isEmpty(data.name)) {
     toast.error("veillez saisir le nom du Protocol")
-    return false
-  }
-  if (!isOnlyLetter(data.name)) {
-    toast.error("Le nom est composé seulement par des lettres")
     return false
   }
   if (!data.nbCures) {

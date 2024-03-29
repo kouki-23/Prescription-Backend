@@ -9,28 +9,48 @@ import addIcon from "@assets/icons/person-add.svg"
 import { useNavigate } from "react-router-dom"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
+import { useState } from "react"
+import { ColumnFilter } from "@tanstack/react-table"
+
+export type Tfilters = {
+  DMI: string
+  firstName: string
+  lastName: string
+  birthDate: string
+  gender: string
+}
 
 type Props = {}
 
 export default function PatientPage({}: Props) {
   const navigator = useNavigate()
+
+  const [filters, setFilters] = useState<Tfilters>({
+    DMI: "",
+    firstName: "",
+    lastName: "",
+    birthDate: "",
+    gender: "",
+  })
+
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["patients"],
     queryFn: getAllPatients,
   })
+
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
   const patients = data ? data : []
   return (
     <div className="px-24">
       <div className="mt-16"></div>
-      <PatientFilter />
+      <PatientFilter filters={filters} setFilters={setFilters} />
       <div className="container mx-auto my-10 flex justify-between">
         <Title text="Liste des patients" />
         <div className="flex gap-2 items-center">
           <PrimaryBtn
             className="px-2 py-2"
-            text="Ajouter protcole"
+            text="Ajouter protocole"
             clickFn={() => navigator("/medecin/addProtocole")}
           />
           <img
@@ -44,6 +64,7 @@ export default function PatientPage({}: Props) {
       <PatientTable
         refetch={refetch}
         data={transformPatientToTablePatient(patients)}
+        filters={transformFilter(filters)}
       />
     </div>
   )
@@ -64,4 +85,18 @@ function transformPatientToTablePatient(p: Patient[]): TPatientData[] {
   })
 
   return patients
+}
+
+type FilterObject = {
+  [key: string]: string | undefined
+}
+
+function transformFilter(filter: Tfilters) {
+  return Object.keys(filter).map(
+    (v) =>
+      ({
+        id: v,
+        value: (filter as FilterObject)[v] as any,
+      } as ColumnFilter),
+  )
 }
