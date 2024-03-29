@@ -9,7 +9,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import addIcon from "@assets/icons/add.svg"
 import plusIcon from "@assets/icons/plus-green.svg"
 import minusIcon from "@assets/icons/minus-red.svg"
@@ -27,6 +27,7 @@ import ErrorPage from "@pages/Error/ErrorPage"
 import DayListCheckBox from "@components/atoms/DayListCheckBox"
 import { addPrepMoleculeToCure } from "@helpers/apis/cure"
 import PasswordConfirmation from "@components/molecules/PasswordConfirmation"
+import { isEmpty, isPositif } from "@helpers/validation"
 
 type Props = {
   cure: Cure
@@ -482,7 +483,29 @@ function AddProduit({
     moleculeId: -1,
     perfusionType: "",
   })
-
+  const verif = useCallback(() => {
+    if (prepMolecule.moleculeId === -1) {
+      toast.error("Selectionner une molecule")
+      return false
+    }
+    if (!isPositif(prepMolecule.dose)) {
+      toast.error("Le dose doit etre une entier positif")
+      return false
+    }
+    if (isEmpty(prepMolecule.unite)) {
+      toast.error("Selectionner l'unite de dose")
+      return false
+    }
+    if (isEmpty(prepMolecule.perfusionType)) {
+      toast.error("Selectionner le type de perfusion")
+      return false
+    }
+    if (prepMolecule.days.length === 0) {
+      toast.error("Selectionner une jour")
+      return false
+    }
+    return true
+  }, [prepMolecule])
   const { isLoading, error, data } = useQuery({
     queryKey: ["molecules"],
     queryFn: getAllMolecules,
@@ -609,7 +632,12 @@ function AddProduit({
           setSelectedDays={(days) => setPrepMolecule({ ...prepMolecule, days })}
         />
       </div>
-      <PrimaryBtn text="Ajouter" clickFn={() => mutation.mutate()} />
+      <PrimaryBtn
+        text="Ajouter"
+        clickFn={() => {
+          if (verif()) mutation.mutate()
+        }}
+      />
     </Model>
   )
 }
