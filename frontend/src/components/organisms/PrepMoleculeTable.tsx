@@ -178,6 +178,7 @@ export default function PrepMoleculeTable({
                 setValue={setValue}
                 isNumber={true}
                 onBlur={() => setChanges(value)}
+                disabled={info.row.original.validation >= 1}
               />
               <span className="absolute right-2 text-primary-blue">
                 {info.row.original.unite}
@@ -220,6 +221,7 @@ export default function PrepMoleculeTable({
                   setValue={setValue}
                   isNumber={true}
                   onBlur={() => setChanges(value)}
+                  disabled={info.row.original.validation >= 1}
                 />
                 <span className="absolute right-2 text-primary-blue">%</span>
               </div>
@@ -244,11 +246,14 @@ export default function PrepMoleculeTable({
         return (
           <div className="flex justify-center">
             <input
-              className="bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md"
+              className={`bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md ${
+                info.row.original.validation >= 1 ? "bg-secondary-gray" : ""
+              }`}
               type="time"
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onBlur={() => setChanges(value)}
+              disabled={info.row.original.validation >= 1}
             />
           </div>
         )
