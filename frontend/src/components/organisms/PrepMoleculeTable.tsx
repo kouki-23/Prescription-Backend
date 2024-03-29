@@ -10,7 +10,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import addIcon from "@assets/icons/add.svg"
+import addIcon from "@assets/icons/add-molecule.svg"
 import plusIcon from "@assets/icons/plus-green.svg"
 import minusIcon from "@assets/icons/minus-red.svg"
 import fileIcon from "@assets/icons/file-download.svg"
