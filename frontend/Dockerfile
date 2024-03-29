@@ -18,6 +18,8 @@ COPY --from=0 /app/dist /usr/share/nginx/html
 
 COPY --from=0 /app/nginx.conf /etc/nginx/nginx.conf
 
+COPY --from=0 /app/cert /etc/ssl/
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
