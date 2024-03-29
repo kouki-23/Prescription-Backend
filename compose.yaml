@@ -5,6 +5,7 @@ services:
     build: ./frontend
     ports:
       - "3005:80"
+      - "3005:443"
     environment:
       - VITE_BACK_URL=backend:3006
     networks:
@@ -37,4 +38,3 @@ volumes:
 networks:
   prescription: {}
   postgres_network: {}
-

@@ -20,6 +20,6 @@ COPY --from=0 /app/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=0 /app/cert /etc/ssl/
 
-EXPOSE 80
+EXPOSE 80 443
 
 CMD ["nginx", "-g", "daemon off;"]
