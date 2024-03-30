@@ -1,4 +1,6 @@
 import "reflect-metadata"
+import https from "https"
+import fs from "fs"
 import express, { Request, Response, NextFunction } from "express"
 import dotenv from "dotenv"
 import cors from "cors"
@@ -74,7 +76,16 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.json({ message: error.message || "Something broke" })
 })
 
-const server = app.listen(PORT, () => {
+const httpsServer = https.createServer(
+  {
+    key: fs.readFileSync("cert/private.key"),
+    cert: fs.readFileSync("cert/certificate.crt"),
+    ca: fs.readFileSync("cert/ca_bundle.crt"),
+  },
+  app,
+)
+
+const server = httpsServer.listen(PORT, () => {
   console.log("server started ")
   console.log(server.address())
 })
