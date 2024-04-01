@@ -86,7 +86,9 @@ export default function PatientTable({ data, refetch, filters }: Props) {
         return (
           <>
             <ConfirmModel
-              text="Voulez-vous vraiment supprimer cette patient?"
+              text={`Voulez-vous vraiment supprimer ce${
+                info.row.original.gender == "Femme" ? "tte" : ""
+              } patient${info.row.original.gender == "Femme" ? "e" : ""}?`}
               isOpen={deleteConfirm}
               setIsOpen={setDeleteConfirm}
               confirmFn={() => mutation.mutate(info.row.original.id)}
