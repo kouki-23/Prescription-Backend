@@ -11,6 +11,7 @@ import { Vehicule } from "./Vehicule"
 import { DetailPrepMolecule } from "./DetailPrepMolecule"
 import { BottleUsed } from "./BottleUsed"
 import { Cure } from "./Cure"
+import { PrepMoleculeHistory } from "./HistoryEntities/PrepMoleculeHistory"
 
 // TODO : possiblite to add unite for dose
 @Entity()
@@ -75,6 +76,9 @@ export class PrepMolecule {
     onDelete: "CASCADE",
   })
   cure: Cure
+
+  @OneToMany(() => PrepMoleculeHistory, (p) => p.prepMolecule)
+  prepMoleculeHistory: PrepMoleculeHistory[]
 
   constructor(
     day: number,

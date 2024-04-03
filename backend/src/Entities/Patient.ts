@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { DataHistory } from "./DataHistory"
 import { Prescription } from "./Prescription"
+import { PatientHistory } from "./HistoryEntities/PatientHistory"
 
 @Entity()
 export class Patient {
@@ -62,8 +62,8 @@ export class Patient {
   @Column({ nullable: true })
   serviceType?: string
 
-  @OneToMany(() => DataHistory, (datahistory) => datahistory.patient)
-  dataHistory: DataHistory[]
+  @OneToMany(() => PatientHistory, (p) => p.patient)
+  patientHistory: PatientHistory[]
 
   @OneToMany(() => Prescription, (p) => p.patient)
   prescription: Prescription[]

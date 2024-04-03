@@ -9,8 +9,16 @@ export async function updatePrepMoleculesHandler(
   next: NextFunction,
 ) {
   try {
+    if (!req.user) {
+      throw "no user"
+    }
     await Promise.all(
-      req.body.map((p: PrepMolecule) => updatePrepMolecule(p.id, p)),
+      req.body.map((p: PrepMolecule) => {
+        if (!req.user) {
+          throw "no user"
+        }
+        return updatePrepMolecule(p.id, p, req.user.id)
+      }),
     )
     res.sendStatus(StatusCode.Ok)
   } catch (e) {

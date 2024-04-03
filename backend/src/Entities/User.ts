@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
-import { DataHistory } from "./DataHistory"
+import { PrepMoleculeHistory } from "./HistoryEntities/PrepMoleculeHistory"
+import { PatientHistory } from "./HistoryEntities/PatientHistory"
 
 export enum UserRole {
   ADMIN = "admin",
@@ -30,6 +31,9 @@ export class User {
   @Column({ nullable: true })
   serviceType?: string
 
-  @OneToMany(() => DataHistory, (datahistory) => datahistory.user)
-  dataHistory: DataHistory[]
+  @OneToMany(() => PatientHistory, (p) => p.modifiedBy)
+  patientHistory: PatientHistory[]
+
+  @OneToMany(() => PrepMoleculeHistory, (prep) => prep.modifiedBy)
+  prepMoleculeHistory: PrepMoleculeHistory
 }
