@@ -26,7 +26,7 @@ export abstract class History<T> {
   @Column("json")
   payload: DifferenceObject<T>
 
-  @Column({ type: "enum" })
+  @Column({ type: "enum", enum: HistoryActions })
   action: HistoryActions
 
   constructor(

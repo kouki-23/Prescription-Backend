@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -35,7 +36,11 @@ export class Cure {
   @ManyToOne(() => Prescription, (pres) => pres.cures, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "prescriptionId" })
   prescription: Prescription
+
+  @Column()
+  prescriptionId: number
 
   @OneToMany(() => PrepMolecule, (b) => b.cure, {
     cascade: true,
