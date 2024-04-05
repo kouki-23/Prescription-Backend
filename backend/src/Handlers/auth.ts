@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { HttpError, StatusCode } from "../Utils/HttpError"
+import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
 import { login } from "../Services/authService"
 import { LoginBody } from "../Middlewares/validation/schema"
 import jwt from "jsonwebtoken"
@@ -23,7 +23,7 @@ export async function loginHandler(
     })
     return res.json({ user, accessToken })
   } catch (e) {
-    return next(e)
+    return next(handleError(e))
   }
 }
 

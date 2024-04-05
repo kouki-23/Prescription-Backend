@@ -8,11 +8,14 @@ import {
   UpdateMolecule,
   createMolecule,
   deleteMolecule,
+  getAllEnabledMolecules,
   getAllMolecules,
   getMoleculeById,
 } from "../Services/moleculeService"
 import { Response } from "express"
-import { HttpError, StatusCode } from "../Utils/HttpError"
+import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
+import { Molecule } from "../Entities/Molecule"
+import { UserRole } from "../Entities/User"
 
 export async function createMoleculeHandler(
   req: Request<never, never, CreateMoleculeBody, never>,
@@ -21,14 +24,9 @@ export async function createMoleculeHandler(
 ) {
   try {
     await createMolecule(req.body)
-    res.sendStatus(200)
+    return res.sendStatus(StatusCode.Ok)
   } catch (e) {
-    return next(
-      new HttpError(
-        "Could not create molecule",
-        StatusCode.InternalServerError,
-      ),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -38,15 +36,15 @@ export async function getAllMoleculesHandler(
   next: NextFunction,
 ) {
   try {
-    const molecules = await getAllMolecules()
+    let molecules: Molecule[] = []
+    if (req.user?.role === UserRole.ADMIN) {
+      molecules = await getAllMolecules()
+    } else {
+      molecules = await getAllEnabledMolecules()
+    }
     res.json(molecules)
   } catch (e) {
-    return next(
-      new HttpError(
-        "could not find any molecules",
-        StatusCode.InternalServerError,
-      ),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -58,9 +56,12 @@ export async function getMoleculeByIdHandler(
   const { id } = req.params
   try {
     const molecule = await getMoleculeById(Number(id))
+    if (req.user?.role !== UserRole.ADMIN && molecule.disabled) {
+      throw new HttpError("forbidden", StatusCode.Forbidden)
+    }
     res.json(molecule)
   } catch (e) {
-    next(e)
+    next(handleError(e))
   }
 }
 
@@ -78,7 +79,7 @@ export async function updateMoleculeHandler(
       next(new HttpError("No molecule Updated", StatusCode.BadRequest))
     }
   } catch (e) {
-    next(e)
+    next(handleError(e))
   }
 }
 
@@ -96,6 +97,6 @@ export async function deleteMoleculeHandler(
       next(new HttpError("no molecule is deleted", StatusCode.BadRequest))
     }
   } catch (e) {
-    next(e)
+    next(handleError(e))
   }
 }

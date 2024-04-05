@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { updatePrepMolecule } from "../Services/prepMoleculeServices"
-import { HttpError, StatusCode } from "../Utils/HttpError"
+import { StatusCode, handleError } from "../Utils/HttpError"
 import { PrepMolecule } from "../Entities/PrepMolecule"
 
 export async function updatePrepMoleculesHandler(
@@ -22,7 +22,6 @@ export async function updatePrepMoleculesHandler(
     )
     res.sendStatus(StatusCode.Ok)
   } catch (e) {
-    console.log(e)
-    next(new HttpError("could not update prepMolcule ", StatusCode.BadRequest))
+    next(handleError(e))
   }
 }

@@ -11,7 +11,7 @@ import {
   getPatientById,
   updatePatient,
 } from "../Services/patientService"
-import { HttpError, StatusCode } from "../Utils/HttpError"
+import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
 
 export async function createPatientHandler(
   req: Request<never, never, CreatePatientBody, never>,
@@ -19,12 +19,13 @@ export async function createPatientHandler(
   next: NextFunction,
 ) {
   try {
-    await createPatient(req.body)
+    if (!req.user) {
+      throw ""
+    }
+    await createPatient(req.body, req.user.id)
     res.sendStatus(200)
   } catch (e) {
-    return next(
-      new HttpError("cannot create patient", StatusCode.InternalServerError),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -53,7 +54,7 @@ export async function getPatientByIdHandler(
     const patient = await getPatientById(Number(id))
     res.json(patient)
   } catch (e) {
-    next(e)
+    next(handleError(e))
   }
 }
 
@@ -64,14 +65,12 @@ export async function updatePatientHandler(
 ) {
   const { id } = req.params
   try {
-    const isUpdated = await updatePatient(Number(id), req.body)
-    if (isUpdated) {
-      res.sendStatus(200)
-    } else {
-      next(new HttpError("no patient is updated", StatusCode.BadRequest))
+    if (req.user) {
+      await updatePatient(Number(id), req.body, req.user.id)
     }
+    res.sendStatus(200)
   } catch (e) {
-    next(e)
+    next(handleError(e))
   }
 }
 
@@ -82,13 +81,11 @@ export async function deletePatientHandler(
 ) {
   const { id } = req.params
   try {
-    const isDeleted = await deletePatient(Number(id))
-    if (isDeleted) {
-      res.sendStatus(200)
-    } else {
-      next(new HttpError("no patient is deleted", StatusCode.BadRequest))
+    if (req.user) {
+      await deletePatient(Number(id), req.user.id)
     }
+    res.sendStatus(200)
   } catch (e) {
-    next(e)
+    next(handleError(e))
   }
 }

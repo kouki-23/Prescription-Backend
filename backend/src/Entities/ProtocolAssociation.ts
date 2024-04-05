@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
 import { Protocol } from "./Protocol"
-import { GroupProtocol } from "./ParentProtocol"
+import { GroupProtocol } from "./GroupProtocol"
 
 @Entity()
 export class ProtocolAssociation {
@@ -11,7 +11,7 @@ export class ProtocolAssociation {
   order: number
 
   @ManyToOne(() => GroupProtocol, (group) => group.protocolAssociation)
-  parentProtocol: GroupProtocol
+  groupProtocol: GroupProtocol
 
   @ManyToOne(() => Protocol, (pro) => pro.protocolAssociation)
   protocol: Protocol

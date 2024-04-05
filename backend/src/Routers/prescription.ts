@@ -14,7 +14,7 @@ import {
   getPrescriptionsWithEverythingByPatientIdHandler,
   updatePrescriptionHandler,
 } from "../Handlers/prescription"
-import { getPrescriptionById } from "../Services/prescriptionSevice"
+import { isMedecin } from "../Middlewares/auth"
 
 const router = Router()
 
@@ -36,14 +36,17 @@ router.get(
   getPrescriptionsWithEverythingByPatientIdHandler,
 )
 
+//TODO : add body schema validation
 router.patch(
   "/:id",
+  isMedecin,
   validateRequestParams(IdParamsSchema),
   updatePrescriptionHandler,
 )
 
 router.delete(
   "/:id",
+  isMedecin,
   validateRequestParams(IdParamsSchema),
   deletePrescriptionHandler,
 )

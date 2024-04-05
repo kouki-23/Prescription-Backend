@@ -3,6 +3,7 @@ import { User, UserRole } from "../Entities/User"
 import { CreateUserBody } from "../Middlewares/validation/schema"
 import bcrypt from "bcrypt"
 
+// TODO : 5it
 export async function createUser(userB: CreateUserBody) {
   const user = new User()
   user.name = userB.name

@@ -10,11 +10,15 @@ export async function login(username: string, password: string) {
   const user = await userRepo.findOneBy({
     username,
   })
-  if (!user) throw new HttpError("username is incorrect", StatusCode.BadRequest)
+  if (!user)
+    throw new HttpError(
+      "Le nom d'utilisateur est incorrect",
+      StatusCode.BadRequest,
+    )
 
   const isCorrect = await bcrypt.compare(password, user.password)
   if (!isCorrect) {
-    throw new HttpError("password is incorrect", StatusCode.BadRequest)
+    throw new HttpError("Le mot de passe est incorrect", StatusCode.BadRequest)
   }
 
   const accessToken = jwt.sign(

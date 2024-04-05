@@ -22,10 +22,19 @@ export class ProtocoleMoleculeAssociation {
   @ManyToOne(
     () => Molecule,
     (molecule) => molecule.protocoleMoleculeAssociation,
+    {
+      onDelete: "CASCADE",
+    },
   )
   molecule: Molecule
 
-  @ManyToOne(() => Protocol, (protocol) => protocol.protocolMoleculeAssociation)
+  @ManyToOne(
+    () => Protocol,
+    (protocol) => protocol.protocolMoleculeAssociation,
+    {
+      onDelete: "CASCADE",
+    },
+  )
   protocol: Protocol
 
   constructor(

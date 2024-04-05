@@ -9,6 +9,6 @@ export class GroupProtocol {
   @Column()
   name: String
 
-  @OneToMany(() => ProtocolAssociation, (pro) => pro.parentProtocol)
+  @OneToMany(() => ProtocolAssociation, (pro) => pro.groupProtocol)
   protocolAssociation: ProtocolAssociation[]
 }

@@ -10,7 +10,7 @@ import {
   getPrescriptionWithEverythingByPatientId,
   updatePrescription,
 } from "../Services/prescriptionSevice"
-import { HttpError, StatusCode } from "../Utils/HttpError"
+import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
 
 export async function createPrescriptionHandler(
   req: Request<never, never, CreatePrescriptionBody, never>,
@@ -21,12 +21,7 @@ export async function createPrescriptionHandler(
     await createPrescrptition(req.body)
     res.sendStatus(200)
   } catch (e) {
-    return next(
-      new HttpError(
-        "cannot create prescription",
-        StatusCode.InternalServerError,
-      ),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -41,13 +36,11 @@ export async function getPrescriptionsWithEverythingByPatientIdHandler(
       Number(patientId),
     )
     pres.forEach((p) => {
-      p.cures.sort((a, b) => a.order - b.order)
+      p.cures.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
     })
     res.json(pres)
   } catch (e) {
-    return next(
-      new HttpError("cannot get prescription", StatusCode.InternalServerError),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -60,13 +53,11 @@ export async function getPrescriptionByIdHandler(
   try {
     const prescription = await getPrescriptionById(Number(id))
     if (!prescription) {
-      return next(new HttpError("invalid id", StatusCode.NotFound))
+      throw next(new HttpError("invalid id", StatusCode.NotFound))
     }
     return res.send(prescription)
   } catch (e) {
-    return next(
-      new HttpError("cannot get prescription", StatusCode.InternalServerError),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -77,15 +68,10 @@ export async function updatePrescriptionHandler(
 ) {
   const { id } = req.params
   try {
-    const result = await updatePrescription(Number(id), req.body)
-    return res.json(result.generatedMaps)
+    await updatePrescription(Number(id), req.body)
+    return res.sendStatus(StatusCode.NoContent)
   } catch (e) {
-    return next(
-      new HttpError(
-        "cannot update prescription",
-        StatusCode.InternalServerError,
-      ),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -97,13 +83,8 @@ export async function deletePrescriptionHandler(
   const { id } = req.params
   try {
     await deletePrescription(Number(id))
-    return res.sendStatus(StatusCode.Ok)
+    return res.sendStatus(StatusCode.NoContent)
   } catch (e) {
-    return next(
-      new HttpError(
-        "cannot delete prescription",
-        StatusCode.InternalServerError,
-      ),
-    )
+    return next(handleError(e))
   }
 }

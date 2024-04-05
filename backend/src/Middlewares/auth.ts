@@ -55,3 +55,18 @@ export function isPharmacien(req: Request, res: Response, next: NextFunction) {
     return next(new HttpError("Unauthorized", StatusCode.Unauthorized))
   }
 }
+
+export function isMedecinOrPharmacien(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  if (
+    req.user?.role === UserRole.PHARMACIEN ||
+    req.user?.role === UserRole.MEDECIN
+  ) {
+    next()
+  } else {
+    return next(new HttpError("Unauthorized", StatusCode.Unauthorized))
+  }
+}

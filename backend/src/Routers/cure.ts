@@ -2,15 +2,33 @@ import { Router } from "express"
 import {
   addPrepMoleculeToCureHandler,
   deleteCureHandler,
-  updateCureHandler,
 } from "../Handlers/cure"
+import { isMedecin } from "../Middlewares/auth"
+import {
+  validateRequestBody,
+  validateRequestParams,
+} from "../Middlewares/validation/validation"
+import {
+  IdParamsSchema,
+  addPrepMoleculeToCureBodySchema,
+} from "../Middlewares/validation/schema"
 
 const router = Router()
 
-router.patch("/:id", updateCureHandler)
+//TODO : add body validation
+router.patch(
+  "/:id/molecule",
+  validateRequestParams(IdParamsSchema),
+  validateRequestBody(addPrepMoleculeToCureBodySchema),
+  isMedecin,
+  addPrepMoleculeToCureHandler,
+)
 
-router.patch("/:id/molecule", addPrepMoleculeToCureHandler)
-
-router.delete("/:id", deleteCureHandler)
+router.delete(
+  "/:id",
+  validateRequestParams(IdParamsSchema),
+  isMedecin,
+  deleteCureHandler,
+)
 
 export default router

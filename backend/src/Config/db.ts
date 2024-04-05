@@ -1,11 +1,8 @@
 import { DataSource } from "typeorm"
 import { User } from "../Entities/User"
-import { Bottle } from "../Entities/Bottle"
-import { BottleUsed } from "../Entities/BottleUsed"
 import { Cure } from "../Entities/Cure"
-import { DetailPrepMolecule } from "../Entities/DetailPrepMolecule"
 import { Molecule } from "../Entities/Molecule"
-import { GroupProtocol } from "../Entities/ParentProtocol"
+import { GroupProtocol } from "../Entities/GroupProtocol"
 import { Patient } from "../Entities/Patient"
 import { PrepMolecule } from "../Entities/PrepMolecule"
 import { Prescription } from "../Entities/Prescription"
@@ -15,6 +12,8 @@ import { ProtocoleMoleculeAssociation } from "../Entities/ProtocoleMoleculeAssoc
 import { Vehicule } from "../Entities/Vehicule"
 import { PrepMoleculeHistory } from "../Entities/HistoryEntities/PrepMoleculeHistory"
 import { PatientHistory } from "../Entities/HistoryEntities/PatientHistory"
+import { Product } from "../Entities/Product"
+import { ProductUsed } from "../Entities/ProductUsed"
 
 export default new DataSource({
   type: "postgres",
@@ -22,7 +21,7 @@ export default new DataSource({
   port: 5432,
   username: process.env.DB_USERNAME || "postgres",
   password: process.env.DB_PASSWORD || "root",
-  database: "prescription",
+  database: process.env.DB_NAME || "prescription",
   //synchronize: true,
   //dropSchema: true,
   logging: true,
@@ -30,10 +29,7 @@ export default new DataSource({
   migrations: ["./src/migrations/*"],
   entities: [
     User,
-    Bottle,
-    BottleUsed,
     Cure,
-    DetailPrepMolecule,
     Molecule,
     GroupProtocol,
     Patient,
@@ -45,5 +41,8 @@ export default new DataSource({
     Vehicule,
     PrepMoleculeHistory,
     PatientHistory,
+    Product,
+    ProductUsed,
+    GroupProtocol,
   ],
 })

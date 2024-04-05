@@ -25,13 +25,11 @@ router.post(
   validateRequestBody(createPatientBodySchema),
   createPatientHandler,
 )
-router.get("/", isMedecin, getAllPatientsHandler)
-router.get(
-  "/:id",
-  isMedecin,
-  validateRequestParams(IdParamsSchema),
-  getPatientByIdHandler,
-)
+
+router.get("/", getAllPatientsHandler)
+
+router.get("/:id", validateRequestParams(IdParamsSchema), getPatientByIdHandler)
+
 router.patch(
   "/:id",
   isMedecin,
@@ -39,6 +37,7 @@ router.patch(
   validateRequestBody(updatePatientBodySchema),
   updatePatientHandler,
 )
+
 router.delete(
   "/:id",
   isMedecin,

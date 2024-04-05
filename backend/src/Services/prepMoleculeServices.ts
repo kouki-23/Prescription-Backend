@@ -2,6 +2,7 @@ import db from "../Config/db"
 import { HistoryActions } from "../Entities/HistoryEntities/History"
 import { PrepMoleculeHistory } from "../Entities/HistoryEntities/PrepMoleculeHistory"
 import { PrepMolecule } from "../Entities/PrepMolecule"
+import { HttpError, StatusCode } from "../Utils/HttpError"
 import { getDifference } from "../Utils/helpers"
 
 const repo = db.getRepository(PrepMolecule)
@@ -14,7 +15,7 @@ export async function updatePrepMolecule(
 ) {
   const prepMolecule = await repo.findOneBy({ id: idprep })
   if (!prepMolecule) {
-    throw "no prep molecule with this id"
+    throw new HttpError("prep molecule introuvable", StatusCode.NotFound)
   }
   const diff = getDifference<PrepMolecule>(prepMolecule, prep)
   if (!diff) {
