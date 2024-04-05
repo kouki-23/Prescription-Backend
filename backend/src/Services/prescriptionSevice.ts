@@ -8,6 +8,7 @@ import { getProductByMolecule } from "./productService"
 import { getPatientById } from "./patientService"
 import { getProtocolWithMolecules } from "./protocolService"
 import { HttpError, StatusCode } from "../Utils/HttpError"
+import { ProductUsed } from "../Entities/ProductUsed"
 
 const repo = db.getRepository(Prescription)
 
@@ -20,6 +21,7 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
   let startDate = new Date(data.startDate)
   let prescription = new Prescription(
     protocol.name,
+    protocol.intercure,
     data.prescriber,
     data.clinicalTest,
     data.primitif,
@@ -49,8 +51,10 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
         p.perfusionType,
         false,
         cure,
-        product.id,
+        [],
       )
+      const productUsed = new ProductUsed(prepMolecule, product.id, 0)
+      prepMolecule.productsUsed.push(productUsed)
       cure.prepMolecule.push(prepMolecule)
     }
   })
@@ -69,8 +73,10 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
           p.perfusionType,
           false,
           cure,
-          product.id,
+          [],
         )
+        const productUsed = new ProductUsed(prepMolecule, product.id, 0)
+        prepMolecule.productsUsed.push(productUsed)
         cure.prepMolecule.push(prepMolecule)
       }
     })
@@ -122,8 +128,9 @@ export async function getPrescriptionById(id: number) {
     },
   })
   if (!result) {
-    return new HttpError("prescription introuvable ", StatusCode.NotFound)
+    throw new HttpError("prescription introuvable ", StatusCode.NotFound)
   }
+  return result
 }
 
 export async function updatePrescription(id: number, prescription: any) {

@@ -36,10 +36,14 @@ export async function getPrescriptionsWithEverythingByPatientIdHandler(
       Number(patientId),
     )
     pres.forEach((p) => {
-      p.cures.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+      p.cures.sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
     })
     res.json(pres)
   } catch (e) {
+    console.log(e)
     return next(handleError(e))
   }
 }
@@ -55,6 +59,10 @@ export async function getPrescriptionByIdHandler(
     if (!prescription) {
       throw next(new HttpError("invalid id", StatusCode.NotFound))
     }
+    prescription.cures.sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    )
     return res.send(prescription)
   } catch (e) {
     return next(handleError(e))

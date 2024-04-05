@@ -1,7 +1,7 @@
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import TextInput from "@components/atoms/TextInput"
 import Title from "@components/atoms/Title"
-import { Cure, Option, PatientData } from "@helpers/types"
+import { Cure, Option, Patient } from "@helpers/types"
 import { addDaysToDate, getDose } from "@helpers/utils"
 import {
   createColumnHelper,
@@ -28,11 +28,12 @@ import DayListCheckBox from "@components/atoms/DayListCheckBox"
 import { addPrepMoleculeToCure } from "@helpers/apis/cure"
 import PasswordConfirmation from "@components/molecules/PasswordConfirmation"
 import { isEmpty, isPositif } from "@helpers/validation"
+import { handleError } from "@helpers/apis"
 
 type Props = {
   cure: Cure
   setCure: (c: Cure) => void
-  patient: PatientData
+  patient: Patient
   selectedCure: number
   intercure: number
 }
@@ -63,7 +64,7 @@ export default function PrepMoleculeTable({
   const [data, setData] = useState(transformCureToDataTable(cure))
   const [isCureChanged, setIsCureChanged] = useState(false)
   const cureMut = useMutation({
-    mutationKey: ["prepMolecules", cure.order],
+    mutationKey: ["prepMolecules", cure.id],
     mutationFn: async (password: string) => {
       if (user) {
         await login(user.username, password)
@@ -309,7 +310,7 @@ export default function PrepMoleculeTable({
           <div className="flex items-center gap-4 my-8">
             <Title className="font-semibold text-3xl" text="Produits" />
             <span className="text-2xl font-semibold text-primary-blue opacity-85">
-              Cure {cure.order}
+              Cure {selectedCure + 1}
             </span>
           </div>
           <div className="flex gap-2">
@@ -327,8 +328,10 @@ export default function PrepMoleculeTable({
               className="size-8 cursor-pointer"
               src={fileIcon}
               onClick={() => {
-                const url = window.location
-                window.open(`${url}/file/${cure.order}`)
+                const url = window.location.origin
+                window.open(
+                  `${url}/${cure.prescriptionId}/${selectedCure}/file`,
+                )
               }}
             />
           </div>
@@ -409,7 +412,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
     .map((p) => {
       return {
         day: p.day,
-        name: p.details.molecule.name,
+        name: p.productsUsed[0].product.molecule.name,
         dose: p.theoreticalDose,
         doseAdaptee: p.dose,
         unite: p.unite,
@@ -519,7 +522,7 @@ function AddProduit({
   const mutation = useMutation({
     mutationKey: ["prepMolecule"],
     mutationFn: () => addPrepMoleculeToCure(cureId, prepMolecule),
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(handleError(e)),
     onSuccess: (data) => {
       toast.success("produit ajouter avec succès")
       setCure(data.data)

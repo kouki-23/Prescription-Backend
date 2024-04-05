@@ -1,4 +1,4 @@
-import { PatientData } from "./types"
+import { Patient } from "./types"
 
 export function addDaysToDate(date: Date | string, day: number): Date {
   const d = new Date(date)
@@ -40,7 +40,7 @@ export function getDate(date: Date): string {
 export function getDose(
   dose: number,
   unite: string,
-  patient: PatientData,
+  patient: Patient,
   moleculeName: string,
 ): string {
   switch (unite) {

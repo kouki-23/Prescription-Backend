@@ -34,6 +34,7 @@ export async function addPrepMoleculeToCureHandler(
     const cure = await addPrepMoleculeToCure(Number(id), req.body)
     return res.json(cure)
   } catch (e) {
+    console.log(e)
     return next(handleError(e))
   }
 }

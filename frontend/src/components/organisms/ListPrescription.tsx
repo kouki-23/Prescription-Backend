@@ -134,7 +134,7 @@ function PrescriptionCard({
         key={prescription.id}
         icon={prescriptionIcon}
         title={`Prescription ${index + 1}:`}
-        subTitle={prescription.protocol.name}
+        subTitle={prescription.protocolName}
         state={"En cours"}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
@@ -144,8 +144,8 @@ function PrescriptionCard({
       />
       {isExpended && (
         <div className="ml-10">
-          {prescription.cures.map((c) => (
-            <CureCard key={c.id} cure={c} refetch={refetch} />
+          {prescription.cures.map((c, i) => (
+            <CureCard key={c.id} cure={c} refetch={refetch} index={i} />
           ))}
         </div>
       )}
@@ -153,7 +153,15 @@ function PrescriptionCard({
   )
 }
 
-function CureCard({ cure, refetch }: { cure: Cure; refetch: Function }) {
+function CureCard({
+  cure,
+  index,
+  refetch,
+}: {
+  cure: Cure
+  index: number
+  refetch: Function
+}) {
   const [isExpended, setIsExpended] = useState(false)
   const [deleteModelOpen, setDeleteModelOpen] = useState(false)
   const deleteCureMut = useMutation({
@@ -190,7 +198,7 @@ function CureCard({ cure, refetch }: { cure: Cure; refetch: Function }) {
       <Card
         key={cure.id}
         icon={cureIcon}
-        title={`Cure ${cure.order}:`}
+        title={`Cure ${index + 1}:`}
         subTitle={String(cure.startDate)}
         state={cure.state}
         isExpended={isExpended}
@@ -247,7 +255,7 @@ function JourneyCard({
           {prepMolecules.map((m) => (
             <Card
               icon={moleculeIcon}
-              title={m.details.molecule.name}
+              title={m.productsUsed[0].product.molecule.name}
               subTitle={m.dose + " " + m.unite}
             />
           ))}

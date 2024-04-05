@@ -5,6 +5,7 @@ import { PrepMolecule } from "../Entities/PrepMolecule"
 import { addPrepMoleculeToCureBody } from "../Middlewares/validation/schema"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import { getProductByMoleculeId } from "./productService"
+import { ProductUsed } from "../Entities/ProductUsed"
 
 const repo = db.getRepository(Cure)
 
@@ -42,19 +43,35 @@ export async function addPrepMoleculeToCure(
   }
   const product = await getProductByMoleculeId(prepMolecule.moleculeId)
   const preps: PrepMolecule[] = prepMolecule.days.map((day: number) => {
-    return new PrepMolecule(
+    const prep = new PrepMolecule(
       day,
       prepMolecule.dose,
       prepMolecule.unite,
       prepMolecule.perfusionType,
       true,
       cure,
-      product.id,
+      [],
     )
+    const productUsed = new ProductUsed(prep, product.id, 0)
+    prep.productsUsed.push(productUsed)
+    return prep
   })
   cure.prepMolecule = [...cure.prepMolecule, ...preps]
   await repo.save(cure)
-  return cure
+  return await repo.findOne({
+    where: {
+      id: cure.id,
+    },
+    relations: {
+      prepMolecule: {
+        productsUsed: {
+          product: {
+            molecule: true,
+          },
+        },
+      },
+    },
+  })
 }
 
 // TODO : add transaction for multiple deletes

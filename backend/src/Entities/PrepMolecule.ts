@@ -65,12 +65,10 @@ export class PrepMolecule {
   @JoinColumn()
   vehicule: Vehicule
 
-  @ManyToOne(() => ProductUsed, (p) => p.prepMolecule)
-  @JoinColumn({ name: "productUsedId" })
-  productsUsed: ProductUsed
-
-  @Column()
-  productUsedId: number
+  @OneToMany(() => ProductUsed, (p) => p.prepMolecule, {
+    cascade: true,
+  })
+  productsUsed: ProductUsed[]
 
   @ManyToOne(() => Cure, (b) => b.prepMolecule, {
     onDelete: "CASCADE",
@@ -87,7 +85,7 @@ export class PrepMolecule {
     perfusionType: string,
     isCustom: boolean,
     cure: Cure,
-    productId: number,
+    productsUsed: ProductUsed[],
   ) {
     this.day = day
     this.finalCond = ""
@@ -99,7 +97,7 @@ export class PrepMolecule {
     this.isCustom = isCustom
     this.dose = dose
     this.unite = unite
-    this.productsUsed = new ProductUsed(this, productId, 0)
+    this.productsUsed = productsUsed
     this.perfusionType = perfusionType
     this.cure = cure
     this.validation = 0

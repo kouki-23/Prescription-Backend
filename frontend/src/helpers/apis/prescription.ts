@@ -24,7 +24,6 @@ export function getPrescriptionByPatientId(id: number) {
 
 export async function getPrescriptionById(id: number) {
   const res = await axios.get<Prescription>(`/prescription/${id}`)
-  res.data.cures.sort((a, b) => a.order - b.order)
   return res
 }
 

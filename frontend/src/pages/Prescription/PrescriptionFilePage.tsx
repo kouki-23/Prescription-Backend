@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useParams } from "react-router-dom"
 import { getAge } from "@helpers/personInfo"
-import { Cure, PatientData, PrepMolecule } from "@helpers/types"
+import { Cure, Patient, PrepMolecule } from "@helpers/types"
 import {
   createColumnHelper,
   flexRender,
@@ -18,16 +18,17 @@ import fileIcon from "@assets/icons/download.svg"
 type Props = {}
 
 export default function PrescriptionFilePage({}: Props) {
-  const { id, cureorder } = useParams()
+  const { prescriptionid, cureorder } = useParams()
+  console.log(useParams())
   const { isLoading, error, data } = useQuery({
-    queryKey: ["prescription", id],
-    queryFn: () => getPrescriptionById(Number(id)),
+    queryKey: ["prescription", prescriptionid],
+    queryFn: () => getPrescriptionById(Number(prescriptionid)),
   })
   const ref = useRef(null)
 
   const prescription = useMemo(() => data?.data, [data])
   const cure = useMemo(
-    () => prescription?.cures.find((a) => a.order === Number(cureorder)),
+    () => prescription?.cures[Number(cureorder)],
     [prescription],
   )
   if (isLoading) return <LoadingInterface />
@@ -84,14 +85,11 @@ export default function PrescriptionFilePage({}: Props) {
             <h3 className="font-semibold py-3 text-2xl">
               Détails du traitements :
             </h3>
-            <Info label="Protocole" text={prescription.protocol.name} />
-            <Info
-              label="Intercure"
-              text={prescription.protocol.intercure + " jours"}
-            />
+            <Info label="Protocole" text={prescription.protocolName} />
+            <Info label="Intercure" text={prescription.intercure + " jours"} />
             <Info
               label="Numéro de la cure"
-              text={`${cure.order} / ${prescription.cures.length}`}
+              text={`${Number(cureorder) + 1} / ${prescription.cures.length}`}
             />
             <Info
               label="Date de début du traitement"
@@ -136,135 +134,135 @@ function Info({
   )
 }
 
-function MoleculeTable({
-  cure,
-  patient,
-}: {
-  cure: Cure
-  patient: PatientData
-}) {
+function MoleculeTable({ cure, patient }: { cure: Cure; patient: Patient }) {
   const columnHelper = createColumnHelper<PrepMolecule>()
-  const columns = [
-    columnHelper.accessor((row) => row.day, {
-      id: "day",
-      cell: (info) =>
-        `J${info.getValue()} ( ${getDate(
-          addDaysToDate(cure.startDate, info.getValue() - 1),
-        )} )`,
-      header: "Jour",
-    }),
-    columnHelper.accessor((row) => row.details.molecule.name, {
-      id: "name",
-      cell: (info) => info.getValue(),
-      header: "Produit",
-    }),
-    columnHelper.accessor((row) => row.perfusionType, {
-      id: "perfusionType",
-      cell: (info) => info.getValue(),
-      header: "Administration",
-    }),
-    columnHelper.accessor((row) => row.theoreticalDose + " " + row.unite, {
-      id: "doseUniteT",
-      cell: (info) => info.getValue(),
-      header: "Dose Théorique - Unité",
-    }),
-    columnHelper.accessor(
-      (row) =>
-        `${getDose(
-          row.theoreticalDose,
-          row.unite,
-          patient,
-          row.details.molecule.name,
-        )} mg`,
-      {
-        id: "doseT",
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor((row) => row.day, {
+        id: "day",
+        cell: (info) =>
+          `J${info.getValue()} ( ${getDate(
+            addDaysToDate(cure.startDate, info.getValue() - 1),
+          )} )`,
+        header: "Jour",
+      }),
+      columnHelper.accessor(
+        (row) => row.productsUsed[0].product.molecule.name,
+        {
+          id: "name",
+          cell: (info) => info.getValue(),
+          header: "Produit",
+        },
+      ),
+      columnHelper.accessor((row) => row.perfusionType, {
+        id: "perfusionType",
         cell: (info) => info.getValue(),
-        header: "Dose Théorique",
-      },
-    ),
-    columnHelper.accessor((row) => `${row.dose} ${row.unite}`, {
-      id: "doseAdapteeUnite",
-      cell: (info) => info.getValue(),
-      header: "Dose Adaptée - Unité",
-      size: 50,
-    }),
-    columnHelper.accessor(
-      (row) =>
-        `${getDose(
-          row.dose,
-          row.unite,
-          patient,
-          row.details.molecule.name,
-        )} mg`,
-      {
-        id: "doseAdaptee",
+        header: "Administration",
+      }),
+      columnHelper.accessor((row) => row.theoreticalDose + " " + row.unite, {
+        id: "doseUniteT",
         cell: (info) => info.getValue(),
-        header: "Dose Adaptée",
-      },
-    ),
-    columnHelper.accessor(
-      (row) => `${Math.round((row.dose / row.theoreticalDose) * 100)}%`,
-      {
-        id: "dosepersentage",
+        header: "Dose Théorique - Unité",
+      }),
+      columnHelper.accessor(
+        (row) =>
+          `${getDose(
+            row.theoreticalDose,
+            row.unite,
+            patient,
+            row.productsUsed[0].product.molecule.name,
+          )} mg`,
+        {
+          id: "doseT",
+          cell: (info) => info.getValue(),
+          header: "Dose Théorique",
+        },
+      ),
+      columnHelper.accessor((row) => `${row.dose} ${row.unite}`, {
+        id: "doseAdapteeUnite",
         cell: (info) => info.getValue(),
-        header: "Dose%",
-      },
-    ),
-    columnHelper.accessor((row) => row.time, {
-      id: "time",
-      cell: (info) => info.getValue(),
-      header: "Heure",
-    }),
-    /* columnHelper.accessor((row) => row.duration, {
+        header: "Dose Adaptée - Unité",
+        size: 50,
+      }),
+      columnHelper.accessor(
+        (row) =>
+          `${getDose(
+            row.dose,
+            row.unite,
+            patient,
+            row.productsUsed[0].product.molecule.name,
+          )} mg`,
+        {
+          id: "doseAdaptee",
+          cell: (info) => info.getValue(),
+          header: "Dose Adaptée",
+        },
+      ),
+      columnHelper.accessor(
+        (row) => `${Math.round((row.dose / row.theoreticalDose) * 100)}%`,
+        {
+          id: "dosepersentage",
+          cell: (info) => info.getValue(),
+          header: "Dose%",
+        },
+      ),
+      columnHelper.accessor((row) => row.time, {
+        id: "time",
+        cell: (info) => info.getValue(),
+        header: "Heure",
+      }),
+      /* columnHelper.accessor((row) => row.duration, {
       id: "duration",
       cell: (info) => info.getValue() + "h",
       header: "Durée",
     }),*/
-    columnHelper.accessor((row) => row.validation, {
-      id: "validation",
-      cell: (info) =>
-        info.getValue() === 1 ? "Validé par medecin" : "Non validée",
-      header: "Validation",
-    }),
-  ]
+      columnHelper.accessor((row) => row.validation, {
+        id: "validation",
+        cell: (info) =>
+          info.getValue() === 1 ? "Validé par medecin" : "Non validée",
+        header: "Validation",
+      }),
+    ],
+    [],
+  )
   const table = useReactTable({
     data: cure.prepMolecule,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
   return (
-    <table className="container mx-auto text-sm border-collapse rounded-xl border-hidden shadow">
-      <thead className=" text-white-shade">
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr className="" key={headerGroup.id}>
-            {headerGroup.headers.map((header, index) => (
-              <th
-                className={`text-xs py-3 bg-primary-blue ${
-                  index === 0 ? "rounded-tl-xl" : ""
-                } ${
-                  index === headerGroup.headers.length - 1
-                    ? "rounded-tr-xl"
-                    : ""
-                }
-                `}
-                key={header.id}
+    <table className="mt-8 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border">
+      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        {useMemo(
+          () =>
+            table.getHeaderGroups().map((headerGroup) => (
+              <tr
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center"
+                key={headerGroup.id}
               >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
+                {headerGroup.headers.map((header) => (
+                  <th className="py-3" key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </th>
+                ))}
+              </tr>
+            )),
+          [],
+        )}
       </thead>
       <tbody>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className="text-xs">
+          <tr key={row.original.id} className="bg-white dark:bg-gray-800">
             {row.getVisibleCells().map((cell) => (
-              <td className="text-center py-3" key={cell.id}>
+              <td
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                key={cell.row.id}
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}

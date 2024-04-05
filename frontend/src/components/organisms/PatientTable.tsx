@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom"
 import { getDate } from "@helpers/utils"
 import { twMerge } from "tailwind-merge"
 import ConfirmModel from "@components/molecules/ConfirmModel"
+import { handleError } from "@helpers/apis"
 
 type Props = {
   data: TPatientData[]
@@ -30,8 +31,8 @@ type Props = {
 
 export type TPatientData = {
   id: number
-  DMI: number
-  index: number
+  DMI: string
+  index: string
   firstName: string
   lastName: string
   birthDate: string
@@ -42,7 +43,7 @@ export default function PatientTable({ data, refetch, filters }: Props) {
   const mutation = useMutation({
     mutationKey: ["patients"],
     mutationFn: (id: number) => deletePatient(id),
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(handleError(e)),
     onSuccess: () => {
       refetch()
       toast.success("patient deleted")

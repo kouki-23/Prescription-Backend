@@ -6,7 +6,7 @@ import ErrorPage from "@pages/Error/ErrorPage"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams } from "react-router-dom"
 import backIcon from "@assets/icons/back.svg"
-import { PatientData, Prescription } from "@helpers/types"
+import { Patient, Prescription } from "@helpers/types"
 import Title from "@components/atoms/Title"
 import { useEffect, useMemo, useState } from "react"
 import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
@@ -55,7 +55,7 @@ export default function PrescriptionDetailsPage({}: Props) {
             />
             <PatientInfoCard
               patient={prescription.patient}
-              setPatient={(p: PatientData) =>
+              setPatient={(p: Patient) =>
                 setPrescription({ ...prescription, patient: p })
               }
             />
@@ -70,7 +70,7 @@ export default function PrescriptionDetailsPage({}: Props) {
                 newCures[selectedCure] = c
                 setPrescription({ ...prescription, cures: newCures })
               }}
-              intercure={prescription.protocol.intercure}
+              intercure={prescription.intercure}
             />
           </div>
           <div className="container mx-auto my-10">
@@ -124,26 +124,21 @@ function PrescriptionInfoCard({
           label="Date de début"
           value={getDate(new Date(prescription.cures[selectedCure].startDate))}
         />
-        <InfoText label="Protocole" value={prescription.protocol.name} />
+        <InfoText label="Protocole" value={prescription.protocolName} />
       </div>
-      <InfoText
-        label="Intercure"
-        value={`${prescription.protocol.intercure} jours`}
-      />
+      <InfoText label="Intercure" value={`${prescription.intercure} jours`} />
       <div className="space-x-5 flex items-center">
         <span>Navigation entre les cures :</span>
         <div className="flex gap-5">
-          {prescription.cures.map((c) => (
+          {prescription.cures.map((c, i) => (
             <div
               key={c.id}
-              onClick={() => setSelectedCure(c.order - 1)}
+              onClick={() => setSelectedCure(i)}
               className={`size-9 border-2 border-secondary-blue flex justify-center items-center rounded-full cursor-pointer ${
-                c.order - 1 === selectedCure
-                  ? "bg-secondary-blue bg-opacity-30"
-                  : ""
+                i === selectedCure ? "bg-secondary-blue bg-opacity-30" : ""
               }`}
             >
-              <span className="">{c.order}</span>
+              <span className="">{i + 1}</span>
             </div>
           ))}
         </div>
@@ -156,8 +151,8 @@ function PatientInfoCard({
   patient,
   setPatient,
 }: {
-  patient: PatientData
-  setPatient: (p: PatientData) => void
+  patient: Patient
+  setPatient: (p: Patient) => void
 }) {
   const [updateOldPatient, setUpdateOldPatient] = useState(false)
   let oldPatient = useMemo(() => patient, [updateOldPatient])
