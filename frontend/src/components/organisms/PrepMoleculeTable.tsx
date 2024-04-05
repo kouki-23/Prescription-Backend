@@ -74,7 +74,7 @@ export default function PrepMoleculeTable({
       toast.error("Erreur survenue")
     },
     onSuccess: () => {
-      toast.success("Mis à jour avec succès")
+      toast.success("Mise à jour avec succès")
       setIsCureChanged(false)
       setIsOpen(false)
     },
@@ -494,7 +494,7 @@ function AddProduit({
       return false
     }
     if (!isPositif(prepMolecule.dose)) {
-      toast.error("Le dose doit etre une entier positif")
+      toast.error("Le dose doit être une entier positif")
       return false
     }
     if (isEmpty(prepMolecule.unite)) {

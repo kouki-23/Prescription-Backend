@@ -66,7 +66,7 @@ export default function AddProtocolPage({}: Props) {
       toast.error("Erreur survenue")
     },
     onSuccess: () => {
-      toast.success("Protocole ajouter avec succés")
+      toast.success("Protocole ajouté avec succès")
     },
   })
   return (
@@ -144,15 +144,15 @@ export function AddProtocol({ data, setData }: ProtocolProps) {
 }
 function verif(data: TProtocol): boolean {
   if (isEmpty(data.name)) {
-    toast.error("veillez saisir le nom du Protocol")
+    toast.error("Veillez saisir le nom du Protocole")
     return false
   }
   if (!data.nbCures) {
-    toast.error("veillez saisir le nombre des cures")
+    toast.error("Veillez saisir le nombre de cures")
     return false
   }
   if (!isInteger(data.nbCures) && !isPositif(data.nbCures)) {
-    toast.error("Le nombre de cure est un entier positif")
+    toast.error("Le nombre de cures est un entier positif")
     return false
   }
   if (!data.intercure) {

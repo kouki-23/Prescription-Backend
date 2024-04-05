@@ -117,7 +117,7 @@ function PrescriptionCard({
       toast.error("Erreur survenue")
     },
     onSuccess: () => {
-      toast.success("Mis à jour avec succès")
+      toast.success("Mise à jour avec succès")
       refetch()
     },
   })
@@ -163,7 +163,7 @@ function CureCard({ cure, refetch }: { cure: Cure; refetch: Function }) {
       toast.error("Erreur survenue")
     },
     onSuccess: () => {
-      toast.success("Mis à jour avec succès")
+      toast.success("Mise à jour avec succès")
       refetch()
     },
   })

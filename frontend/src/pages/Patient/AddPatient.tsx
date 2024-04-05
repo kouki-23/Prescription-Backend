@@ -108,16 +108,16 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       return false
     }
     if (isEmpty(data.firstName)) {
-      toast.error("Le prenom est obligatoire")
+      toast.error("Le prénom est obligatoire")
       return false
     }
     if (!isOnlyLetterWithSpaces(data.firstName)) {
-      toast.error("Le prenom doit contenir seulement des lettres ")
+      toast.error("Le prénom doit contenir seulement des lettres ")
       return false
     }
 
     if (isEmpty(data.gender)) {
-      toast.error("Selectionner un genre")
+      toast.error("Sélectionner un genre")
       return false
     }
     if (isEmpty(data.birthDate)) {
@@ -125,7 +125,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       return false
     }
     if (!isDateInPast(data.birthDate)) {
-      toast.error("Veuillez selectionner un date valid")
+      toast.error("Veuillez selectionner une date valide")
       return false
     }
     return true
@@ -224,7 +224,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
       return false
     }
     if (!isPositif(data.weight) || !isFloat(data.weight)) {
-      toast.error("Le poids doit etre un decimal positif")
+      toast.error("Le poids doit être un decimal positif")
       return false
     }
     if (!data.height) {
@@ -233,24 +233,24 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
       return false
     }
     if (!isPositif(data.height) || !isFloat(data.weight)) {
-      toast.error("La taille doit etre un decimal positif")
+      toast.error("La taille doit être un decimal positif")
       return false
     }
     if (data.bodySurface > 2) {
-      toast.error("La surface corporelle doit etre inferieure de 2")
+      toast.error("La surface corporelle doit être inferieure a 2")
       return false
     }
     if (!data.creatinine) {
-      toast.error("Veuillez saisir la creatine")
+      toast.error("Veuillez saisir la creatinine")
 
       return false
     }
     if (!isPositif(data.creatinine) || !isFloat(data.creatinine)) {
-      toast.error("La creatine doit etre un decimal positif")
+      toast.error("La creatine doit être un decimal positif")
       return false
     }
     if (!data.clairanceFormula) {
-      toast.error("Veuillez selectionner la formule clairance")
+      toast.error("Veuillez selectionner de la formule clairance")
       return false
     }
 

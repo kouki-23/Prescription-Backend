@@ -170,7 +170,7 @@ function PatientInfoCard({
       setPatient(oldPatient)
     },
     onSuccess: () => {
-      toast.success("Mis à jour avec succès")
+      toast.success("Mise à jour avec succès")
       setUpdateOldPatient(!updateOldPatient)
     },
   })
