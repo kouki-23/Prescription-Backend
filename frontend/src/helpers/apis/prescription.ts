@@ -34,3 +34,16 @@ export async function updatePrescription(id: Number, prescription: any) {
 export async function deletePrescription(id: Number) {
   return axios.delete(`/prescription/${id}`)
 }
+
+export async function updateCureStartDate(
+  prescriptionId: number,
+  cureId: number,
+  newDate: Date,
+  cascade: boolean,
+) {
+  return axios.patch(`/prescription/${prescriptionId}`, {
+    cureId,
+    date: newDate,
+    cascade,
+  })
+}

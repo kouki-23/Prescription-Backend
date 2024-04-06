@@ -6,12 +6,14 @@ import {
 import {
   IdParamsSchema,
   createPrescriptionBodySchema,
+  updateCureStartDateBodySchema,
 } from "../Middlewares/validation/schema"
 import {
   createPrescriptionHandler,
   deletePrescriptionHandler,
   getPrescriptionByIdHandler,
   getPrescriptionsWithEverythingByPatientIdHandler,
+  updateCureStartDateHandler,
   updatePrescriptionHandler,
 } from "../Handlers/prescription"
 import { isMedecin } from "../Middlewares/auth"
@@ -42,6 +44,14 @@ router.patch(
   isMedecin,
   validateRequestParams(IdParamsSchema),
   updatePrescriptionHandler,
+)
+
+router.patch(
+  "/:id/cure/date",
+  isMedecin,
+  validateRequestParams(IdParamsSchema),
+  validateRequestBody(updateCureStartDateBodySchema),
+  updateCureStartDateHandler,
 )
 
 router.delete(

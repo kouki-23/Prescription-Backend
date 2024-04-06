@@ -130,6 +130,9 @@ export async function getPrescriptionById(id: number) {
   if (!result) {
     throw new HttpError("prescription introuvable ", StatusCode.NotFound)
   }
+  result.cures.sort(
+    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+  )
   return result
 }
 

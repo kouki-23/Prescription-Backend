@@ -16,14 +16,23 @@ export class ProductUsed {
   @Column("decimal")
   quantityFrac: number
 
-  @ManyToOne(() => PrepMolecule, (p) => p.productsUsed)
+  @ManyToOne(() => PrepMolecule, (p) => p.productsUsed, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "prepMoleculeId" })
   prepMolecule: PrepMolecule
 
   @Column()
   prepMoleculeId: number
 
-  @ManyToOne(() => Product, (p) => p.ProductsUsed)
+  @ManyToOne(
+    () => Product,
+    (p) => p.ProductsUsed,
+
+    {
+      onDelete: "CASCADE",
+    },
+  )
   @JoinColumn({ name: "productId" })
   product: Product
 

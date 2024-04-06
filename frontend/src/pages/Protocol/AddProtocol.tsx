@@ -5,6 +5,7 @@ import { addProtocol } from "@helpers/apis/protocol"
 import { isEmpty, isInteger, isPositif } from "@helpers/validation"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { twMerge } from "tailwind-merge"
 
@@ -50,6 +51,7 @@ type ProtocolProps = {
   setData: React.Dispatch<React.SetStateAction<TProtocol>>
 }
 export default function AddProtocolPage({}: Props) {
+  const navigator = useNavigate()
   const [data, setData] = useState<TProtocol>({
     name: "",
     intercure: 0,
@@ -67,6 +69,7 @@ export default function AddProtocolPage({}: Props) {
     },
     onSuccess: () => {
       toast.success("Protocole ajouté avec succès")
+      navigator("/admin/")
     },
   })
   return (
@@ -161,6 +164,10 @@ function verif(data: TProtocol): boolean {
   }
   if (!isInteger(data.intercure) && !isPositif(data.intercure)) {
     toast.error("L'intercure est un entier positif")
+    return false
+  }
+  if (data.molecules.length === 0) {
+    toast.error("Vous devez ajouter au moins une molécule.")
     return false
   }
 

@@ -1,6 +1,7 @@
 import {
   CreatePrescriptionBody,
   IdParams,
+  updateCureStartDateBody,
 } from "../Middlewares/validation/schema"
 import { NextFunction, Request, Response } from "express"
 import {
@@ -59,10 +60,6 @@ export async function getPrescriptionByIdHandler(
     if (!prescription) {
       throw next(new HttpError("invalid id", StatusCode.NotFound))
     }
-    prescription.cures.sort(
-      (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    )
     return res.send(prescription)
   } catch (e) {
     return next(handleError(e))
@@ -91,6 +88,35 @@ export async function deletePrescriptionHandler(
   const { id } = req.params
   try {
     await deletePrescription(Number(id))
+    return res.sendStatus(StatusCode.NoContent)
+  } catch (e) {
+    return next(handleError(e))
+  }
+}
+
+export async function updateCureStartDateHandler(
+  req: Request<IdParams, never, updateCureStartDateBody>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    const prescription = await getPrescriptionById(Number(id))
+    const cureIndex = prescription.cures.findIndex(
+      (c) => c.id === req.body.cureId,
+    )
+    if (!cureIndex) {
+      throw new HttpError("cure untrouvable", StatusCode.BadRequest)
+    }
+    prescription.cures[cureIndex].startDate = new Date(req.body.date)
+    if (req.body.cascade) {
+      let d = prescription.cures[cureIndex].startDate
+      for (let i = cureIndex; i < prescription.cures.length; i++) {
+        d.setDate(d.getDate() + prescription.intercure)
+        prescription.cures[i].startDate = d
+      }
+    }
+    await updatePrescription(prescription.id, prescription)
     return res.sendStatus(StatusCode.NoContent)
   } catch (e) {
     return next(handleError(e))

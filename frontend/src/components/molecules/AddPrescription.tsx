@@ -146,14 +146,13 @@ function Step2({
   useEffect(() => {
     if (data && dataP.protocolId !== -1) {
       const protocol = data.data.find((v: any) => v.id === dataP.protocolId)
-      console.log(protocol)
-      setDataP({ ...dataP, nbCures: protocol.nbCures })
+      if (protocol) setDataP({ ...dataP, nbCures: protocol.nbCures })
     }
   }, [dataP.protocolId])
   let protocolOptions: Option<number>[] = []
   if (data) {
-    protocolOptions = data.data.map((v: any): Option<number> => {
-      return { value: v.id, label: v.name }
+    protocolOptions = data.data.map((v): Option<number> => {
+      return { value: v.id, label: `${v.name} ${v.details}` }
     })
   }
   if (isLoading) return <Loading />

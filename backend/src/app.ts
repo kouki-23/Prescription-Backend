@@ -52,7 +52,14 @@ app.use(
 )
 app.use(cookieParser())
 app.use(express.json())
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
+if (process.env.ENV === "dev") {
+  app.use(morgan("dev"))
+} else {
+  var accessLogStream = fs.createWriteStream("./logs/access.log", {
+    flags: "a",
+  })
+  app.use(morgan("combined", { stream: accessLogStream }))
+}
 
 //routers
 app.use("/auth", auth)

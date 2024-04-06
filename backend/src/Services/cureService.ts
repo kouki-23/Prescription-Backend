@@ -85,15 +85,16 @@ export async function deleteCure(cureId: number) {
   if (!cure) {
     throw new HttpError("le cure est introuvable", StatusCode.BadRequest)
   }
-
+  console.log(cure)
   const nextCures = await repo.find({
     where: {
       startDate: MoreThan(cure.startDate),
       prescriptionId: cure.prescriptionId,
     },
   })
+  console.log(nextCures)
   await Promise.all([
     repo.delete({ id: cure.id }),
-    ...nextCures.map((c: any) => repo.delete({ id: c.cure_id })),
+    ...nextCures.map((c) => repo.delete({ id: c.id })),
   ])
 }
