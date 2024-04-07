@@ -27,6 +27,18 @@ export async function getAllMolecules() {
   return molecules
 }
 
+export async function getAllEnabledMolecules() {
+  const molecules: Molecule[] = await repo.find({
+    where: {
+      disabled: false,
+    },
+    order: {
+      name: "ASC",
+    },
+  })
+  return molecules
+}
+
 export async function getMoleculesByIds(ids: number[]) {
   const molecules: Molecule[] = await repo.findBy({
     id: In(ids),
@@ -42,7 +54,7 @@ export async function getMoleculeById(id: number) {
   })
   if (!molecule)
     throw new HttpError(
-      "No molecule found having this id ",
+      "Aucune molécule trouvée avec cet identifiant",
       StatusCode.NotFound,
     )
   return molecule

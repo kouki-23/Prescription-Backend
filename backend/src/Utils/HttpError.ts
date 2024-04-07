@@ -1,5 +1,6 @@
 export enum StatusCode {
   Ok = 200,
+  NoContent = 204,
   BadRequest = 400,
   Unauthorized = 401,
   Forbidden = 403,
@@ -12,5 +13,16 @@ export class HttpError extends Error {
   constructor(message: string, errorCode: StatusCode) {
     super(message)
     this.code = errorCode
+  }
+}
+
+export function handleError(e: unknown) {
+  if (e instanceof HttpError) {
+    return e
+  } else {
+    return new HttpError(
+      "Une erreur inconnue s'est produite",
+      StatusCode.InternalServerError,
+    )
   }
 }

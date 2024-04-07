@@ -2,27 +2,32 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm"
-import { PrepMolecule } from "./PrepMolecule"
 import { Molecule } from "./Molecule"
+import { ProductUsed } from "./ProductUsed"
 
 @Entity()
-export class DetailPrepMolecule {
+export class Product {
   @PrimaryGeneratedColumn()
   id: number
-
-  @Column()
-  dci: string
 
   @Column()
   specialite: string
 
   @Column("decimal")
+  dosage: number
+
+  // TODO: can be delete because it always mg
+  @Column()
+  dosageUnite: string
+
+  @Column("decimal")
   volume: number
 
+  // TODO: can be delete because it always ml
   @Column()
   volumeUnite: string
 
@@ -35,8 +40,9 @@ export class DetailPrepMolecule {
   @Column("decimal")
   volumeReconstitution: number
 
+  // TODO: can be delete because it always ml
   @Column()
-  volumeReconstitutionUnity: string
+  volumeReconstitutionUnite: string
 
   @Column()
   conservationReconstitutionFridge: boolean
@@ -45,7 +51,7 @@ export class DetailPrepMolecule {
   dilutionVolume: number
 
   @Column()
-  dilutionVolumeUnite: String
+  dilutionVolumeUnite: string
 
   @Column("decimal")
   minConcentrarion: number
@@ -53,8 +59,9 @@ export class DetailPrepMolecule {
   @Column("decimal")
   maxConcentrarion: number
 
+  // TODO: can be delete because it always mg/ml
   @Column()
-  concentrationUnite: String
+  concentrationUnite: string
 
   @Column()
   conservrationDilutionFridge: boolean
@@ -68,10 +75,14 @@ export class DetailPrepMolecule {
   @Column()
   SensivityPVC: boolean
 
-  @OneToMany(() => PrepMolecule, (prep) => prep.details)
-  prepMolecule: PrepMolecule[]
+  @Column({ default: false })
+  disabled: boolean
 
-  @OneToOne(() => Molecule)
+  @OneToMany(() => ProductUsed, (p) => p.product)
+  ProductsUsed: ProductUsed[]
+
+  // DCI
+  @ManyToOne(() => Molecule, (m) => m.products)
   @JoinColumn()
   molecule: Molecule
 }

@@ -1,10 +1,10 @@
 import { updatePatient } from "@helpers/apis/patient"
 import { getAge } from "@helpers/personInfo"
-import { PatientData } from "@helpers/types"
+import { Patient } from "@helpers/types"
 import { useState } from "react"
 
 type Props = {
-  patient: PatientData
+  patient: Patient
 }
 
 export default function PatientSideInfo({ patient }: Props) {

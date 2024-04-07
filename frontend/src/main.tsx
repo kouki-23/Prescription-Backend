@@ -17,6 +17,7 @@ import PrescriptionPage from "@pages/Prescription/PrescriptionPage"
 import PrescriptionDetailsPage from "@pages/Prescription/PrescriptionDetailsPage"
 import PrescriptionFilePage from "@pages/Prescription/PrescriptionFilePage"
 import AddProtocolPage from "@pages/Protocol/AddProtocol"
+import ListProtocolPage from "@pages/Protocol/ListProtocol"
 
 globalDefault()
 
@@ -31,6 +32,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route element={<AuthGuard />}>
               <Route path="/" element={<Index />} />
             </Route>
+            <Route element={<AuthGuard role="medecin" />}>
+              <Route
+                path="/:prescriptionid/:cureorder/file"
+                element={<PrescriptionFilePage />}
+              />
+            </Route>
             <Route element={<Layout />}>
               <Route path="/medecin" element={<AuthGuard role="medecin" />}>
                 <Route path="" element={<ListPatient />} />
@@ -41,20 +48,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 />
                 <Route path="prescription/:id">
                   <Route path="" element={<PrescriptionDetailsPage />} />
-                  <Route
-                    path="file/:cureorder"
-                    element={<PrescriptionFilePage />}
-                  />
                 </Route>
                 <Route
                   path="prescription/:id"
                   element={<PrescriptionDetailsPage />}
                 />
-                <Route
-                  path="addProtocole"
-                  element={<AddProtocolPage />}
-                ></Route>
               </Route>
+              <Route path="/admin" element={<AuthGuard role="admin" />}>
+                <Route path="ajouterprotocole" element={<AddProtocolPage />} />
+                <Route path="" element={<ListProtocolPage />} />
+              </Route>
+              <Route
+                path="/pharmacien"
+                element={<AuthGuard role="pharmacien" />}
+              ></Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />
           </Routes>

@@ -53,6 +53,15 @@ export async function getAllProtocols() {
   return protocols
 }
 
+export async function getAllEnabledProtocols() {
+  const protocols: Protocol[] = await repo.find({
+    where: {
+      disabled: false,
+    },
+  })
+  return protocols
+}
+
 export async function getProtocolWithMolecules(id: number) {
   const protocol: Protocol | null = await repo.findOne({
     where: { id },

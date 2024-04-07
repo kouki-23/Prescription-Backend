@@ -1,14 +1,21 @@
 import db from "../Config/db"
+import { HistoryActions } from "../Entities/HistoryEntities/History"
+import { PatientHistory } from "../Entities/HistoryEntities/PatientHistory"
 import { Patient } from "../Entities/Patient"
 import {
   CreatePatientBody,
   UpdatePatientBody,
 } from "../Middlewares/validation/schema"
 import { HttpError, StatusCode } from "../Utils/HttpError"
+import { getDifference, getHistoryPayload } from "../Utils/helpers"
 
 const repo = db.getRepository(Patient)
+const repoHistory = db.getRepository(PatientHistory)
 
-export async function createPatient(patientB: CreatePatientBody) {
+export async function createPatient(
+  patientB: CreatePatientBody,
+  userId: number,
+) {
   const patient = new Patient()
   patient.DMI = patientB.DMI
   patient.birthDate = new Date(patientB.birthDate)
@@ -25,11 +32,24 @@ export async function createPatient(patientB: CreatePatientBody) {
   patient.matrimonial = patientB.matrimonial
   patient.weight = patientB.weight
   patient.serviceType = patientB.serviceType
-  return await repo.save(patient)
+
+  await repo.save(patient)
+  await repoHistory.save(
+    new PatientHistory(
+      getHistoryPayload(patient),
+      userId,
+      patient.id,
+      HistoryActions.CREATE,
+    ),
+  )
 }
 
 export async function getAllPatients() {
-  const patients: Patient[] = await repo.find()
+  const patients: Patient[] = await repo.find({
+    order: {
+      created_at: "DESC",
+    },
+  })
   return patients
 }
 
@@ -39,25 +59,45 @@ export async function getPatientById(id: number) {
       id,
     },
   })
-  if (!patient) throw new HttpError("patient not found", StatusCode.NotFound)
+  if (!patient) throw new HttpError("patient introuvable", StatusCode.NotFound)
   return patient
 }
 
-export async function updatePatient(id: number, p: UpdatePatientBody) {
-  const result = await repo.update(
-    {
-      id,
-    },
-    p,
-  )
-  if (!result.affected || result.affected === 0) return false
-  return true
-}
-
-export async function deletePatient(id: number) {
-  const result = await repo.delete({
+export async function updatePatient(
+  id: number,
+  p: UpdatePatientBody,
+  userId: number,
+) {
+  const patient = await repo.findOneBy({
     id,
   })
-  if (!result.affected || result.affected === 0) return false
-  return true
+  if (!patient) throw new HttpError("patient introuvable", StatusCode.NotFound)
+  const diff = getDifference(patient, p)
+  if (diff) {
+    await repo.update(
+      {
+        id,
+      },
+      p,
+    )
+    await repoHistory.save(
+      new PatientHistory(diff, userId, patient.id, HistoryActions.UPDATE),
+    )
+  }
+}
+
+export async function deletePatient(id: number, userId: number) {
+  const patient = await repo.findOneBy({
+    id,
+  })
+  if (!patient) throw new HttpError("patient introuvable", StatusCode.NotFound)
+  await repo.delete(patient)
+  await repoHistory.save(
+    new PatientHistory(
+      getHistoryPayload(patient),
+      userId,
+      patient.id,
+      HistoryActions.DELETE,
+    ),
+  )
 }

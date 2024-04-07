@@ -4,10 +4,13 @@ import { Request } from "express"
 import {
   CreateProtocol,
   deleteProtocol,
+  getAllEnabledProtocols,
   getAllProtocols,
   getProtocolWithMolecules,
 } from "../Services/protocolService"
-import { HttpError, StatusCode } from "../Utils/HttpError"
+import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
+import { UserRole } from "../Entities/User"
+import { Protocol } from "../Entities/Protocol"
 
 export async function createProtocolHandler(
   req: Request<never, never, CreateProtocolBody, never>,
@@ -31,15 +34,15 @@ export async function getAllProtocolsHandler(
   next: NextFunction,
 ) {
   try {
-    const protocols = await getAllProtocols()
+    let protocols: Protocol[] = []
+    if (req.user?.role === UserRole.ADMIN) {
+      protocols = await getAllProtocols()
+    } else {
+      protocols = await getAllEnabledProtocols()
+    }
     res.json(protocols)
   } catch (e) {
-    return next(
-      new HttpError(
-        "could not find any protocol",
-        StatusCode.InternalServerError,
-      ),
-    )
+    return next(handleError(e))
   }
 }
 
@@ -50,9 +53,12 @@ export async function getProtocolWithMoleculesHandler(
 ) {
   try {
     const protocol = await getProtocolWithMolecules(Number(req.params.id))
+    if (req.user?.role !== UserRole.ADMIN && protocol.disabled) {
+      throw new HttpError("forbidden", StatusCode.Forbidden)
+    }
     res.json(protocol)
   } catch (e) {
-    return next(e)
+    return next(handleError(e))
   }
 }
 
@@ -64,12 +70,11 @@ export async function deleteProtocolHandler(
   try {
     const { id } = req.params
     const isdeleted = await deleteProtocol(Number(id))
-    if (isdeleted) {
-      res.sendStatus(200)
+    if (!isdeleted) {
+      throw "no protocol deleted"
     }
+    res.sendStatus(200)
   } catch (e) {
-    return next(
-      new HttpError("could not delete Protocol ", StatusCode.BadRequest),
-    )
+    return next(handleError(e))
   }
 }

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,10 +20,6 @@ export class Cure {
   @PrimaryGeneratedColumn()
   id: number
 
-  // it can be deleted we can know order by startDate
-  @Column()
-  order: number
-
   @Column("date")
   startDate: Date
 
@@ -35,7 +32,11 @@ export class Cure {
   @ManyToOne(() => Prescription, (pres) => pres.cures, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "prescriptionId" })
   prescription: Prescription
+
+  @Column()
+  prescriptionId: number
 
   @OneToMany(() => PrepMolecule, (b) => b.cure, {
     cascade: true,
@@ -44,13 +45,11 @@ export class Cure {
   prepMolecule: PrepMolecule[]
 
   constructor(
-    order: number,
     startDate: Date,
     state: CureState,
     prescription: Prescription,
     molecules: PrepMolecule[],
   ) {
-    this.order = order
     // i am creating new Date to avoid refrence problem and changing of date after construction of Cure
     this.startDate = new Date(startDate)
     this.state = state

@@ -8,9 +8,9 @@ import {
   OneToMany,
 } from "typeorm"
 import { Vehicule } from "./Vehicule"
-import { DetailPrepMolecule } from "./DetailPrepMolecule"
-import { BottleUsed } from "./BottleUsed"
 import { Cure } from "./Cure"
+import { PrepMoleculeHistory } from "./HistoryEntities/PrepMoleculeHistory"
+import { ProductUsed } from "./ProductUsed"
 
 // TODO : possiblite to add unite for dose
 @Entity()
@@ -47,7 +47,7 @@ export class PrepMolecule {
   time: string
 
   @Column()
-  validation: number // 0 : no validation | 1 : medecin | 2 : medecin && pharmacien
+  validation: 0 | 1 | 2 // 0 : no validation | 1 : medecin | 2 : medecin && pharmacien
 
   @Column()
   theoreticalDose: number
@@ -65,16 +65,18 @@ export class PrepMolecule {
   @JoinColumn()
   vehicule: Vehicule
 
-  @ManyToOne(() => DetailPrepMolecule, (d) => d.prepMolecule)
-  details: DetailPrepMolecule
-
-  @OneToMany(() => BottleUsed, (b) => b.prepMolecule)
-  bottlesUsed: BottleUsed[]
+  @OneToMany(() => ProductUsed, (p) => p.prepMolecule, {
+    cascade: true,
+  })
+  productsUsed: ProductUsed[]
 
   @ManyToOne(() => Cure, (b) => b.prepMolecule, {
     onDelete: "CASCADE",
   })
   cure: Cure
+
+  @OneToMany(() => PrepMoleculeHistory, (p) => p.prepMolecule)
+  prepMoleculeHistory: PrepMoleculeHistory[]
 
   constructor(
     day: number,
@@ -83,7 +85,7 @@ export class PrepMolecule {
     perfusionType: string,
     isCustom: boolean,
     cure: Cure,
-    details: DetailPrepMolecule,
+    productsUsed: ProductUsed[],
   ) {
     this.day = day
     this.finalCond = ""
@@ -95,7 +97,7 @@ export class PrepMolecule {
     this.isCustom = isCustom
     this.dose = dose
     this.unite = unite
-    this.details = details
+    this.productsUsed = productsUsed
     this.perfusionType = perfusionType
     this.cure = cure
     this.validation = 0

@@ -1,12 +1,12 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm"
 import { Patient } from "./Patient"
-import { Protocol } from "./Protocol"
 import { Cure } from "./Cure"
 
 // UPDATE : removed startDate because we can get it from the first cure
@@ -17,6 +17,12 @@ export class Prescription {
 
   @Column()
   prescriber: string
+
+  @Column()
+  protocolName: string
+
+  @Column()
+  intercure: number
 
   @Column()
   clinicalTest: boolean
@@ -30,39 +36,38 @@ export class Prescription {
   @Column({ nullable: true })
   comment?: string
 
-  @Column()
-  serviceType: string
+  @Column({ nullable: true })
+  serviceType?: string
 
   @ManyToOne(() => Patient, (p) => p.prescription, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "patientId" })
   patient: Patient
+
+  @Column()
+  patientId: number
 
   @OneToMany(() => Cure, (c) => c.prescription, {
     cascade: true,
   })
   cures: Cure[]
 
-  @ManyToOne(() => Protocol, (p) => p.prescription)
-  protocol: Protocol
-
   constructor(
+    protocolName: string,
+    intercure: number,
     prescriber: string,
     clinicalTest: boolean,
     primitif: string,
     histoType: string,
-    serviceType: string,
-    patient: Patient,
-    protocol: Protocol,
+    patientId: number,
     cures: Cure[],
-    comment?: string,
   ) {
+    this.protocolName = protocolName
+    this.intercure = intercure
     this.prescriber = prescriber
     this.clinicalTest = clinicalTest
-    this.comment = comment
-    this.serviceType = serviceType
-    this.patient = patient
-    this.protocol = protocol
+    this.patientId = patientId
     this.cures = cures
     this.primitif = primitif
     this.histoType = histoType

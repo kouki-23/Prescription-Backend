@@ -52,7 +52,14 @@ app.use(
 )
 app.use(cookieParser())
 app.use(express.json())
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
+if (process.env.ENV === "dev") {
+  app.use(morgan("dev"))
+} else {
+  var accessLogStream = fs.createWriteStream("./logs/access.log", {
+    flags: "a",
+  })
+  app.use(morgan("combined", { stream: accessLogStream }))
+}
 
 //routers
 app.use("/auth", auth)
@@ -76,16 +83,23 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.json({ message: error.message || "Something broke" })
 })
 
-const httpsServer = https.createServer(
-  {
-    key: fs.readFileSync("cert/private.key"),
-    cert: fs.readFileSync("cert/certificate.crt"),
-    ca: fs.readFileSync("cert/ca_bundle.crt"),
-  },
-  app,
-)
+if (process.env.ENV !== "dev") {
+  const httpsServer = https.createServer(
+    {
+      key: fs.readFileSync("cert/private.key"),
+      cert: fs.readFileSync("cert/certificate.crt"),
+      ca: fs.readFileSync("cert/ca_bundle.crt"),
+    },
+    app,
+  )
 
-const server = httpsServer.listen(PORT, () => {
-  console.log("server started ")
-  console.log(server.address())
-})
+  const server = httpsServer.listen(PORT, () => {
+    console.log("server started ")
+    console.log(server.address())
+  })
+} else {
+  const server = app.listen(PORT, () => {
+    console.log("server started ")
+    console.log(server.address())
+  })
+}

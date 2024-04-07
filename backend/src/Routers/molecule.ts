@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { isMedecin } from "../Middlewares/auth"
+import { isAdmin, isMedecin } from "../Middlewares/auth"
 import {
   validateRequestBody,
   validateRequestParams,
@@ -21,22 +21,22 @@ const router = Router()
 
 router.post(
   "/",
-  isMedecin,
+  isAdmin,
   validateRequestBody(createMoleculeBodySchema),
   createMoleculeHandler,
 )
+
 router.get("/", getAllMoleculesHandler)
 
 router.get(
   "/:id",
-  isMedecin,
   validateRequestParams(IdParamsSchema),
   getMoleculeByIdHandler,
 )
 
 router.patch(
   "/:id",
-  isMedecin,
+  isAdmin,
   validateRequestParams(IdParamsSchema),
   validateRequestBody(UpdateMoleculeBodySchema),
   updateMoleculeHandler,
@@ -44,7 +44,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  isMedecin,
+  isAdmin,
   validateRequestParams(IdParamsSchema),
   deleteMoleculeHandler,
 )

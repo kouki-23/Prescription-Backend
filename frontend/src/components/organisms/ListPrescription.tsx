@@ -11,6 +11,10 @@ import { useNavigate } from "react-router-dom"
 import { addDaysToDate } from "@helpers/utils"
 import deleteIcon from "@assets/icons/delete.svg"
 import { deletePrescription } from "@helpers/apis/prescription"
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "react-toastify"
+import ConfirmModel from "@components/molecules/ConfirmModel"
+import { deleteCure } from "@helpers/apis/cure"
 
 type Props = {
   prescriptions: Prescription[]
@@ -105,28 +109,43 @@ function PrescriptionCard({
   refetch: Function
 }) {
   const naviagator = useNavigate()
+  const [deleteModelOpen, setDeleteModelOpen] = useState(false)
+  const deletePerscriptionMut = useMutation({
+    mutationKey: ["prescription", "delete", prescription.id],
+    mutationFn: () => deletePrescription(prescription.id),
+    onError: () => {
+      toast.error("Erreur survenue")
+    },
+    onSuccess: () => {
+      toast.success("Mise à jour avec succès")
+      refetch()
+    },
+  })
   const [isExpended, setIsExpended] = useState(false)
   return (
     <>
+      <ConfirmModel
+        confirmFn={() => deletePerscriptionMut.mutate()}
+        isOpen={deleteModelOpen}
+        setIsOpen={setDeleteModelOpen}
+        text="Voulez-vous vraiment supprimer cette prescription"
+      />
       <Card
         key={prescription.id}
         icon={prescriptionIcon}
         title={`Prescription ${index + 1}:`}
-        subTitle={prescription.protocol.name}
+        subTitle={prescription.protocolName}
         state={"En cours"}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
         onClick={() => naviagator(`/medecin/prescription/${prescription.id}`)}
         hover={true}
-        OnHoverClick={async () => {
-          await deletePrescription(prescription.id)
-          refetch()
-        }}
+        OnHoverClick={() => setDeleteModelOpen(true)}
       />
       {isExpended && (
         <div className="ml-10">
-          {prescription.cures.map((c) => (
-            <CureCard key={c.id} cure={c} />
+          {prescription.cures.map((c, i) => (
+            <CureCard key={c.id} cure={c} refetch={refetch} index={i} />
           ))}
         </div>
       )}
@@ -134,8 +153,28 @@ function PrescriptionCard({
   )
 }
 
-function CureCard({ cure }: { cure: Cure }) {
+function CureCard({
+  cure,
+  index,
+  refetch,
+}: {
+  cure: Cure
+  index: number
+  refetch: Function
+}) {
   const [isExpended, setIsExpended] = useState(false)
+  const [deleteModelOpen, setDeleteModelOpen] = useState(false)
+  const deleteCureMut = useMutation({
+    mutationKey: ["cure", "delete", cure.id],
+    mutationFn: () => deleteCure(cure.id),
+    onError: () => {
+      toast.error("Erreur survenue")
+    },
+    onSuccess: () => {
+      toast.success("Mise à jour avec succès")
+      refetch()
+    },
+  })
   const groupedMolecules = useMemo(() => {
     let groups = new Map<number, PrepMolecule[]>()
     cure.prepMolecule.forEach((prepMolecule) => {
@@ -150,14 +189,22 @@ function CureCard({ cure }: { cure: Cure }) {
   }, [cure])
   return (
     <>
+      <ConfirmModel
+        confirmFn={() => deleteCureMut.mutate()}
+        isOpen={deleteModelOpen}
+        setIsOpen={setDeleteModelOpen}
+        text="Voulez-vous vraiment supprimer cette cure? (Remarque : toutes les prochaines cures seront également supprimées)"
+      />
       <Card
         key={cure.id}
         icon={cureIcon}
-        title={`Cure ${cure.order}:`}
+        title={`Cure ${index + 1}:`}
         subTitle={String(cure.startDate)}
         state={cure.state}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
+        hover={true}
+        OnHoverClick={() => setDeleteModelOpen(true)}
       />
       {isExpended && (
         <div className="ml-10">
@@ -208,7 +255,7 @@ function JourneyCard({
           {prepMolecules.map((m) => (
             <Card
               icon={moleculeIcon}
-              title={m.details.molecule.name}
+              title={m.productsUsed[0].product.molecule.name}
               subTitle={m.dose + " " + m.unite}
             />
           ))}

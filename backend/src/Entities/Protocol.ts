@@ -1,8 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { ProtocolAssociation } from "./ProtocolAssociation"
 import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
 import { Prescription } from "./Prescription"
 
+//TODO : auto genereated id and change backend/src/Services/protocolService.ts:12
 @Entity()
 export class Protocol {
   @PrimaryColumn()
@@ -26,20 +34,19 @@ export class Protocol {
   @Column()
   histoType: string
 
-  @Column()
+  @Column({ default: true })
   isCreated: boolean
+
+  @Column({ default: false })
+  disabled: boolean
 
   @OneToMany(() => ProtocolAssociation, (pA) => pA.protocol)
   protocolAssociation: ProtocolAssociation[]
 
   @OneToMany(() => ProtocoleMoleculeAssociation, (pm) => pm.protocol, {
-    onDelete: "CASCADE",
     cascade: true,
   })
   protocolMoleculeAssociation: ProtocoleMoleculeAssociation[]
-
-  @OneToMany(() => Prescription, (p) => p.protocol)
-  prescription: Prescription[]
 
   constructor(
     id: number,
@@ -59,7 +66,6 @@ export class Protocol {
     this.details = details
     this.indications = indications
     this.histoType = histoType
-    this.isCreated = true
     this.protocolAssociation = protocolAssociation
     this.protocolMoleculeAssociation = protocolMoleculeAssociation
   }

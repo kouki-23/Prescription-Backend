@@ -6,9 +6,9 @@ import passwordIcon from "@assets/icons/password.svg"
 import { useState } from "react"
 import { login } from "@helpers/apis/user"
 import { toast } from "react-toastify"
-import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@helpers/auth/auth"
+import { handleError } from "@helpers/apis"
 
 type Props = {}
 
@@ -24,11 +24,7 @@ export default function Login({}: Props) {
       auth.login(user, accessToken)
       naviagte("/")
     } catch (e) {
-      if (e instanceof AxiosError) {
-        toast.error(e.response?.data.message)
-      } else {
-        toast.error("Désolé, une erreur inconnue s'est produite")
-      }
+      toast.error(handleError(e))
     }
   }
 

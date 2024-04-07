@@ -6,15 +6,17 @@ import {
 import {
   IdParamsSchema,
   createPrescriptionBodySchema,
+  updateCureStartDateBodySchema,
 } from "../Middlewares/validation/schema"
 import {
   createPrescriptionHandler,
   deletePrescriptionHandler,
   getPrescriptionByIdHandler,
   getPrescriptionsWithEverythingByPatientIdHandler,
+  updateCureStartDateHandler,
   updatePrescriptionHandler,
 } from "../Handlers/prescription"
-import { getPrescriptionById } from "../Services/prescriptionSevice"
+import { isMedecin } from "../Middlewares/auth"
 
 const router = Router()
 
@@ -36,14 +38,25 @@ router.get(
   getPrescriptionsWithEverythingByPatientIdHandler,
 )
 
+//TODO : add body schema validation
 router.patch(
   "/:id",
+  isMedecin,
   validateRequestParams(IdParamsSchema),
   updatePrescriptionHandler,
 )
 
+router.patch(
+  "/:id/cure/date",
+  isMedecin,
+  validateRequestParams(IdParamsSchema),
+  validateRequestBody(updateCureStartDateBodySchema),
+  updateCureStartDateHandler,
+)
+
 router.delete(
   "/:id",
+  isMedecin,
   validateRequestParams(IdParamsSchema),
   deletePrescriptionHandler,
 )

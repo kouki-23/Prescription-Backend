@@ -1,12 +1,14 @@
 import db from "../Config/db"
 import { Cure, CureState } from "../Entities/Cure"
-import { DetailPrepMolecule } from "../Entities/DetailPrepMolecule"
+import { Product } from "../Entities/Product"
 import { PrepMolecule } from "../Entities/PrepMolecule"
 import { Prescription } from "../Entities/Prescription"
 import { CreatePrescriptionBody } from "../Middlewares/validation/schema"
-import { getDetailByMolecule } from "./detailPrepMoleculeService"
+import { getProductByMolecule } from "./productService"
 import { getPatientById } from "./patientService"
 import { getProtocolWithMolecules } from "./protocolService"
+import { HttpError, StatusCode } from "../Utils/HttpError"
+import { ProductUsed } from "../Entities/ProductUsed"
 
 const repo = db.getRepository(Prescription)
 
@@ -18,32 +20,30 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
   ])
   let startDate = new Date(data.startDate)
   let prescription = new Prescription(
+    protocol.name,
+    protocol.intercure,
     data.prescriber,
     data.clinicalTest,
     data.primitif,
     data.histoType,
-    data.serviceType,
-    patient,
-    protocol,
+    patient.id,
     [],
   )
 
-  //get details of molecules to link with prepmolecule
-  const detailsMolecules: DetailPrepMolecule[] = []
+  //get products to link with prepmolecule
+  const products: Product[] = []
   await Promise.all(
     protocol.protocolMoleculeAssociation.map(async (p) => {
-      const a = await getDetailByMolecule(p.molecule)
-      if (a) {
-        detailsMolecules.push(a)
-      }
+      const product = await getProductByMolecule(p.molecule)
+      products.push(product)
     }),
   )
 
   //creating the first cure
-  let cure = new Cure(1, startDate, CureState.EN_COURS, prescription, [])
+  let cure = new Cure(startDate, CureState.EN_COURS, prescription, [])
   protocol.protocolMoleculeAssociation.map((p) => {
-    const detail = detailsMolecules.find((d) => d.molecule.id === p.molecule.id)
-    if (detail) {
+    const product = products.find((p) => p.molecule.id === p.molecule.id)
+    if (product) {
       const prepMolecule: PrepMolecule = new PrepMolecule(
         p.day,
         p.dose,
@@ -51,8 +51,10 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
         p.perfusionType,
         false,
         cure,
-        detail,
+        [],
       )
+      const productUsed = new ProductUsed(prepMolecule, product.id, 0)
+      prepMolecule.productsUsed.push(productUsed)
       cure.prepMolecule.push(prepMolecule)
     }
   })
@@ -60,12 +62,10 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
 
   for (let i = 2; i <= data.nbCures; i++) {
     startDate.setDate(startDate.getDate() + protocol.intercure)
-    cure = new Cure(i, startDate, CureState.PREVU, prescription, [])
+    cure = new Cure(startDate, CureState.PREVU, prescription, [])
     protocol.protocolMoleculeAssociation.map((p) => {
-      const detail = detailsMolecules.find(
-        (d) => d.molecule.id === p.molecule.id,
-      )
-      if (detail) {
+      const product = products.find((p) => p.molecule.id === p.molecule.id)
+      if (product) {
         const prepMolecule: PrepMolecule = new PrepMolecule(
           p.day,
           p.dose,
@@ -73,14 +73,16 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
           p.perfusionType,
           false,
           cure,
-          detail,
+          [],
         )
+        const productUsed = new ProductUsed(prepMolecule, product.id, 0)
+        prepMolecule.productsUsed.push(productUsed)
         cure.prepMolecule.push(prepMolecule)
       }
     })
     prescription.cures.push(cure)
   }
-  repo.save(prescription)
+  await repo.save(prescription)
 }
 
 export async function getPrescriptionWithEverythingByPatientId(
@@ -93,12 +95,13 @@ export async function getPrescriptionWithEverythingByPatientId(
       },
     },
     relations: {
-      protocol: true,
       patient: true,
       cures: {
         prepMolecule: {
-          details: {
-            molecule: true,
+          productsUsed: {
+            product: {
+              molecule: true,
+            },
           },
         },
       },
@@ -112,15 +115,12 @@ export async function getPrescriptionById(id: number) {
       id,
     },
     relations: {
-      protocol: true,
       patient: true,
       cures: {
         prepMolecule: {
-          details: {
-            molecule: {
-              protocoleMoleculeAssociation: {
-                protocol: true,
-              },
+          productsUsed: {
+            product: {
+              molecule: true,
             },
           },
         },
@@ -128,19 +128,11 @@ export async function getPrescriptionById(id: number) {
     },
   })
   if (!result) {
-    return result
+    throw new HttpError("prescription introuvable ", StatusCode.NotFound)
   }
-  const protocolId = result.protocol.id
-  result.cures.forEach((c) => {
-    c.prepMolecule.forEach((p) => {
-      const a = p.details.molecule.protocoleMoleculeAssociation.find(
-        (p) => p.protocol.id === protocolId,
-      )
-      if (a) {
-        p.details.molecule.protocoleMoleculeAssociation = [a]
-      }
-    })
-  })
+  result.cures.sort(
+    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+  )
   return result
 }
 
