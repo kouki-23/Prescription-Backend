@@ -19,7 +19,6 @@ type Props = {}
 
 export default function PrescriptionFilePage({}: Props) {
   const { prescriptionid, cureorder } = useParams()
-  console.log(useParams())
   const { isLoading, error, data } = useQuery({
     queryKey: ["prescription", prescriptionid],
     queryFn: () => getPrescriptionById(Number(prescriptionid)),

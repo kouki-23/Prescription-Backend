@@ -91,7 +91,7 @@ export async function deletePatient(id: number, userId: number) {
     id,
   })
   if (!patient) throw new HttpError("patient introuvable", StatusCode.NotFound)
-  await repo.delete(patient)
+  await repo.softDelete({ id: patient.id })
   await repoHistory.save(
     new PatientHistory(
       getHistoryPayload(patient),

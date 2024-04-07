@@ -65,7 +65,6 @@ export default function PatientPage({}: Props) {
 
 function transformPatientToTablePatient(p: Patient[]): TPatientData[] {
   let patients: TPatientData[] = []
-  console.log(p)
   p.forEach((e) => {
     patients.push({
       id: e.id,

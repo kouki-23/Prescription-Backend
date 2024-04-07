@@ -101,9 +101,6 @@ export default function PatientTable({ data, refetch, filters }: Props) {
       header: "Actions",
     }),
   ]
-  useEffect(() => {
-    console.log(columns)
-  }, [filters])
   const table = useReactTable({
     data,
     columns,
