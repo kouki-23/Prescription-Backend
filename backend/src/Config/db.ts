@@ -24,7 +24,7 @@ export default new DataSource({
   database: process.env.DB_NAME || "prescription",
   //synchronize: true,
   //dropSchema: true,
-  logging: true,
+  logging: process.env.ENV === "dev" ? true : false,
   //entities: ["./src/Entities/*.js"],
   migrations: ["./src/migrations/*"],
   entities: [

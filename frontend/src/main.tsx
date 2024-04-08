@@ -36,6 +36,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="ajouteProtocole" element={<AddProtocolPage />} />
               <Route path="" element={<SpecialityList />} />
             </Route>
+            <Route element={<AuthGuard role="medecin" />}>
+              <Route
+                path="/:prescriptionid/:cureorder/file"
+                element={<PrescriptionFilePage />}
+              />
+            </Route>
             <Route element={<Layout />}>
               <Route path="/medecin" element={<AuthGuard role="medecin" />}>
                 <Route path="" element={<ListPatient />} />
@@ -46,10 +52,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 />
                 <Route path="prescription/:id">
                   <Route path="" element={<PrescriptionDetailsPage />} />
-                  <Route
-                    path="file/:cureorder"
-                    element={<PrescriptionFilePage />}
-                  />
                 </Route>
                 <Route
                   path="prescription/:id"

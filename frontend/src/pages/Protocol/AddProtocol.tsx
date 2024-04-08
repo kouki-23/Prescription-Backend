@@ -5,6 +5,7 @@ import { addProtocol } from "@helpers/apis/protocol"
 import { isEmpty, isInteger, isPositif } from "@helpers/validation"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { twMerge } from "tailwind-merge"
 
@@ -50,6 +51,7 @@ type ProtocolProps = {
   setData: React.Dispatch<React.SetStateAction<TProtocol>>
 }
 export default function AddProtocolPage({}: Props) {
+  const navigator = useNavigate()
   const [data, setData] = useState<TProtocol>({
     name: "",
     intercure: 0,
@@ -66,7 +68,8 @@ export default function AddProtocolPage({}: Props) {
       toast.error("Erreur survenue")
     },
     onSuccess: () => {
-      toast.success("Protocole ajouter avec succés")
+      toast.success("Protocole ajouté avec succès")
+      navigator("/admin/")
     },
   })
   return (
@@ -144,15 +147,15 @@ export function AddProtocol({ data, setData }: ProtocolProps) {
 }
 function verif(data: TProtocol): boolean {
   if (isEmpty(data.name)) {
-    toast.error("veillez saisir le nom du Protocol")
+    toast.error("Veillez saisir le nom du Protocole")
     return false
   }
   if (!data.nbCures) {
-    toast.error("veillez saisir le nombre des cures")
+    toast.error("Veillez saisir le nombre de cures")
     return false
   }
   if (!isInteger(data.nbCures) && !isPositif(data.nbCures)) {
-    toast.error("Le nombre de cure est un entier positif")
+    toast.error("Le nombre de cures est un entier positif")
     return false
   }
   if (!data.intercure) {
@@ -161,6 +164,10 @@ function verif(data: TProtocol): boolean {
   }
   if (!isInteger(data.intercure) && !isPositif(data.intercure)) {
     toast.error("L'intercure est un entier positif")
+    return false
+  }
+  if (data.molecules.length === 0) {
+    toast.error("Vous devez ajouter au moins une molécule.")
     return false
   }
 

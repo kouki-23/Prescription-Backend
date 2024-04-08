@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { ProtocolAssociation } from "./ProtocolAssociation"
 import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
 import { Prescription } from "./Prescription"

@@ -51,7 +51,7 @@ export class Product {
   dilutionVolume: number
 
   @Column()
-  dilutionVolumeUnite: String
+  dilutionVolumeUnite: string
 
   @Column("decimal")
   minConcentrarion: number
@@ -61,7 +61,7 @@ export class Product {
 
   // TODO: can be delete because it always mg/ml
   @Column()
-  concentrationUnite: String
+  concentrationUnite: string
 
   @Column()
   conservrationDilutionFridge: boolean

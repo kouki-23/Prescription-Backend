@@ -24,7 +24,6 @@ export function getPrescriptionByPatientId(id: number) {
 
 export async function getPrescriptionById(id: number) {
   const res = await axios.get<Prescription>(`/prescription/${id}`)
-  res.data.cures.sort((a, b) => a.order - b.order)
   return res
 }
 
@@ -34,4 +33,17 @@ export async function updatePrescription(id: Number, prescription: any) {
 
 export async function deletePrescription(id: Number) {
   return axios.delete(`/prescription/${id}`)
+}
+
+export async function updateCureStartDate(
+  prescriptionId: number,
+  cureId: number,
+  newDate: Date,
+  cascade: boolean,
+) {
+  return axios.patch(`/prescription/${prescriptionId}`, {
+    cureId,
+    date: newDate,
+    cascade,
+  })
 }

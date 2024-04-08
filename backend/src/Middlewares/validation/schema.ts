@@ -124,3 +124,13 @@ export const addPrepMoleculeToCureBodySchema = z.object({
 export type addPrepMoleculeToCureBody = z.infer<
   typeof addPrepMoleculeToCureBodySchema
 >
+
+export const updateCureStartDateBodySchema = z.object({
+  cureId: z.number(),
+  date: z.string(),
+  cascade: z.boolean(),
+})
+
+export type updateCureStartDateBody = z.infer<
+  typeof updateCureStartDateBodySchema
+>

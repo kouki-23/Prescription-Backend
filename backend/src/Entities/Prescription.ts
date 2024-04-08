@@ -22,6 +22,9 @@ export class Prescription {
   protocolName: string
 
   @Column()
+  intercure: number
+
+  @Column()
   clinicalTest: boolean
 
   @Column()
@@ -52,6 +55,7 @@ export class Prescription {
 
   constructor(
     protocolName: string,
+    intercure: number,
     prescriber: string,
     clinicalTest: boolean,
     primitif: string,
@@ -60,6 +64,7 @@ export class Prescription {
     cures: Cure[],
   ) {
     this.protocolName = protocolName
+    this.intercure = intercure
     this.prescriber = prescriber
     this.clinicalTest = clinicalTest
     this.patientId = patientId
