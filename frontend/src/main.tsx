@@ -17,6 +17,7 @@ import PrescriptionPage from "@pages/Prescription/PrescriptionPage"
 import PrescriptionDetailsPage from "@pages/Prescription/PrescriptionDetailsPage"
 import PrescriptionFilePage from "@pages/Prescription/PrescriptionFilePage"
 import AddProtocolPage from "@pages/Protocol/AddProtocol"
+import SpecialityList from "@pages/Admin/SpecialityList"
 
 globalDefault()
 
@@ -30,6 +31,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route element={<AuthGuard />}>
               <Route path="/" element={<Index />} />
+            </Route>
+            <Route path="/admin" element={<AuthGuard role="admin" />}>
+              <Route path="ajouteProtocole" element={<AddProtocolPage />} />
+              <Route path="" element={<SpecialityList />} />
             </Route>
             <Route element={<Layout />}>
               <Route path="/medecin" element={<AuthGuard role="medecin" />}>
@@ -50,9 +55,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   path="prescription/:id"
                   element={<PrescriptionDetailsPage />}
                 />
-              </Route>
-              <Route path="/admin" element={<AuthGuard role="admin" />}>
-                <Route path="ajouteProtocole" element={<AddProtocolPage />} />
               </Route>
               <Route
                 path="/pharmacien"
