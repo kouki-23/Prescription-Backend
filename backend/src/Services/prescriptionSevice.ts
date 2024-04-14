@@ -141,5 +141,16 @@ export async function updatePrescription(id: number, prescription: any) {
 }
 
 export async function deletePrescription(id: number) {
-  return repo.delete({ id })
+  const prescription = await repo.findOne({
+    where: { id },
+    relations: {
+      cures: {
+        prepMolecule: true,
+      },
+    },
+  })
+  if (!prescription) {
+    throw new HttpError("prescription introuvable ", StatusCode.NotFound)
+  }
+  await repo.softRemove(prescription)
 }

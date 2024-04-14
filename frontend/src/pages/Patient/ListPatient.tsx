@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import PatientTable, { TPatientData } from "@components/organisms/PatientTable"
 import { getAllPatients } from "@helpers/apis/patient"
 import ErrorPage from "@pages/Error/ErrorPage"
-import { Patient } from "@helpers/types"
+import { Patient, UserRole } from "@helpers/types"
 import PatientFilter from "@components/organisms/PatientFilter"
 import Title from "@components/atoms/Title"
 import addIcon from "@assets/icons/person-add.svg"
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import { useState } from "react"
 import { ColumnFilter } from "@tanstack/react-table"
+import { useAuth } from "@helpers/auth/auth"
 
 export type Tfilters = {
   DMI: string
@@ -23,6 +24,7 @@ type Props = {}
 
 export default function PatientPage({}: Props) {
   const navigator = useNavigate()
+  const { user } = useAuth()
 
   const [filters, setFilters] = useState<Tfilters>({
     DMI: "",
@@ -36,7 +38,7 @@ export default function PatientPage({}: Props) {
     queryKey: ["patients"],
     queryFn: getAllPatients,
   })
-
+  if (!user) return <></>
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
   return (
@@ -45,14 +47,16 @@ export default function PatientPage({}: Props) {
       <PatientFilter filters={filters} setFilters={setFilters} />
       <div className="container mx-auto my-10 flex justify-between">
         <Title text="Liste des patients" />
-        <div className="flex gap-2 items-center">
-          <img
-            className="size-10 cursor-pointer"
-            src={addIcon}
-            onClick={() => navigator("/medecin/addPatient")}
-            alt="ajouter patient"
-          />
-        </div>
+        {user?.role === UserRole.MEDECIN && (
+          <div className="flex gap-2 items-center">
+            <img
+              className="size-10 cursor-pointer"
+              src={addIcon}
+              onClick={() => navigator("/medecin/addPatient")}
+              alt="ajouter patient"
+            />
+          </div>
+        )}
       </div>
       <PatientTable
         refetch={refetch}
@@ -90,6 +94,6 @@ function transformFilter(filter: Tfilters) {
       ({
         id: v,
         value: (filter as FilterObject)[v] as any,
-      } as ColumnFilter),
+      }) as ColumnFilter,
   )
 }

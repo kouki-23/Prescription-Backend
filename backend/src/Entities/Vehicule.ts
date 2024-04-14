@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, OneToOne } from "typeorm"
+import { Column, PrimaryGeneratedColumn, Entity, OneToMany } from "typeorm"
 import { PrepMolecule } from "./PrepMolecule"
 
 @Entity()
@@ -7,17 +7,17 @@ export class Vehicule {
   id: number
 
   @Column()
-  type: string
+  type: string // Poche | Flacon
 
   @Column()
   content: string
 
   @Column()
-  volume: string
+  volume: number
 
-  @Column()
-  finalVolume: string
+  @Column({ nullable: true })
+  PVC: boolean
 
-  @OneToOne(() => PrepMolecule)
-  prepMolucule: PrepMolecule
+  @OneToMany(() => PrepMolecule, (prepMolucule) => prepMolucule.vehicule)
+  prepMolucule: PrepMolecule[]
 }

@@ -37,3 +37,17 @@ export async function getProductByMoleculeId(moleculeId: number) {
     )
   return product
 }
+
+export async function getProductsByMoleculeId(moleculeId: number) {
+  const products = await repo.find({
+    where: {
+      molecule: {
+        id: moleculeId,
+      },
+    },
+    order: {
+      dosage: "DESC",
+    },
+  })
+  return products
+}

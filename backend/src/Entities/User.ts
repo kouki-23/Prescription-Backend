@@ -19,6 +19,10 @@ export class User {
   @Column({ unique: true })
   username: string
 
+  // TODO : remove nullable after adding all the emails of users
+  @Column({ unique: true, nullable: true })
+  email: string
+
   @Column()
   password: string
 

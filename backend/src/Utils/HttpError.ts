@@ -1,3 +1,5 @@
+import { error } from "console"
+
 export enum StatusCode {
   Ok = 200,
   NoContent = 204,
@@ -17,6 +19,7 @@ export class HttpError extends Error {
 }
 
 export function handleError(e: unknown) {
+  console.log(e)
   if (e instanceof HttpError) {
     return e
   } else {

@@ -29,7 +29,8 @@ export function diffObjects(obj1: any, obj2: any) {
 }
 
 export function getDate(date: Date): string {
-  return date.toISOString().split("T")[0].split("-").reverse().join("-")
+  return date.toLocaleDateString("en-GB")
+  //return date.toISOString().split("T")[0].split("-").reverse().join("-")
 }
 
 export function getDose(
@@ -54,4 +55,8 @@ export function getDose(
     default:
       return "-"
   }
+}
+
+export function getPersentage(partialValue: number, totalValue: number) {
+  return Math.round((partialValue / totalValue) * 100)
 }
