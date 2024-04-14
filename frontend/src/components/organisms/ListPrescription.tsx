@@ -1,5 +1,5 @@
 import Title from "@components/atoms/Title"
-import { Cure, Prescription, PrepMolecule } from "@helpers/types"
+import { Cure, Prescription, PrepMolecule, UserRole } from "@helpers/types"
 import prescriptionIcon from "@assets/icons/prescription.svg"
 import cureIcon from "@assets/icons/cure.svg"
 import jourIcon from "@assets/icons/jour.svg"
@@ -15,6 +15,7 @@ import { useMutation } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import ConfirmModel from "@components/molecules/ConfirmModel"
 import { deleteCure } from "@helpers/apis/cure"
+import { useAuth } from "@helpers/auth/auth"
 
 type Props = {
   prescriptions: Prescription[]
@@ -108,7 +109,8 @@ function PrescriptionCard({
   index: number
   refetch: Function
 }) {
-  const naviagator = useNavigate()
+  const { user } = useAuth()
+  const navigator = useNavigate()
   const [deleteModelOpen, setDeleteModelOpen] = useState(false)
   const deletePerscriptionMut = useMutation({
     mutationKey: ["prescription", "delete", prescription.id],
@@ -138,8 +140,8 @@ function PrescriptionCard({
         state={"En cours"}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
-        onClick={() => naviagator(`/medecin/prescription/${prescription.id}`)}
-        hover={true}
+        onClick={() => navigator(`${prescription.id}`)}
+        hover={user?.role === UserRole.MEDECIN ? true : false}
         OnHoverClick={() => setDeleteModelOpen(true)}
       />
       {isExpended && (
@@ -162,6 +164,7 @@ function CureCard({
   index: number
   refetch: Function
 }) {
+  const { user } = useAuth()
   const [isExpended, setIsExpended] = useState(false)
   const [deleteModelOpen, setDeleteModelOpen] = useState(false)
   const deleteCureMut = useMutation({
@@ -203,7 +206,7 @@ function CureCard({
         state={cure.state}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
-        hover={true}
+        hover={user?.role === UserRole.MEDECIN ? true : false}
         OnHoverClick={() => setDeleteModelOpen(true)}
       />
       {isExpended && (

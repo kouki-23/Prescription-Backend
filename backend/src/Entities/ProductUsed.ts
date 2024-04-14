@@ -13,8 +13,12 @@ export class ProductUsed {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column("decimal")
-  quantityFrac: number
+  // persentage from 0 to 1
+  @Column({ type: "decimal", default: 0 })
+  frac: number
+
+  @Column({ default: 1 })
+  quantity: number
 
   @ManyToOne(() => PrepMolecule, (p) => p.productsUsed, {
     onDelete: "CASCADE",
@@ -42,10 +46,12 @@ export class ProductUsed {
   constructor(
     prepMolecule: PrepMolecule,
     productId: number,
-    quantityFrac: number,
+    quantity?: number,
+    frac?: number,
   ) {
     this.prepMolecule = prepMolecule
     this.productId = productId
-    this.quantityFrac = quantityFrac
+    if (quantity) this.quantity = quantity
+    if (frac) this.frac = frac
   }
 }

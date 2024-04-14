@@ -372,3 +372,76 @@ INSERT INTO public.patient VALUES (21, '24/2024', '20242145', 'jim', 'sin', 'Hom
 
 SELECT pg_catalog.setval('public.patient_id_seq', 21, true);
 
+-- vehicules
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 1000, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 1000, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 500, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 500, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 250, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 250, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 100, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 100, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 1000, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 1000, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 500, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 500, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 250, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 250, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 100, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 100, true);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 1000);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 500);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 250);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 100);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 1000);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 500);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 250);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 100);

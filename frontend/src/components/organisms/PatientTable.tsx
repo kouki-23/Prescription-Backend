@@ -22,6 +22,8 @@ import { getDate } from "@helpers/utils"
 import { twMerge } from "tailwind-merge"
 import ConfirmModel from "@components/molecules/ConfirmModel"
 import { handleError } from "@helpers/apis"
+import { useAuth } from "@helpers/auth/auth"
+import { UserRole } from "@helpers/types"
 
 type Props = {
   data: TPatientData[]
@@ -40,6 +42,7 @@ export type TPatientData = {
 }
 
 export default function PatientTable({ data, refetch, filters }: Props) {
+  const { user } = useAuth()
   const mutation = useMutation({
     mutationKey: ["patients"],
     mutationFn: (id: number) => deletePatient(id),
@@ -80,27 +83,31 @@ export default function PatientTable({ data, refetch, filters }: Props) {
       cell: (info) => <PrescriptionActions patient={info.row.original} />,
       header: "Prescription",
     }),
-    columnHelper.display({
-      id: "Actions",
-      cell: (info) => {
-        const [deleteConfirm, setDeleteConfirm] = useState(false)
-        return (
-          <>
-            <ConfirmModel
-              text={`Voulez-vous vraiment supprimer ce${
-                info.row.original.gender == "Femme" ? "tte" : ""
-              } patient${info.row.original.gender == "Femme" ? "e" : ""}?`}
-              isOpen={deleteConfirm}
-              setIsOpen={setDeleteConfirm}
-              confirmFn={() => mutation.mutate(info.row.original.id)}
-            />
-            <Actions deleteFn={() => setDeleteConfirm(true)} />
-          </>
-        )
-      },
-      header: "Actions",
-    }),
   ]
+
+  if (user && user.role === UserRole.MEDECIN)
+    columns.push(
+      columnHelper.display({
+        id: "Actions",
+        cell: (info) => {
+          const [deleteConfirm, setDeleteConfirm] = useState(false)
+          return (
+            <>
+              <ConfirmModel
+                text={`Voulez-vous vraiment supprimer ce${
+                  info.row.original.gender == "Femme" ? "tte" : ""
+                } patient${info.row.original.gender == "Femme" ? "e" : ""}?`}
+                isOpen={deleteConfirm}
+                setIsOpen={setDeleteConfirm}
+                confirmFn={() => mutation.mutate(info.row.original.id)}
+              />
+              <Actions deleteFn={() => setDeleteConfirm(true)} />
+            </>
+          )
+        },
+        header: "Actions",
+      }),
+    )
   const table = useReactTable({
     data,
     columns,
@@ -176,17 +183,23 @@ type PrescriptionActionsProps = {
 }
 
 function PrescriptionActions({ patient }: PrescriptionActionsProps) {
+  const { user } = useAuth()
   const navigator = useNavigate()
   const [isPrescriptionOpen, setIsPrescriptionOpen] = useState(false)
+  if (!user) return <div></div>
   return (
     <>
-      <AddPrescription
-        patient={patient}
-        isOpen={isPrescriptionOpen}
-        setIsOpen={setIsPrescriptionOpen}
-      />
+      {user.role === UserRole.MEDECIN && (
+        <AddPrescription
+          patient={patient}
+          isOpen={isPrescriptionOpen}
+          setIsOpen={setIsPrescriptionOpen}
+        />
+      )}
       <div className="flex justify-center gap-4">
-        <Icon src={addIcon} onCLick={() => setIsPrescriptionOpen(true)} />
+        {user.role === UserRole.MEDECIN ? (
+          <Icon src={addIcon} onCLick={() => setIsPrescriptionOpen(true)} />
+        ) : null}
         <Icon
           src={listIcon}
           onCLick={() => navigator(`${patient.id}/prescription`)}

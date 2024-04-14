@@ -1,6 +1,7 @@
 import { updatePatient } from "@helpers/apis/patient"
+import { useAuth } from "@helpers/auth/auth"
 import { getAge } from "@helpers/personInfo"
-import { Patient } from "@helpers/types"
+import { Patient, UserRole } from "@helpers/types"
 import { useState } from "react"
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 }
 
 export default function PatientSideInfo({ patient }: Props) {
+  const { user } = useAuth()
   const [comment, setComment] = useState(patient.comment)
   return (
     <div className="bg-dark-gray bg-opacity-50 h-screen px-9 pt-20 w-full">
@@ -30,14 +32,18 @@ export default function PatientSideInfo({ patient }: Props) {
             value={String(patient.bodySurface)}
           />
           <p className="text-primary-blue font-medium pt-1">Commentaire:</p>
-          <textarea
-            className="bg-primary-gray bg-opacity-30 w-96 rounded-lg py-2 px-2 focus:outline-secondary-blue shadow"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            onBlur={() => {
-              if (comment) updatePatient(patient.id, { comment })
-            }}
-          />
+          {user?.role === UserRole.MEDECIN ? (
+            <textarea
+              className="bg-primary-gray bg-opacity-30 w-96 rounded-lg py-2 px-2 focus:outline-secondary-blue shadow"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              onBlur={() => {
+                if (comment) updatePatient(patient.id, { comment })
+              }}
+            />
+          ) : (
+            <p>{comment}</p>
+          )}
         </div>
       </div>
     </div>

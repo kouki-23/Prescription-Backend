@@ -9,6 +9,7 @@ type Props<keyT> = {
   setSelected: (option: Option<keyT>) => void
   options: Option<keyT>[]
   className?: string
+  size?: number | "sm" | "md" | "lg"
 }
 
 export default function OptionInput<keyT>({
@@ -16,19 +17,23 @@ export default function OptionInput<keyT>({
   selected,
   setSelected,
   className,
+  size = "md",
 }: Props<keyT>) {
+  const width = size === "sm" ? "w-64" : size === "md" ? "w-96" : "w-128"
   return (
     <Listbox value={selected} onChange={setSelected}>
       <Listbox.Button
         className={twMerge(
-          "relative w-96 py-2 min-h-10 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md",
+          `relative ${width} py-2 min-h-10 cursor-pointer rounded-lg  bg-primary-gray flex items-center justify-center sm:text-sm shadow-md`,
           className,
         )}
       >
         <img className="absolute end-1" src={scrollIcon} />
         {selected ? selected.label : "Sélectionner"}
       </Listbox.Button>
-      <Listbox.Options className="absolute z-10 bg-white-shade overflow-auto max-h-60 w-96 rounded-lg bg-white text-base shadow-md text-center sm:text-sm">
+      <Listbox.Options
+        className={`absolute z-10 bg-white-shade overflow-auto max-h-60 ${width} rounded-lg bg-white text-base shadow-md text-center sm:text-sm`}
+      >
         {options.map((option) => (
           <Listbox.Option
             key={String(option.value)}

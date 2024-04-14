@@ -17,6 +17,8 @@ import protocolRouter from "./Routers/protocol"
 import prescriptionRouter from "./Routers/prescription"
 import cureRouter from "./Routers/cure"
 import prepRouter from "./Routers/prepMolecules"
+import productRouter from "./Routers/product"
+import vehiculeRouter from "./Routers/vehicule"
 import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
 import morgan from "morgan"
@@ -71,6 +73,8 @@ app.use("/protocol", protocolRouter)
 app.use("/prescription", prescriptionRouter)
 app.use("/cure", cureRouter)
 app.use("/prep", prepRouter)
+app.use("/product", productRouter)
+app.use("/vehicule", vehiculeRouter)
 
 //error handler
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {

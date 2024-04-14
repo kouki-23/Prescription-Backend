@@ -54,7 +54,7 @@ const genderOptions: Option<string>[] = [
   { label: "Femme", value: "Femme" },
 ]
 
-export default function AddPatient({}: Props) {
+export default function AddPatient({ }: Props) {
   const [data, setData] = useState<TData>({
     DMI: "",
     index: "",
@@ -124,10 +124,17 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
       toast.error("Selectionner Date de naissance")
       return false
     }
+
+    if (isEmpty(data.matrimonial)) {
+      toast.error("Selectionner etat civil")
+      return false
+    }
+
     if (!isDateInPast(data.birthDate)) {
       toast.error("Veuillez selectionner une date valide")
       return false
     }
+
     return true
   }
 
@@ -306,7 +313,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             <LabledInput
               text="Surface corporelle (m²)"
               value={String(bodySurf)}
-              setValue={() => {}}
+              setValue={() => { }}
               isNumber={true}
               disabled={true}
             />

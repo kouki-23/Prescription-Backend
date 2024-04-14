@@ -43,6 +43,8 @@ export interface PrepMolecule {
   duration: number
   time: string
   validation: number
+  finished: boolean
+  isAdjusted: boolean
   theoreticalDose: number
   perfusionType: string
   isCustom: boolean
@@ -126,14 +128,15 @@ export interface Vehicule {
   id: number
   type: string
   content: string
-  volume: string
-  finalVolume: string
-  prepMolucule: PrepMolecule
+  volume: number
+  PVC: boolean
+  prepMolucule: PrepMolecule[]
 }
 
 export interface ProductUsed {
   id: number
-  quantityFrac: number
+  frac: number
+  quantity: number
   prepMolecule: PrepMolecule
   prepMoleculeId: number
   product: Product
