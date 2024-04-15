@@ -2,19 +2,14 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Entity,
-  OneToOne,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
 } from "typeorm"
 import { Vehicule } from "./Vehicule"
 import { Cure } from "./Cure"
 import { PrepMoleculeHistory } from "./HistoryEntities/PrepMoleculeHistory"
 import { ProductUsed } from "./ProductUsed"
-import { boolean } from "zod"
 
 // TODO : possiblite to add unite for dose
 @Entity()
