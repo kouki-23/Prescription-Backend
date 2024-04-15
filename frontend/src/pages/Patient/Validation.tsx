@@ -6,6 +6,7 @@ import { getAllPatients } from "@helpers/apis/patient"
 import ErrorPage from "@pages/Error/ErrorPage"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
+import { transformFilter } from "./ListPatient"
 
 export type Tfilters = {
   DMI: string
@@ -17,8 +18,7 @@ export type Tfilters = {
 
 type Props = {}
 
-export default function ValidationPage({ }: Props) {
-
+export default function ValidationPage({}: Props) {
   const [filters, setFilters] = useState<Tfilters>({
     DMI: "",
     firstName: "",
@@ -39,7 +39,13 @@ export default function ValidationPage({ }: Props) {
       <div className="container mx-auto my-10">
         <Title text="Liste des patients" />
       </div>
-      {data && <PatientTable data={data} filters={filters} refetch={refetch} />}
+      {data && (
+        <PatientTable
+          data={data}
+          filters={transformFilter(filters)}
+          refetch={refetch}
+        />
+      )}
     </div>
   )
 }

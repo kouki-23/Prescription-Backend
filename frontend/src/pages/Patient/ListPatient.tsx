@@ -88,7 +88,7 @@ type FilterObject = {
   [key: string]: string | undefined
 }
 
-function transformFilter(filter: Tfilters) {
+export function transformFilter(filter: Tfilters) {
   return Object.keys(filter).map(
     (v) =>
       ({
