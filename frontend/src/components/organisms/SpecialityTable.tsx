@@ -6,38 +6,44 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { useEffect } from "react"
 import { twMerge } from "tailwind-merge"
 import editIcon from "@assets/icons/edit.svg"
 import deleteIcon from "@assets/icons/delete.svg"
 import listIcon from "@assets/icons/list.svg"
+import { Product } from "@helpers/types"
+import { useMutation } from "@tanstack/react-query"
+import { deleteProduct } from "@helpers/apis/product"
+import { handleError } from "@helpers/apis"
+import { toast } from "react-toastify"
 
 type Props = {
-  data: TProductData[]
-  setData: (data: TProductData[]) => void
-}
-export type TProductData = {
-  dci: string
-  specialite: string
-  dose: number
-  volume: number
-  isReconstruct: boolean
+  data: Product[]
+  refetch: () => void
 }
 
-export function SpecialtityTable({ data, setData }: Props) {
-  const columnHelper = createColumnHelper<TProductData>()
+export function SpecialtityTable({ data, refetch }: Props) {
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deleteProduct(id),
+    onError: (e) => toast.error(handleError(e)),
+    onSuccess: () => {
+      refetch()
+      toast.success("Produit supprimé")
+    },
+  })
+  console.log(data)
+  const columnHelper = createColumnHelper<Product>()
   const columns = [
     columnHelper.accessor((row) => row.specialite, {
       id: "specialite",
       cell: (info) => info.getValue(),
       header: "Specialité",
     }),
-    columnHelper.accessor((row) => row.dci, {
+    columnHelper.accessor((row) => row.molecule.name, {
       id: "dci",
       cell: (info) => info.getValue(),
       header: "Molecule",
     }),
-    columnHelper.accessor((row) => row.dose, {
+    columnHelper.accessor((row) => row.dosage, {
       id: "dose",
       cell: (info) => info.getValue(),
       header: "Dose",
@@ -49,27 +55,26 @@ export function SpecialtityTable({ data, setData }: Props) {
     }),
     columnHelper.accessor((row) => row.isReconstruct, {
       id: "isReconstruct",
-      cell: (info) => info.getValue(),
+      cell: (info) => (info.getValue() ? "à reconstituer" : "Pret à l'emploi"),
       header: "Statut",
     }),
     columnHelper.display({
       id: "actions",
       header: "Actions",
-      cell: (info) => (
-        <div className="flex justify-center gap-4">
-          <Icon src={listIcon} />
-          <Icon src={editIcon} />
-          <Icon
-            src={deleteIcon}
-            onCLick={() => setData(data.filter((_, i) => i !== info.row.index))}
-          />
-        </div>
-      ),
+      cell: (info) => {
+        return (
+          <div className="flex justify-center gap-4">
+            <Icon src={listIcon} />
+            <Icon src={editIcon} />
+            <Icon
+              src={deleteIcon}
+              onCLick={() => deleteMutation.mutate(info.row.original.id)}
+            />
+          </div>
+        )
+      },
     }),
   ]
-  useEffect(() => {
-    console.log(columns)
-  })
   const table = useReactTable({
     data,
     columns,
@@ -105,6 +110,17 @@ export function SpecialtityTable({ data, setData }: Props) {
           </tr>
         ))}
       </thead>
+      <tbody>
+        {table.getRowModel().rows.map((row) => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <td className="text-center py-3" key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   )
 }
