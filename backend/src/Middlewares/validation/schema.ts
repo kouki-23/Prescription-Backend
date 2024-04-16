@@ -134,3 +134,26 @@ export const updateCureStartDateBodySchema = z.object({
 export type updateCureStartDateBody = z.infer<
   typeof updateCureStartDateBodySchema
 >
+export const createProductBodySchema = z.object({
+  specialite: z.string(),
+  dosage: z.number(),
+  dosageUnite: z.string(),
+  volume: z.number(),
+  volumeUnite: z.string(),
+  isReconstruct: z.boolean(),
+  solvantReconstitution: z.string(),
+  volumeReconstitution: z.number(),
+  volumeReconstitutionUnite: z.string(),
+  conservationReconstitutionFridge: z.boolean(),
+  dilutionVolume: z.number(),
+  dilutionVolumeUnite: z.string(),
+  minConcentration: z.number(),
+  maxConcentration: z.number(),
+  concentrationUnite: z.string(),
+  conservationDilutionFridge: z.boolean(),
+  conservationPeriodDilution: z.number(),
+  lightShelter: z.boolean(),
+  sensitivityPVC: z.boolean(),
+  disable: z.boolean(),
+})
+export type CreateProductBody = z.infer<typeof createProductBodySchema>
