@@ -1,0 +1,33 @@
+import { Router } from "express"
+import { isAdmin } from "../Middlewares/auth"
+import {
+  validateRequestBody,
+  validateRequestParams,
+} from "../Middlewares/validation/validation"
+import {
+  IdParamsSchema,
+  createProductBodySchema,
+} from "../Middlewares/validation/schema"
+import {
+  createProductHandler,
+  deleteProductHandler,
+  getAllProductsHandler,
+} from "../Handlers/product"
+
+const router = Router()
+
+router.post(
+  "/,",
+  isAdmin,
+  validateRequestBody(createProductBodySchema),
+  createProductHandler,
+)
+router.get("/", getAllProductsHandler)
+router.delete(
+  "/:id",
+  isAdmin,
+  validateRequestParams(IdParamsSchema),
+  deleteProductHandler,
+)
+
+export default router
