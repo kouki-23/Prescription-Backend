@@ -20,12 +20,6 @@ export default function NavBar({}: Props) {
           selected={selected}
           setSelected={setSelected}
         />
-        <LinkTo
-          to="planning"
-          label="Planning"
-          selected={selected}
-          setSelected={setSelected}
-        />
       </div>
       <Outlet />
     </>

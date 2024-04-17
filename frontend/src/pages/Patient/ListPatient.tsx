@@ -94,6 +94,6 @@ export function transformFilter(filter: Tfilters) {
       ({
         id: v,
         value: (filter as FilterObject)[v] as any,
-      }) as ColumnFilter,
+      } as ColumnFilter),
   )
 }

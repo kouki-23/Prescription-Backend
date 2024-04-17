@@ -206,8 +206,6 @@ export default function AdjustementDetailsPage() {
     }
   }, [data.dilution])
 
-  useEffect(() => {}, [products])
-
   useEffect(() => {
     setData({
       ...data,

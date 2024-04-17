@@ -60,6 +60,7 @@ export async function getPrepMoleculeById(id: number) {
       id,
     },
     relations: {
+      vehicule: true,
       cure: {
         prescription: {
           patient: true,

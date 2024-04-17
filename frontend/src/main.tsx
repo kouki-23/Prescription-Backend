@@ -22,6 +22,7 @@ import { UserRole } from "@helpers/types"
 import NavBar from "@components/molecules/NavBar"
 import AdjustementPage from "@pages/Adjustement/AdjustementPage"
 import AdjustementDetailsPage from "@pages/Adjustement/AdjustementDetailsPage"
+import FicheFabrication from "@pages/FAB/FicheFabrication"
 
 globalDefault()
 
@@ -41,6 +42,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <AuthGuard role={[UserRole.MEDECIN, UserRole.PHARMACIEN]} />
               }
             >
+              <Route path="/FAB/:prepid" element={<FicheFabrication />} />
               <Route
                 path="/:prescriptionid/:cureorder/file"
                 element={<PrescriptionFilePage />}

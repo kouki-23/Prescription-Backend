@@ -120,7 +120,13 @@ export default function AdjustementTable({ data, refetch }: Props) {
       cell: (info) => (
         <div className="flex justify-center">
           <img
-            onClick={info.row.original.isAdjusted ? () => {} : () => {}}
+            onClick={
+              info.row.original.isAdjusted
+                ? () => {
+                    navigator(`/FAB/${info.row.original.id}`)
+                  }
+                : () => {}
+            }
             src={ficherIcon}
             className="size-7 cursor-pointer"
           />
