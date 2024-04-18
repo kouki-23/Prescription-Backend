@@ -252,13 +252,7 @@ function CureCard({
             .map((p) => {
               const prepM = groupedMolecules.get(p)
               if (prepM)
-                return (
-                  <JourneyCard
-                    key={p}
-                    prepMolecules={prepM}
-                    startDate={cure.startDate}
-                  />
-                )
+                return <JourneyCard key={p} prepMolecules={prepM} cure={cure} />
             })}
         </div>
       )}
@@ -268,16 +262,36 @@ function CureCard({
 
 function JourneyCard({
   prepMolecules,
-  startDate,
+  cure,
 }: {
   prepMolecules: PrepMolecule[]
-  startDate: string
+  cure: Cure
 }) {
   const [isExpended, setIsExpended] = useState(false)
   const date = useMemo(
-    () => addDaysToDate(startDate, prepMolecules[0].day - 1),
-    [startDate],
+    () => addDaysToDate(cure.startDate, prepMolecules[0].day - 1),
+    [cure.startDate],
   )
+
+  let color: "orange" | "green" | "blue" | undefined = undefined
+  let state = undefined
+  if (cure.state === CureState.PREVU) {
+    color = "orange"
+    state = CureState.PREVU
+  } else if (cure.state === CureState.TERMINEE) {
+    color = "green"
+    state = CureState.TERMINEE
+  } else {
+    const isCompleted = prepMolecules.every((p) => p.finished === true)
+    if (isCompleted) {
+      color = "green"
+      state = CureState.TERMINEE
+    } else {
+      color = "blue"
+      state = CureState.EN_COURS
+    }
+  }
+
   return (
     <>
       <Card
@@ -285,9 +299,10 @@ function JourneyCard({
         icon={jourIcon}
         title={`J${prepMolecules[0].day}:`}
         subTitle={date.toISOString().split("T")[0]}
-        state={"En cours"}
+        state={state}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
+        color={color}
       />
       {isExpended && (
         <div className="ml-16">
@@ -296,6 +311,7 @@ function JourneyCard({
               icon={moleculeIcon}
               title={m.productsUsed[0].product.molecule.name}
               subTitle={m.dose + " " + m.unite}
+              color={color === "orange" ? color : m.finished ? "green" : "blue"}
             />
           ))}
         </div>

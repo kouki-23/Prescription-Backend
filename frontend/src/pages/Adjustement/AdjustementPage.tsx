@@ -13,7 +13,6 @@ export default function AdjustementPage() {
 
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
-  console.log(data)
   return (
     <div className="container mx-auto space-y-5 mt-20 px-10">
       <Title text="Liste des ajustements" />
