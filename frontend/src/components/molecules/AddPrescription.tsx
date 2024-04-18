@@ -14,7 +14,7 @@ import {
 import { getAllProtocols } from "@helpers/apis/protocol"
 import { useAuth } from "@helpers/auth/auth"
 import { Option } from "@helpers/types"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -143,6 +143,17 @@ function Step2({
     queryKey: ["protocols"],
     queryFn: getAllProtocols,
   })
+
+  const mutation = useMutation({
+    mutationKey: ["patients"],
+    mutationFn: () => createPrescription(dataP),
+    onError: (e) => toast.error(handleError(e)),
+    onSuccess: () => {
+      navigator(`${dataP.patientId}/prescription`)
+      //toast.success("prescription")
+    },
+  })
+
   useEffect(() => {
     if (data && dataP.protocolId !== -1) {
       const protocol = data.data.find((v: any) => v.id === dataP.protocolId)
@@ -226,17 +237,7 @@ function Step2({
       </div>
       <div className="flex justify-center mt-8 gap-8">
         <SecondaryBtn text="Précédent" clickFn={() => setStep(1)} />
-        <PrimaryBtn
-          text="Suivant"
-          clickFn={async () => {
-            try {
-              await createPrescription(dataP)
-              navigator(`${dataP.patientId}/prescription`)
-            } catch (e) {
-              toast.error(handleError(e))
-            }
-          }}
-        />
+        <PrimaryBtn text="Suivant" clickFn={async () => mutation.mutate()} />
       </div>
     </>
   )
