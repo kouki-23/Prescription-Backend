@@ -1,5 +1,11 @@
 import Title from "@components/atoms/Title"
-import { Cure, Prescription, PrepMolecule, UserRole } from "@helpers/types"
+import {
+  Cure,
+  Prescription,
+  PrepMolecule,
+  UserRole,
+  CureState,
+} from "@helpers/types"
 import prescriptionIcon from "@assets/icons/prescription.svg"
 import cureIcon from "@assets/icons/cure.svg"
 import jourIcon from "@assets/icons/jour.svg"
@@ -48,6 +54,7 @@ type CardProps = {
   onClick?: () => void
   hover?: boolean
   OnHoverClick?: () => void
+  color?: "blue" | "green" | "orange"
 }
 
 function Card({
@@ -60,7 +67,20 @@ function Card({
   onClick,
   hover,
   OnHoverClick,
+  color,
 }: CardProps) {
+  const [bgColor, textColor] = useMemo(() => {
+    if (!color || color === "blue") {
+      return ["bg-light-blue  bg-opacity-15", "text-secondary-blue"]
+    }
+    if (color === "green") {
+      return ["bg-green-shade bg-opacity-15", "text-[#50845e]"]
+    }
+    if (color === "orange") {
+      return ["bg-orange-shade bg-opacity-15", "text-orange-shade"]
+    }
+    return ["", ""]
+  }, [color])
   return (
     <div className="relative flex w-full m-2 gap-3 items-center showImage">
       {isExpended !== undefined && setIsExpended !== undefined && (
@@ -71,7 +91,7 @@ function Card({
         />
       )}
       <div
-        className={`flex w-full items-center bg-light-blue bg-opacity-10 rounded-lg p-2 px-5 shadow-sm justify-between ${
+        className={`flex w-full items-center ${bgColor} rounded-lg p-2 px-5 shadow-sm justify-between ${
           onClick ? "cursor-pointer" : ""
         }`}
         onClick={onClick}
@@ -84,7 +104,9 @@ function Card({
           <span className="text-sm ">{subTitle}</span>
         </div>
         <div className="flex items-center">
-          <span className="px-2 font-semibold text-xl transition-all text-secondary-blue">
+          <span
+            className={`px-2 font-semibold text-xl transition-all ${textColor}`}
+          >
             {state}
           </span>
         </div>
@@ -124,6 +146,10 @@ function PrescriptionCard({
     },
   })
   const [isExpended, setIsExpended] = useState(false)
+  const isCompteted = useMemo(
+    () => prescription.cures.every((c) => c.state === "Terminée"),
+    [prescription],
+  )
   return (
     <>
       <ConfirmModel
@@ -137,12 +163,13 @@ function PrescriptionCard({
         icon={prescriptionIcon}
         title={`Prescription ${index + 1}:`}
         subTitle={prescription.protocolName}
-        state={"En cours"}
-        isExpended={isExpended}
-        setIsExpended={setIsExpended}
         onClick={() => navigator(`${prescription.id}`)}
         hover={user?.role === UserRole.MEDECIN ? true : false}
         OnHoverClick={() => setDeleteModelOpen(true)}
+        state={isCompteted ? "Terminée" : "En Cours"}
+        isExpended={isExpended}
+        setIsExpended={setIsExpended}
+        color={isCompteted ? "green" : "blue"}
       />
       {isExpended && (
         <div className="ml-10">
@@ -190,6 +217,14 @@ function CureCard({
     })
     return groups
   }, [cure])
+  let color: "orange" | "green" | "blue" | undefined = undefined
+  if (cure.state === CureState.PREVU) {
+    color = "orange"
+  } else if (cure.state === CureState.TERMINEE) {
+    color = "green"
+  } else {
+    color = "blue"
+  }
   return (
     <>
       <ConfirmModel
@@ -208,6 +243,7 @@ function CureCard({
         setIsExpended={setIsExpended}
         hover={user?.role === UserRole.MEDECIN ? true : false}
         OnHoverClick={() => setDeleteModelOpen(true)}
+        color={color}
       />
       {isExpended && (
         <div className="ml-10">

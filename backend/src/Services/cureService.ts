@@ -98,3 +98,17 @@ export async function deleteCure(cureId: number) {
     ...nextCures.map((c) => repo.delete({ id: c.id })),
   ])
 }
+
+export async function getCureByPrepMoleculeId(prepMoleculeId: number) {
+  const cure = await repo.findOne({
+    where: {
+      prepMolecule: {
+        id: prepMoleculeId,
+      },
+    },
+  })
+  if (!cure) {
+    throw "no cure"
+  }
+  return cure
+}
