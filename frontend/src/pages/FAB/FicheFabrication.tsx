@@ -1,12 +1,11 @@
-import arianaLogo from "@assets/ariana-logo.png"
+import asqiiLogo from "@assets/asqii_logo.svg"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import { getPrepMoleculeById } from "@helpers/apis/prepMolcule"
-import { Product, ProductUsed } from "@helpers/types"
+import { ProductUsed } from "@helpers/types"
 import { addDaysToDate, getDate, getDose } from "@helpers/utils"
 import ErrorPage from "@pages/Error/ErrorPage"
 import {
   Document,
-  Font,
   Image,
   PDFViewer,
   Page,
@@ -18,152 +17,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 
 type Props = {}
-
-/*export default function FicheFabrication({}: Props) {
-  const { prepid } = useParams()
-  const { isLoading, error, data } = useQuery({
-    queryKey: ["prepmolecule", prepid],
-    queryFn: () => getPrepMoleculeById(Number(prepid)),
-  })
-
-  if (isLoading) return <LoadingInterface />
-  if (error) return <ErrorPage cause={error.message} />
-  const prep = data!.data
-  const volumePA = prep.productsUsed.reduce(
-    (prev, curr) => prev + curr.quantity * curr.product.volume * curr.frac,
-    0,
-  )
-  const volumeFinal = volumePA + Number(prep.solventVolume)
-  const concentration = prep.dose / volumeFinal
-  return (
-    <div className="mx-10">
-      <div className="flex border-2 rounded-3xl items-center justify-between mt-5 px-5">
-        <img src={arianaLogo} className="size-20" />
-        <h1 className="text-3xl font-bold">FICHE DE FABRICATION</h1>
-        <h3>N ordonnance</h3>
-      </div>
-      <div className="flex justify-between mt-5">
-        <div className="border-2 rounded-3xl px-5">
-          <div className="flex gap-2  my-3">
-            <p className="font-bold text-xl">Patient : </p>
-            <p className="text-xl">{`${prep.cure.prescription.patient.firstName} ${prep.cure.prescription.patient.lastName}`}</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <InfoText label="DMI" value={prep.cure.prescription.patient.DMI} />
-            <InfoText
-              label="Index"
-              value={prep.cure.prescription.patient.index}
-            />
-            <InfoText
-              label="DDN"
-              value={getDate(
-                new Date(prep.cure.prescription.patient.birthDate),
-              )}
-            />
-            <InfoText
-              label="Genre"
-              value={prep.cure.prescription.patient.gender}
-            />
-            <InfoText
-              label="Poids"
-              value={prep.cure.prescription.patient.weight}
-            />
-            <InfoText
-              label="Taille"
-              value={prep.cure.prescription.patient.height}
-            />
-            <InfoText
-              label="SC"
-              value={prep.cure.prescription.patient.bodySurface}
-            />
-            <InfoText
-              label="creatinine"
-              value={prep.cure.prescription.patient.creatinine}
-            />
-          </div>
-        </div>
-        <div className="border-2 rounded-3xl p-5 px-5">
-          <div className="space-y-3">
-            <InfoText
-              label="Molecule"
-              value={prep.productsUsed[0].product.molecule.name}
-            />
-            <InfoText
-              label="Protocol"
-              value={prep.cure.prescription.protocolName}
-            />
-            <InfoText
-              label="Dose Prescrite"
-              value={`${getDose(
-                prep.dose,
-                prep.unite,
-                prep.cure.prescription.patient,
-                prep.productsUsed[0].product.molecule.name,
-              )} mg`}
-            />
-            <InfoText label="Volume final" value={volumeFinal.toFixed(2)} />
-            <InfoText
-              label="Concentration final"
-              value={concentration.toFixed(2) + " mg/ml"}
-            />
-          </div>
-        </div>
-        <div className="border-2 rounded-3xl px-5">
-          <div className="flex gap-2  my-3">
-            <p className="font-bold text-xl">Patient : </p>
-            <p className="text-xl">{`${prep.cure.prescription.patient.firstName} ${prep.cure.prescription.patient.lastName}`}</p>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <InfoText label="DMI" value={prep.cure.prescription.patient.DMI} />
-            <InfoText
-              label="Index"
-              value={prep.cure.prescription.patient.index}
-            />
-            <InfoText
-              label="DDN"
-              value={getDate(
-                new Date(prep.cure.prescription.patient.birthDate),
-              )}
-            />
-            <InfoText
-              label="Genre"
-              value={prep.cure.prescription.patient.gender}
-            />
-            <InfoText
-              label="Poids"
-              value={prep.cure.prescription.patient.weight}
-            />
-            <InfoText
-              label="Taille"
-              value={prep.cure.prescription.patient.height}
-            />
-            <InfoText
-              label="Taille"
-              value={prep.cure.prescription.patient.height}
-            />
-            <InfoText
-              label="SC"
-              value={prep.cure.prescription.patient.bodySurface}
-            />
-            <InfoText
-              label="creatinine"
-              value={prep.cure.prescription.patient.creatinine}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function InfoText({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="flex gap-1">
-      <p className="font-semibold text-sm">{label}:</p>
-      <p className="text-sm">{value}</p>
-    </div>
-  )
-}*/
 
 export default function FicheFabrication({}: Props) {
   const { prepid } = useParams()
@@ -185,29 +38,29 @@ export default function FicheFabrication({}: Props) {
   // Create styles
   const styles = StyleSheet.create({
     document: {
-      fontSize: 10,
+      fontSize: 8,
     },
     page: {},
     header: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginTop: 10,
-      marginHorizontal: 10,
+      marginTop: 5,
+      marginHorizontal: 15,
       paddingHorizontal: 10,
       border: 2,
-      borderRadius: 10,
+      borderRadius: 5,
     },
     logo: {
-      width: 80,
-      height: 80,
+      width: 50,
+      height: 50,
     },
     title: {
       fontFamily: "Helvetica-Bold",
-      fontSize: 22,
+      fontSize: 20,
     },
     flexScreen: {
-      marginTop: 20,
+      marginTop: 8,
       flexDirection: "row",
       marginHorizontal: 15,
       gap: 10,
@@ -215,7 +68,7 @@ export default function FicheFabrication({}: Props) {
     itemScreen: {
       flexGrow: 1,
       border: 2,
-      borderRadius: 10,
+      borderRadius: 5,
       padding: 8,
     },
     patientItems: {
@@ -224,9 +77,17 @@ export default function FicheFabrication({}: Props) {
       paddingVertical: 4,
     },
     box: {
-      marginTop: 20,
+      marginTop: 8,
       border: 2,
-      borderRadius: 10,
+      borderRadius: 5,
+      marginHorizontal: 15,
+      padding: 10,
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    fabric: {
+      marginTop: 8,
+      border: 1,
       marginHorizontal: 15,
       padding: 10,
       flexDirection: "row",
@@ -238,7 +99,7 @@ export default function FicheFabrication({}: Props) {
       <Document style={styles.document}>
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
-            <Image src={arianaLogo} style={styles.logo} />
+            <Image src={asqiiLogo} style={styles.logo} />
             <Text style={styles.title}>FICHE DE FABRICATION</Text>
             <Text>N'ORDANNACE</Text>
           </View>
@@ -336,26 +197,19 @@ export default function FicheFabrication({}: Props) {
                 )}
               />
               <InfoText label="Jour d'administration" value={`J${prep.day}`} />
+              <InfoText label="Heure d'administration" value={prep.time} />
               <InfoText
                 label="Prescripteur"
                 value={`Dr. ${prep.cure.prescription.prescriber}`}
               />
-              <InfoText
-                label="Primitif"
-                value={`${prep.cure.prescription.primitif}`}
-              />
-              <InfoText
-                label="Type Histologique"
-                value={`${prep.cure.prescription.histoType}`}
-              />
             </View>
           </View>
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
+          <View style={{ marginHorizontal: 15, marginTop: 4 }}>
             <Text
               style={{
                 fontFamily: "Helvetica-Bold",
                 fontSize: 18,
-                marginVertical: 10,
+                marginVertical: 4,
               }}
             >
               Flacons:
@@ -380,11 +234,55 @@ export default function FicheFabrication({}: Props) {
               value={`${volumeFinal.toFixed(1)} ml `}
             />
           </View>
+          <View style={styles.box}>
+            <InfoText label="Date de fabrication" value={getDate(new Date())} />
+            <InfoText
+              label="Date de préremption"
+              value={getDate(
+                addDaysToDate(
+                  new Date(),
+                  prep.productsUsed[0].product.concervationtionPeriodDilution,
+                ),
+              )}
+            />
+            <InfoText
+              label="Conservation"
+              value={`${volumeFinal.toFixed(1)} ml `}
+            />
+          </View>
+          <View>
+            <View style={styles.fabric}>
+              <View style={{ flexDirection: "column", gap: 5 }}>
+                <Text>Institut X</Text>
+                <InfoText
+                  label="Patient"
+                  value={`${prep.cure.prescription.patient.firstName} ${prep.cure.prescription.patient.lastName}`}
+                />
+                {/* TODO: change to somme of dose of flacons */}
+                <InfoText
+                  label="Produit"
+                  value={`${prep.dose} mg de ${prep.productsUsed[0].product.specialite}`}
+                />
+                <InfoText label="Volume final" value={`${volumeFinal} ml`} />
+              </View>
+              <View style={{ flexDirection: "column", gap: 5 }}>
+                <InfoText label="N ordannce" value={""} />
+                <InfoText
+                  label="Date d'adminstration"
+                  value={getDate(
+                    addDaysToDate(prep.cure.startDate, prep.day - 1),
+                  )}
+                />
+                <InfoText label="Heure d'administration" value={prep.time} />
+              </View>
+            </View>
+          </View>
         </Page>
       </Document>
     </PDFViewer>
   )
 }
+
 function InfoText({ label, value }: { label: string; value: string | number }) {
   const styleInfo = StyleSheet.create({
     label: {
@@ -470,7 +368,9 @@ function ProductTable({ data }: { data: ProductUsed[] }) {
             <Text style={styles.tableCell}>{`${row.product.volume} ml`}</Text>
           </View>
           <View style={styles.tableCol}>
-            <Text style={styles.tableCell}>{row.quantity}</Text>
+            <Text style={styles.tableCell}>
+              {row.frac == 1 ? row.quantity : "1/n"}
+            </Text>
           </View>
           <View style={styles.tableCol}>
             <Text style={styles.tableCell}>
