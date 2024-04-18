@@ -146,7 +146,9 @@ function Step2({
 
   const mutation = useMutation({
     mutationKey: ["patients"],
-    mutationFn: () => createPrescription(dataP),
+    mutationFn: async () => {
+      if (!mutation.isPending) await createPrescription(dataP)
+    },
     onError: (e) => toast.error(handleError(e)),
     onSuccess: () => {
       navigator(`${dataP.patientId}/prescription`)

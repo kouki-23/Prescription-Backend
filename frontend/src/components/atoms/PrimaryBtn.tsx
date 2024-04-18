@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { twMerge } from "tailwind-merge"
 
 type props = {
@@ -31,20 +31,15 @@ export default function PrimaryBtn({
       }
     }
   }, [])
-  const [clicked, setClicked] = useState(false)
   return (
     <button
       ref={btn}
-      onClick={(e) => {
-        setClicked(true)
-        clickFn(e)
-        setClicked(false)
-      }}
+      onClick={clickFn}
       className={twMerge(
         "bg-secondary-blue bg-opacity-85 rounded-2xl px-12 py-3 text-white-shade font-bold hover:bg-opacity-100",
         className,
       )}
-      disabled={clicked || disabled}
+      disabled={disabled}
     >
       {text}
     </button>
