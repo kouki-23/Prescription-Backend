@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
@@ -22,7 +22,7 @@ import { UserRole } from "@helpers/types"
 import NavBar from "@components/molecules/NavBar"
 import AdjustementPage from "@pages/Adjustement/AdjustementPage"
 import AdjustementDetailsPage from "@pages/Adjustement/AdjustementDetailsPage"
-import FicheFabrication from "@pages/FAB/FicheFabrication"
+const FicheFabrication = lazy(() => import("@pages/FAB/FicheFabrication"))
 
 globalDefault()
 
