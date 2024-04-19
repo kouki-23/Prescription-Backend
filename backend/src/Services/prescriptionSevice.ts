@@ -42,7 +42,9 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
   //creating the first cure
   let cure = new Cure(startDate, CureState.EN_COURS, prescription, [])
   protocol.protocolMoleculeAssociation.map((p) => {
-    const product = products.find((p) => p.molecule.id === p.molecule.id)
+    const product = products.find(
+      (product) => product.molecule.id === p.molecule.id,
+    )
     if (product) {
       const prepMolecule: PrepMolecule = new PrepMolecule(
         p.day,
