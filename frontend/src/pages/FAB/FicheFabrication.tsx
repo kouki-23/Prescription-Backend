@@ -317,6 +317,8 @@ function ProductTable({ data }: { data: ProductUsed[] }) {
       borderWidth: 2,
       borderRadius: 5,
       borderColor: "#000",
+      borderBottom: 0,
+      borderRight: 0,
     },
     tableRow: {
       flexDirection: "row",
