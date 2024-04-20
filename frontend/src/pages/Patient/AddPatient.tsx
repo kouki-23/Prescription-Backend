@@ -15,6 +15,7 @@ import {
   isPositif,
   isDateInPast,
 } from "@helpers/validation"
+import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -54,7 +55,7 @@ const genderOptions: Option<string>[] = [
   { label: "Femme", value: "Femme" },
 ]
 
-export default function AddPatient({ }: Props) {
+export default function AddPatient({}: Props) {
   const [data, setData] = useState<TData>({
     DMI: "",
     index: "",
@@ -225,6 +226,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
 function AddPatientPage2({ data, setData, setPageN }: PageProps) {
   const navigator = useNavigate()
   const [bodySurf, setBodySurf] = useState<number>(0)
+
   function verif(): boolean {
     if (!data.weight) {
       toast.error("Veuillez saisir le poids")
@@ -263,10 +265,26 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
 
     return true
   }
+  const addMut = useMutation({
+    mutationKey: ["patient", "add"],
+    mutationFn: async () => {
+      if (!addMut.isPending)
+        await addPatient({ ...data, bodySurface: bodySurf })
+    },
+    onError: (e) => {
+      toast.error(handleError(e))
+    },
+    onSuccess: () => {
+      navigator("/medecin")
+      toast.success("patient ajouter avec succès")
+    },
+  })
+
   useEffect(() => {
     let newBodySurface = getBodySurf(data.weight, data.height)
     setBodySurf(newBodySurface > 2 ? 2 : newBodySurface)
   }, [data.height, data.weight])
+
   useEffect(() => {
     setData({
       ...data,
@@ -313,7 +331,7 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
             <LabledInput
               text="Surface corporelle (m²)"
               value={String(bodySurf)}
-              setValue={() => { }}
+              setValue={() => {}}
               isNumber={true}
               disabled={true}
             />
@@ -359,13 +377,8 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
         <PrimaryBtn
           text="Ajouter"
           clickFn={async () => {
-            try {
-              if (verif()) {
-                await addPatient({ ...data, bodySurface: bodySurf })
-                navigator("/medecin")
-              }
-            } catch (e) {
-              toast.error(handleError(e))
+            if (verif()) {
+              addMut.mutate()
             }
           }}
         />
