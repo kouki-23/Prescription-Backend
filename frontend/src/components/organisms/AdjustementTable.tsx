@@ -123,7 +123,7 @@ export default function AdjustementTable({ data, refetch }: Props) {
             onClick={
               info.row.original.isAdjusted
                 ? () => {
-                    navigator(`/FAB/${info.row.original.id}`)
+                    window.open(`/FAB/${info.row.original.id}`)
                   }
                 : () => {}
             }
@@ -360,7 +360,7 @@ function AdjustModel({
           onClick={() => librateMut.mutate()}
           className="bg-secondary-blue bg-opacity-85 rounded-2xl px-8 py-3 text-white-shade font-bold hover:bg-opacity-100"
         >
-          Libérer
+          Clear
         </button>
       </div>
     </Model>
