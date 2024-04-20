@@ -4,7 +4,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -12,6 +11,7 @@ import deleteIcon from "@assets/icons/delete.svg"
 import listIcon from "@assets/icons/list.svg"
 import addIcon from "@assets/icons/add.svg"
 import editIcon from "@assets/icons/edit.svg"
+//import infoIcon from "@assets/icons/info.svg"
 import { useMutation } from "@tanstack/react-query"
 import { deletePatient } from "@helpers/apis/patient"
 import { toast } from "react-toastify"
@@ -24,6 +24,8 @@ import ConfirmModel from "@components/molecules/ConfirmModel"
 import { handleError } from "@helpers/apis"
 import { useAuth } from "@helpers/auth/auth"
 import { UserRole } from "@helpers/types"
+//import axios from "axios"
+//import Model from "@components/atoms/Model"
 
 type Props = {
   data: TPatientData[]
@@ -83,6 +85,38 @@ export default function PatientTable({ data, refetch, filters }: Props) {
       cell: (info) => <PrescriptionActions patient={info.row.original} />,
       header: "Prescription",
     }),
+    /*columnHelper.display({
+      header: "mcda",
+      cell: (info) => {
+        const [isOpen, setIsOpen] = useState(false)
+        const [data, setData] = useState({})
+        return (
+          <>
+            <MCDAModel data={data} isOpen={isOpen} setIsOpen={setIsOpen} />
+            <Icon
+              src={infoIcon}
+              onCLick={() => {
+                axios
+                  .post(
+                    "http://102.219.179.156:5030/graphql",
+                    `{"query": "query AllValuesByCode ($index: String!) { allValuesByCode (index: $index) { value attribute { name } } }","operationName": "AllValuesByCode","variables": { "index": "14785236" }}`,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    },
+                  )
+                  .then((data) => {
+                    setData(data.data.data)
+                    setIsOpen(true)
+                  })
+                  .catch(() => {})
+              }}
+            />
+          </>
+        )
+      },
+    }),*/
   ]
 
   if (user && user.role === UserRole.MEDECIN)
@@ -114,7 +148,6 @@ export default function PatientTable({ data, refetch, filters }: Props) {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     state: {
       columnFilters: filters,
     },
@@ -122,7 +155,7 @@ export default function PatientTable({ data, refetch, filters }: Props) {
 
   return (
     <>
-      <table className="container mx-auto text-sm table-fixed border-collapse rounded-xl border-hidden shadow">
+      <table className="container mx-auto text-sm table-fixed border-collapse rounded-xl border-hidden shadow mb-10">
         <thead className="text-white-shade">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr className="" key={headerGroup.id}>
@@ -226,3 +259,21 @@ function Icon({
     />
   )
 }
+
+/*function MCDAModel({ data, isOpen, setIsOpen }: any) {
+  const d = data.allValuesByCode
+  return (
+    <Model isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      {d ? (
+        d.map((a: any) => (
+          <div className="grid grid-cols-2">
+            <p>{a.attribute.name} : </p>
+            <p>{a.value}</p>
+          </div>
+        ))
+      ) : (
+        <p>no info</p>
+      )}
+    </Model>
+  )
+}*/
