@@ -16,7 +16,12 @@ export default function AdjustementPage() {
   return (
     <div className="container mx-auto space-y-5 mt-20 px-10">
       <Title text="Liste des ajustements" />
-      <AdjustementTable data={data!.data} refetch={refetch} />
+      <AdjustementTable
+        data={data!.data.sort(
+          (a, b) => Number(a.finished) - Number(b.finished),
+        )}
+        refetch={refetch}
+      />
     </div>
   )
 }
