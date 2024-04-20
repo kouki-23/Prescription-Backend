@@ -4,6 +4,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
+RUN npm install pm2 -g
+
 COPY package*.json ./
 
 RUN npm install
@@ -14,4 +16,4 @@ RUN npm run build
 
 EXPOSE 3006
 
-CMD [ "npm", "start"]
+CMD ["pm2-runtime", "ecosystem.config.js"]
