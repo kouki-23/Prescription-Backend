@@ -32,8 +32,8 @@ export default function SideNavbar({}: Props) {
           onClick={logoutClick}
         />
       </div>
-      <div className="bg-primary-blue shadow-sm h-screen w-1/5 z-10">
-        <aside className="mt-10 fixed bg-primary-blue h-screen w-1/5 z-10">
+      <div className="h-screen w-1/5 z-10">
+        <aside className="pt-10 fixed bg-primary-blue h-screen w-1/5 z-10 shadow-md ">
           <NavElement
             icon={dashboardIcon}
             text="Dashboard"

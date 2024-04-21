@@ -8,15 +8,16 @@ import { SearchInput } from "@components/atoms/SearchInput"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import ErrorPage from "@pages/Error/ErrorPage"
 
-type Props = {}
-export default function SpecialityList({}: Props) {
+export default function SpecialityList() {
   const navigate = useNavigate()
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: getAllProducts,
   })
+
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
+
   return (
     <div>
       <SearchInput placeholder="Rechercher specialité" />
@@ -29,7 +30,7 @@ export default function SpecialityList({}: Props) {
           alt="ajouter specialité"
         />
       </div>
-      <SpecialtityTable data={data!} refetch={refetch} />
+      <SpecialtityTable data={data!} />
     </div>
   )
 }

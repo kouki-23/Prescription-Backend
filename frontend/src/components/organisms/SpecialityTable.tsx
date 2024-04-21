@@ -2,7 +2,6 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -11,26 +10,25 @@ import editIcon from "@assets/icons/edit.svg"
 import deleteIcon from "@assets/icons/delete.svg"
 import listIcon from "@assets/icons/list.svg"
 import { Product } from "@helpers/types"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteProduct } from "@helpers/apis/product"
 import { handleError } from "@helpers/apis"
 import { toast } from "react-toastify"
 
 type Props = {
   data: Product[]
-  refetch: () => void
 }
 
-export function SpecialtityTable({ data, refetch }: Props) {
+export function SpecialtityTable({ data }: Props) {
+  const queryClient = useQueryClient()
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteProduct(id),
     onError: (e) => toast.error(handleError(e)),
     onSuccess: () => {
-      refetch()
+      queryClient.invalidateQueries({ queryKey: ["products"] })
       toast.success("Produit supprimé")
     },
   })
-  console.log(data)
   const columnHelper = createColumnHelper<Product>()
   const columns = [
     columnHelper.accessor((row) => row.specialite, {
@@ -45,12 +43,12 @@ export function SpecialtityTable({ data, refetch }: Props) {
     }),
     columnHelper.accessor((row) => row.dosage, {
       id: "dose",
-      cell: (info) => info.getValue(),
+      cell: (info) => info.getValue() + " mg",
       header: "Dose",
     }),
     columnHelper.accessor((row) => row.volume, {
       id: "volume",
-      cell: (info) => info.getValue(),
+      cell: (info) => info.getValue() + " ml",
       header: "Volume",
     }),
     columnHelper.accessor((row) => row.isReconstruct, {
@@ -75,15 +73,16 @@ export function SpecialtityTable({ data, refetch }: Props) {
       },
     }),
   ]
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   })
+
   return (
-    <table className="w-full text-sm  border-collapse rounded-xl border-hidden shadow ">
+    <table className="w-full text-sm  border-collapse rounded-xl border-hidden shadow">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr className="text-white-shade" key={headerGroup.id}>

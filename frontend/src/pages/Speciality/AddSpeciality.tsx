@@ -9,12 +9,22 @@ import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { twMerge } from "tailwind-merge"
-type pageProps = {
-  data: Product
-  setData: React.Dispatch<React.SetStateAction<Product>>
+import { getAllVehicules } from "@helpers/apis/vehicule"
+
+type ProductForm = {
+  moleculeId: number
+  minConcentration: number
+  maxConcentration: number
 }
-export default function AddSpeciality({ data, setData }: pageProps) {
+
+export default function AddSpeciality() {
   const navigator = useNavigate()
+
+  const [data, setData] = useState<ProductForm>({
+    moleculeId: 0,
+    minConcentration: 0,
+    maxConcentration: 0,
+  })
 
   const {
     isLoading,
@@ -24,48 +34,59 @@ export default function AddSpeciality({ data, setData }: pageProps) {
     queryKey: ["molecules"],
     queryFn: getAllMolecules,
   })
+  const {
+    isLoading,
+    error,
+    data: molecules,
+  } = useQuery({
+    queryKey: ["vehicules"],
+    queryFn: getAllVehicules,
+  })
+
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
-  const [options, setOptions] = useState<Option<string>[]>([])
+
+  const moleculesOptions: Option<number>[] = molecules!.map((m) => ({
+    value: m.id,
+    label: m.name,
+  }))
 
   return (
     <div>
       <Title text="Ajouter spécialité" className="p-6" />
       <div className="container ml-6 flex space-x-80">
         <div className="space-y-8">
-          <AdminLabledInput
-            text="Nom molecule"
-            value=""
-            setValue={() => console.log("hello")}
-            isNumber={true}
-          />
           <AdminLabelOption
             text="Nom molecule"
-            selected={
-              data.molecule.name
-                ? { label: data.molecule.name, value: data.molecule.name }
-                : null
-            }
+            selected={moleculesOptions.find(
+              (option) => option.value === data.moleculeId,
+            )}
             setSelected={(selected) => {
               setData({
                 ...data,
-                molecule: { ...data.molecule, name: selected.value },
+                moleculeId: selected.value,
               })
             }}
-            options={[]}
+            options={moleculesOptions}
+          />
+
+          <AdminLabelOption
+            text="Nom molecule"
+            selected={moleculesOptions.find(
+              (option) => option.value === data.moleculeId,
+            )}
+            setSelected={(selected) => {
+              setData({
+                ...data,
+                moleculeId: selected.value,
+              })
+            }}
+            options={moleculesOptions}
           />
 
           <AdminLabledInput
-            text="Véhicule"
-            value={String(data.minConcentrarion)}
-            setValue={(value: string) =>
-              setData({ ...data, minConcentrarion: Number(value) })
-            }
-            isNumber={true}
-          />
-          <AdminLabledInput
             text="Concentration Min"
-            value={String(data.minConcentrarion)}
+            value={String(data.minConcentration)}
             setValue={(value: string) =>
               setData({ ...data, minConcentrarion: Number(value) })
             }
@@ -102,20 +123,20 @@ export default function AddSpeciality({ data, setData }: pageProps) {
     </div>
   )
 }
-export type OptionProps = {
+export type OptionProps<T> = {
   text: string
-  selected: Option<string> | null
-  setSelected: (s: Option<string>) => void
-  options: Option<string>[]
+  selected: Option<T> | undefined
+  setSelected: (s: Option<T>) => void
+  options: Option<T>[]
   className?: string
 }
-function AdminLabelOption({
+function AdminLabelOption<T>({
   text,
   selected,
   options,
   setSelected,
   className,
-}: OptionProps) {
+}: OptionProps<T>) {
   return (
     <div>
       <label className={twMerge("block mb-2 text-xl", className)}>{text}</label>
