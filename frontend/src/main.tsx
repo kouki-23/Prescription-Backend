@@ -18,10 +18,18 @@ import PrescriptionDetailsPage from "@pages/Prescription/PrescriptionDetailsPage
 import PrescriptionFilePage from "@pages/Prescription/PrescriptionFilePage"
 import AddProtocolPage from "@pages/Protocol/AddProtocol"
 import SpecialityList from "@pages/Admin/SpecialityList"
+import SideNavbar from "@components/organisms/SideNavbar"
+import AddSpecialityPage from "@pages/Admin/AddSpeciality"
+import AddSpeciality from "@pages/Admin/AddSpeciality"
 
 globalDefault()
 
 const queryClient = new QueryClient()
+const testData = {
+  specialite: "Example Speciality",
+  dilutionVolume: 10, // Example value, adjust as needed
+  maxConcentrarion: 20, // Example value, adjust as needed
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -33,8 +41,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<Index />} />
             </Route>
             <Route path="/admin" element={<AuthGuard role="admin" />}>
+              <Route path="" element={<SideNavbar />}>
+                <Route path="specialite" element={<SpecialityList />} />
+                <Route
+                  path="ajouterSpecialite"
+                  element={<AddSpeciality data={testData} />}
+                />
+              </Route>
               <Route path="ajouteProtocole" element={<AddProtocolPage />} />
-              <Route path="" element={<SpecialityList />} />
             </Route>
             <Route element={<AuthGuard role="medecin" />}>
               <Route
