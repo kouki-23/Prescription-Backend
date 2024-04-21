@@ -218,7 +218,11 @@ function MoleculeTable({ cure, patient }: { cure: Cure; patient: Patient }) {
       columnHelper.accessor((row) => row.validation, {
         id: "validation",
         cell: (info) =>
-          info.getValue() === 1 ? "Validé par medecin" : "Non validée",
+          info.getValue() === 2
+            ? "Validé par pharmacien"
+            : info.getValue() === 1
+            ? "Validé par medecin"
+            : "Non validée",
         header: "Validation",
       }),
     ],
@@ -256,7 +260,10 @@ function MoleculeTable({ cure, patient }: { cure: Cure; patient: Patient }) {
       </thead>
       <tbody>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.original.id} className="bg-white dark:bg-gray-800">
+          <tr
+            key={row.original.id}
+            className="bg-white dark:bg-gray-800 text-center"
+          >
             {row.getVisibleCells().map((cell) => (
               <td
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
