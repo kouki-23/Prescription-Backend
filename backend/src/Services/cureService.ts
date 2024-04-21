@@ -94,8 +94,8 @@ export async function deleteCure(cureId: number) {
   })
   console.log(nextCures)
   await Promise.all([
-    repo.delete({ id: cure.id }),
-    ...nextCures.map((c) => repo.delete({ id: c.id })),
+    repo.softDelete({ id: cure.id }),
+    ...nextCures.map((c) => repo.softDelete({ id: c.id })),
   ])
 }
 
