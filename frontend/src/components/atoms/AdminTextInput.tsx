@@ -16,7 +16,7 @@ export function AdminTextInput({
   return (
     <input
       className={twMerge(
-        `bg-primary-gray rounded-lg px-4 focus:outline-secondary-blue shadow-md ${
+        `bg-white-shade bg-opacity-50 rounded-lg py-2 px-4 border border-primary-blue border-opacity-20 w-72 h-7  focus:outline-secondary-blue shadow-none ${
           disabled ? "bg-secondary-gray" : null
         }`,
         className,
