@@ -20,6 +20,7 @@ import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import { toast } from "react-toastify"
 import { handleError } from "@helpers/apis"
+import { isEmpty, isPositif } from "@helpers/validation"
 
 export type PartialProduct = {
   product: Product
@@ -409,36 +410,62 @@ export default function AdjustementDetailsPage() {
             className="px-8"
             text="Enregistrer"
             clickFn={() => {
-              const veh = vehicules!.data.find(
-                (veh) =>
-                  veh.type === data.dilution[0] &&
-                  veh.content === data.dilution[1] &&
-                  veh.PVC === data.dilution[2] &&
-                  veh.volume === data.volumedilution,
-              )
-              const repartition = data.repartitionProducts.map((r) => ({
-                productId: r.product.id,
-                quantity: r.quantity,
-                frac: r.frac,
-              }))
-              const fraction = data.fractionProducts.map((r) => ({
-                productId: r.product.id,
-                quantity: r.quantity,
-                frac: r.frac,
-              }))
-              adjustMut.mutate({
-                vehiculeId: veh!.id,
-                condFinal: data.condFinal,
-                volumeSolvant: data.volumeSolvant,
-                repartitionProducts: repartition,
-                fractionProducts: fraction,
-              })
+              if (verif(data)) {
+                const veh = vehicules!.data.find(
+                  (veh) =>
+                    veh.type === data.dilution[0] &&
+                    veh.content === data.dilution[1] &&
+                    veh.PVC === data.dilution[2] &&
+                    veh.volume === data.volumedilution,
+                )
+                const repartition = data.repartitionProducts.map((r) => ({
+                  productId: r.product.id,
+                  quantity: r.quantity,
+                  frac: r.frac,
+                }))
+                const fraction = data.fractionProducts.map((r) => ({
+                  productId: r.product.id,
+                  quantity: r.quantity,
+                  frac: r.frac,
+                }))
+                adjustMut.mutate({
+                  vehiculeId: veh!.id,
+                  condFinal: data.condFinal,
+                  volumeSolvant: data.volumeSolvant,
+                  repartitionProducts: repartition,
+                  fractionProducts: fraction,
+                })
+              }
             }}
           />
         </div>
       </div>
     </div>
   )
+}
+
+function verif(data: FormData): boolean {
+  if (isEmpty(data.dilution[0])) {
+    toast.error("Selectionner une dilution")
+    return false
+  }
+
+  if (!isPositif(data.volumedilution)) {
+    toast.error("Le volume dilution doit être une entier positif")
+    return false
+  }
+
+  if (!isPositif(data.volumeSolvant)) {
+    toast.error("Le volume solvant doit être une entier positif")
+    return false
+  }
+
+  if (isEmpty(data.condFinal)) {
+    toast.error("Le volume solvant doit être une entier positif")
+    return false
+  }
+
+  return true
 }
 
 function LabledInfo({ label, text }: { label: string; text: string }) {
