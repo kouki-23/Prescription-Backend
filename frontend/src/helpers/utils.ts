@@ -39,6 +39,7 @@ export function getDose(
   patient: Patient,
   moleculeName: string,
 ): string {
+  dose = Number(dose)
   switch (unite) {
     case "mg/kg":
       return (dose * patient.weight).toFixed(2)
