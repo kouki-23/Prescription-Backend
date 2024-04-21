@@ -31,7 +31,6 @@ export default function PrimaryBtn({
       }
     }
   }, [])
-
   return (
     <button
       ref={btn}
