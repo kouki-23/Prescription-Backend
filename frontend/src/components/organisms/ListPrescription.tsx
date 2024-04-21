@@ -1,5 +1,11 @@
 import Title from "@components/atoms/Title"
-import { Cure, Prescription, PrepMolecule } from "@helpers/types"
+import {
+  Cure,
+  Prescription,
+  PrepMolecule,
+  UserRole,
+  CureState,
+} from "@helpers/types"
 import prescriptionIcon from "@assets/icons/prescription.svg"
 import cureIcon from "@assets/icons/cure.svg"
 import jourIcon from "@assets/icons/jour.svg"
@@ -15,6 +21,7 @@ import { useMutation } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import ConfirmModel from "@components/molecules/ConfirmModel"
 import { deleteCure } from "@helpers/apis/cure"
+import { useAuth } from "@helpers/auth/auth"
 
 type Props = {
   prescriptions: Prescription[]
@@ -47,6 +54,7 @@ type CardProps = {
   onClick?: () => void
   hover?: boolean
   OnHoverClick?: () => void
+  color?: "blue" | "green" | "orange"
 }
 
 function Card({
@@ -59,7 +67,20 @@ function Card({
   onClick,
   hover,
   OnHoverClick,
+  color,
 }: CardProps) {
+  const [bgColor, textColor] = useMemo(() => {
+    if (!color || color === "blue") {
+      return ["bg-light-blue  bg-opacity-15", "text-secondary-blue"]
+    }
+    if (color === "green") {
+      return ["bg-green-shade bg-opacity-15", "text-[#50845e]"]
+    }
+    if (color === "orange") {
+      return ["bg-orange-shade bg-opacity-15", "text-orange-shade"]
+    }
+    return ["", ""]
+  }, [color])
   return (
     <div className="relative flex w-full m-2 gap-3 items-center showImage">
       {isExpended !== undefined && setIsExpended !== undefined && (
@@ -70,7 +91,7 @@ function Card({
         />
       )}
       <div
-        className={`flex w-full items-center bg-light-blue bg-opacity-10 rounded-lg p-2 px-5 shadow-sm justify-between ${
+        className={`flex w-full items-center ${bgColor} rounded-lg p-2 px-5 shadow-sm justify-between ${
           onClick ? "cursor-pointer" : ""
         }`}
         onClick={onClick}
@@ -83,7 +104,9 @@ function Card({
           <span className="text-sm ">{subTitle}</span>
         </div>
         <div className="flex items-center">
-          <span className="px-2 font-semibold text-xl transition-all text-secondary-blue">
+          <span
+            className={`px-2 font-semibold text-xl transition-all ${textColor}`}
+          >
             {state}
           </span>
         </div>
@@ -108,7 +131,8 @@ function PrescriptionCard({
   index: number
   refetch: Function
 }) {
-  const naviagator = useNavigate()
+  const { user } = useAuth()
+  const navigator = useNavigate()
   const [deleteModelOpen, setDeleteModelOpen] = useState(false)
   const deletePerscriptionMut = useMutation({
     mutationKey: ["prescription", "delete", prescription.id],
@@ -122,6 +146,10 @@ function PrescriptionCard({
     },
   })
   const [isExpended, setIsExpended] = useState(false)
+  const isCompteted = useMemo(
+    () => prescription.cures.every((c) => c.state === "Terminée"),
+    [prescription],
+  )
   return (
     <>
       <ConfirmModel
@@ -135,12 +163,13 @@ function PrescriptionCard({
         icon={prescriptionIcon}
         title={`Prescription ${index + 1}:`}
         subTitle={prescription.protocolName}
-        state={"En cours"}
+        onClick={() => navigator(`${prescription.id}`)}
+        hover={user?.role === UserRole.MEDECIN ? true : false}
+        OnHoverClick={() => setDeleteModelOpen(true)}
+        state={isCompteted ? "Terminée" : "En Cours"}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
-        onClick={() => naviagator(`/medecin/prescription/${prescription.id}`)}
-        hover={true}
-        OnHoverClick={() => setDeleteModelOpen(true)}
+        color={isCompteted ? "green" : "blue"}
       />
       {isExpended && (
         <div className="ml-10">
@@ -162,6 +191,7 @@ function CureCard({
   index: number
   refetch: Function
 }) {
+  const { user } = useAuth()
   const [isExpended, setIsExpended] = useState(false)
   const [deleteModelOpen, setDeleteModelOpen] = useState(false)
   const deleteCureMut = useMutation({
@@ -187,6 +217,14 @@ function CureCard({
     })
     return groups
   }, [cure])
+  let color: "orange" | "green" | "blue" | undefined = undefined
+  if (cure.state === CureState.PREVU) {
+    color = "orange"
+  } else if (cure.state === CureState.TERMINEE) {
+    color = "green"
+  } else {
+    color = "blue"
+  }
   return (
     <>
       <ConfirmModel
@@ -203,8 +241,9 @@ function CureCard({
         state={cure.state}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
-        hover={true}
+        hover={user?.role === UserRole.MEDECIN ? true : false}
         OnHoverClick={() => setDeleteModelOpen(true)}
+        color={color}
       />
       {isExpended && (
         <div className="ml-10">
@@ -213,13 +252,7 @@ function CureCard({
             .map((p) => {
               const prepM = groupedMolecules.get(p)
               if (prepM)
-                return (
-                  <JourneyCard
-                    key={p}
-                    prepMolecules={prepM}
-                    startDate={cure.startDate}
-                  />
-                )
+                return <JourneyCard key={p} prepMolecules={prepM} cure={cure} />
             })}
         </div>
       )}
@@ -229,16 +262,36 @@ function CureCard({
 
 function JourneyCard({
   prepMolecules,
-  startDate,
+  cure,
 }: {
   prepMolecules: PrepMolecule[]
-  startDate: string
+  cure: Cure
 }) {
   const [isExpended, setIsExpended] = useState(false)
   const date = useMemo(
-    () => addDaysToDate(startDate, prepMolecules[0].day - 1),
-    [startDate],
+    () => addDaysToDate(cure.startDate, prepMolecules[0].day - 1),
+    [cure.startDate],
   )
+
+  let color: "orange" | "green" | "blue" | undefined = undefined
+  let state = undefined
+  if (cure.state === CureState.PREVU) {
+    color = "orange"
+    state = CureState.PREVU
+  } else if (cure.state === CureState.TERMINEE) {
+    color = "green"
+    state = CureState.TERMINEE
+  } else {
+    const isCompleted = prepMolecules.every((p) => p.finished === true)
+    if (isCompleted) {
+      color = "green"
+      state = CureState.TERMINEE
+    } else {
+      color = "blue"
+      state = CureState.EN_COURS
+    }
+  }
+
   return (
     <>
       <Card
@@ -246,9 +299,10 @@ function JourneyCard({
         icon={jourIcon}
         title={`J${prepMolecules[0].day}:`}
         subTitle={date.toISOString().split("T")[0]}
-        state={"En cours"}
+        state={state}
         isExpended={isExpended}
         setIsExpended={setIsExpended}
+        color={color}
       />
       {isExpended && (
         <div className="ml-16">
@@ -257,6 +311,7 @@ function JourneyCard({
               icon={moleculeIcon}
               title={m.productsUsed[0].product.molecule.name}
               subTitle={m.dose + " " + m.unite}
+              color={color === "orange" ? color : m.finished ? "green" : "blue"}
             />
           ))}
         </div>

@@ -1,10 +1,11 @@
+import { UserRole } from "@helpers/types"
 import { createContext, useContext } from "react"
 
 export type User = {
   id: number
   name: string
   username: string
-  role: string
+  role: UserRole
 }
 
 export type AuthData = {

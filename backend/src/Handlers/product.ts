@@ -1,15 +1,16 @@
 import { Response, Request, NextFunction } from "express"
 import { CreateProductBody, IdParams } from "../Middlewares/validation/schema"
 import { Product } from "../Entities/Product"
-import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
-import { Admin } from "typeorm"
-import { User, UserRole } from "../Entities/User"
+import { StatusCode, handleError } from "../Utils/HttpError"
+import { UserRole } from "../Entities/User"
 import {
   createProduct,
   deleteProduct,
   getAllEnabledProducts,
   getAllProducts,
 } from "../Services/productService"
+import { getProductsByMoleculeId } from "../Services/productService"
+
 export async function getAllProductsHandler(
   req: Request<never, never, CreateProductBody, never>,
   res: Response,
@@ -39,6 +40,9 @@ export async function createProductHandler(
     next(handleError(e))
   }
 }
+
+export async function addProductHandler() {}
+
 export async function deleteProductHandler(
   req: Request<IdParams>,
   res: Response,
@@ -50,5 +54,19 @@ export async function deleteProductHandler(
     res.sendStatus(StatusCode.NoContent)
   } catch (e) {
     next(handleError(e))
+  }
+}
+
+export async function getProductsOfMoleculeHandler(
+  req: Request<IdParams>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    const products = await getProductsByMoleculeId(Number(id))
+    return res.json(products)
+  } catch (e) {
+    return next(handleError(e))
   }
 }

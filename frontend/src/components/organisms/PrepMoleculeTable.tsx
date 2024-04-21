@@ -1,7 +1,7 @@
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import TextInput from "@components/atoms/TextInput"
 import Title from "@components/atoms/Title"
-import { Cure, Option, Patient } from "@helpers/types"
+import { Cure, Option, Patient, UserRole } from "@helpers/types"
 import { addDaysToDate, getDose } from "@helpers/utils"
 import {
   createColumnHelper,
@@ -59,6 +59,7 @@ export default function PrepMoleculeTable({
   intercure,
 }: Props) {
   const { user } = useAuth()
+  if (!user) return <></>
   const [isOpen, setIsOpen] = useState(false)
   const [isAddProduitOpen, setIsAddProduitOpen] = useState(false)
   const [data, setData] = useState(transformCureToDataTable(cure))
@@ -179,7 +180,10 @@ export default function PrepMoleculeTable({
                 setValue={setValue}
                 isNumber={true}
                 onBlur={() => setChanges(value)}
-                disabled={info.row.original.validation >= 1}
+                disabled={
+                  user.role !== UserRole.MEDECIN ||
+                  info.row.original.validation >= 1
+                }
               />
               <span className="absolute right-2 text-primary-blue">
                 {info.row.original.unite}
@@ -222,7 +226,10 @@ export default function PrepMoleculeTable({
                   setValue={setValue}
                   isNumber={true}
                   onBlur={() => setChanges(value)}
-                  disabled={info.row.original.validation >= 1}
+                  disabled={
+                    user.role !== UserRole.MEDECIN ||
+                    info.row.original.validation >= 1
+                  }
                 />
                 <span className="absolute right-2 text-primary-blue">%</span>
               </div>
@@ -244,17 +251,19 @@ export default function PrepMoleculeTable({
           }
           setData(newData)
         }
+        const disabled =
+          user.role !== UserRole.MEDECIN || info.row.original.validation >= 1
         return (
           <div className="flex justify-center">
             <input
               className={`bg-primary-gray rounded-lg py-2 px-4 focus:outline-secondary-blue shadow-md ${
-                info.row.original.validation >= 1 ? "bg-secondary-gray" : ""
+                disabled ? "bg-secondary-gray" : ""
               }`}
               type="time"
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onBlur={() => setChanges(value)}
-              disabled={info.row.original.validation >= 1}
+              disabled={disabled}
             />
           </div>
         )
@@ -319,11 +328,13 @@ export default function PrepMoleculeTable({
               text="Enregistrer"
               clickFn={() => setIsOpen(true)}
             />
-            <img
-              className="size-8 cursor-pointer"
-              src={addIcon}
-              onClick={() => setIsAddProduitOpen(true)}
-            />
+            {user.role === UserRole.MEDECIN && (
+              <img
+                className="size-8 cursor-pointer"
+                src={addIcon}
+                onClick={() => setIsAddProduitOpen(true)}
+              />
+            )}
             <img
               className="size-8 cursor-pointer"
               src={fileIcon}
@@ -397,10 +408,28 @@ function Action({
     }
   }, [validation])
 
+  const { user } = useAuth()
+
+  const setVal = useMemo(() => {
+    if (user?.role === UserRole.MEDECIN) {
+      if (validation === 2) {
+        return () => {}
+      }
+      return () => setValidation(validation === 0 ? 1 : 0)
+    } else if (user?.role === UserRole.PHARMACIEN) {
+      if (validation === 0) {
+        return () => {}
+      }
+      return () => setValidation(validation === 1 ? 2 : 1)
+    } else {
+      return () => {}
+    }
+  }, [validation])
+
   return (
     <div className="flex justify-center">
       <div
-        onClick={() => setValidation(validation === 0 ? 1 : 0)}
+        onClick={setVal}
         className={`cursor-pointer size-7 ${valid} border-2 rounded-full`}
       ></div>
     </div>

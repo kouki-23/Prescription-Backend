@@ -2,9 +2,13 @@
 INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Adem', 'medecin', '$2b$10$MgUrAjXg24ChRwvMR.9ji.dfQyCRRNdFp9dbG60CS9ob9UCFzPz9u', 'medecin', NULL);
 INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Mohammed', 'admin', '$2b$10$JoWagb3KbcCNDuskbr4RAuZ3PKrNG4YPHtCHxYkZW7CpOj5VJAU86', 'admin', NULL);
 INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Eya', 'pharmacien', '$2b$10$AAYFLnY1qfTzQGeoVWhuL.hrpqQmfz9Qnv3gzKYoIsByRotYq683e', 'pharmacien', NULL);
-INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('n.mejri', 'n.mejri', '$2a$10$6HcJMvP7QAMm/7V.dG.op.vw8bznGHx3OohEdkd8O8AMDlaFVWYYi', 'medecin', NULL);
-INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('a.hamdi', 'a.hamdi', '$2a$10$6g1i2iiKjTEwr2td/r64nO9BttMp208YSyG7kEWS/ZZPjZ0mDF6/6', 'medecin', NULL);
-INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('f.mghirbi', 'f.mghirbi', '$2a$10$7/xKgEQqXwjHu2dVOcS7Ee3EyOAkhXRPNYDWN9h78ONkZCnsXiEly', 'medecin', NULL);
+--ariana
+INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Nesrine Mejri', 'n.mejri', '$2a$10$6HcJMvP7QAMm/7V.dG.op.vw8bznGHx3OohEdkd8O8AMDlaFVWYYi', 'medecin', NULL);
+INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Anas Haouari', 'a.haouari', '$2a$10$8da44QRuGWlawwrdL3ygkOc0sSeXzQTYHRYuuv/8NPSnZ0MH0lMFe', 'medecin', NULL);
+INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Myriam Saadi', 'm.saadi', '$2a$10$l79dKsEDgvbdCBxEFCv3eulqoa1CXeUqL/.mqtI.NZX23vLKFFGVe', 'medecin', NULL);
+INSERT INTO public."user" (name, username, password, role, "serviceType") VALUES ('Yosra Berrazega', 'y.berrazega', '$2a$10$LCyWZ/kJvS5bqxNj88o0DefzDuWFX0APFUEt7r4GPVW4o5olAtjEe', 'medecin', NULL);
+
+
 
 --protocol
 --INSERT INTO public.protocol(id, name, intercure, "nbCures", details, indications, "histoType", "isCreated") 
@@ -352,3 +356,92 @@ INSERT INTO public.protocole_molecule_association VALUES (59, 1, 400, 'mg/m²', 
 INSERT INTO public.protocole_molecule_association VALUES (60, 1, 2500, 'mg/m²', 'Perf continue', 27, 1);
 
 SELECT pg_catalog.setval('public.protocole_molecule_association_id_seq', 60, true);
+
+--Patients
+INSERT INTO public.patient VALUES (10, '2101/2023', 'I21511111111', 'Lat', 'Ti', 'Femme', 'Marié', '1947-07-06', 62, 145, 1.58, 56, 'Cockroft', 73.69, NULL, NULL, NULL, '2024-04-02 09:47:07.341974', '2024-04-02 09:47:07.341974');
+INSERT INTO public.patient VALUES (12, '649/2024', 'I VGV444444', 'Reb', 'Fat', 'Homme', 'Marié', '1968-04-24', 56, 152, 1.54, 53.9, 'Cockroft', 108.62, NULL, NULL, NULL, '2024-04-02 10:37:05.211297', '2024-04-02 10:37:05.211297');
+INSERT INTO public.patient VALUES (13, '174/2024', 'I 152lllllll', 'Yah', 'Touf', 'Homme', 'Marié', '1656-08-15', 47, 171, 1.49, 65, 'Cockroft', -201.89, NULL, NULL, NULL, '2024-04-02 11:40:34.312865', '2024-04-02 11:40:34.312865');
+INSERT INTO public.patient VALUES (15, '2246/2023', '202325433', 'Sa', 'Hi', 'Femme', 'Marié', '1950-11-24', 49, 151, 1.43, 87, 'MDRD', 58.84, NULL, NULL, NULL, '2024-04-02 11:55:33.322131', '2024-04-02 11:55:33.322131');
+INSERT INTO public.patient VALUES (16, '86/2024', '202313810', 'Z', 'M', 'Femme', 'Marié', '1964-02-17', 68, 156, 1.72, 53, 'Cockroft', 106.75, NULL, NULL, NULL, '2024-04-03 07:57:24.672976', '2024-04-03 07:57:24.672976');
+INSERT INTO public.patient VALUES (17, '622/2022', 'I326522222', 'na', 'ki', 'Femme', 'Marié', '1974-11-05', 74, 181, 1.93, 71, 'Cockroft', 98.64, NULL, NULL, NULL, '2024-04-03 09:43:10.563004', '2024-04-03 09:43:10.563004');
+INSERT INTO public.patient VALUES (18, '1993', 'i hgy2222222', 'Mosta', 'Hl', 'Femme', 'Marié', '1949-02-10', 52, 161, 1.52, 62, 'Cockroft', 56.7, NULL, NULL, NULL, '2024-04-03 09:51:58.027896', '2024-04-03 09:51:58.027896');
+INSERT INTO public.patient VALUES (20, '1009/2022', 'I 202000:;xc,vdkvk', 'Radh', 'Mass', 'Femme', 'Marié', '1968-11-13', 75, 161, 1.83, 89, 'Cockroft', 74.49, NULL, NULL, NULL, '2024-04-03 11:54:44.661254', '2024-04-03 11:54:44.661254');
+INSERT INTO public.patient VALUES (9, '1035/2023', '2033444', 'Nour', 'Ma', 'Homme', 'Marié', '1956-12-12', 88, 183, 2, 174, 'Cockroft', 45.41, NULL, 'C5
+Complication à type de cholangite auto immune', NULL, '2024-04-02 08:44:28.319539', '2024-04-05 07:53:17.44153');
+INSERT INTO public.patient VALUES (21, '24/2024', '20242145', 'jim', 'sin', 'Homme', 'Marié', '1981-01-05', 70, 160, 1.76, 80, 'Cockroft', 104.4, NULL, NULL, NULL, '2024-04-05 13:05:10.12566', '2024-04-05 13:05:10.12566');
+
+SELECT pg_catalog.setval('public.patient_id_seq', 21, true);
+
+-- vehicules
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 1000, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 1000, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 500, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 500, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 250, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 250, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 100, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'NaCl 0,9%', 100, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 1000, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 1000, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 500, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 500, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 250, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 250, true);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 100, false);
+INSERT INTO public.vehicule(
+	type, content, volume, "PVC")
+	VALUES ( 'Flacon', 'G5%', 100, true);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 1000);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 500);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 250);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'NaCl 0,9%', 100);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 1000);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 500);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 250);
+INSERT INTO public.vehicule(
+	type, content, volume)
+	VALUES ( 'Poche', 'G5%', 100);

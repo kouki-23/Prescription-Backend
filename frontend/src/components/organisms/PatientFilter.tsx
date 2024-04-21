@@ -9,7 +9,7 @@ type Props = {
 
 export default function PatientFilter({ filters, setFilters }: Props) {
   return (
-    <div className="container mx-auto flex items-center justify-center gap-7 my-20 max-lg:flex-col">
+    <div className="container mx-auto flex items-center justify-evenly my-20 max-lg:flex-col">
       <LabeledFilter
         label="DMI"
         value={filters.DMI}
@@ -33,11 +33,11 @@ export default function PatientFilter({ filters, setFilters }: Props) {
           setValue={(s) => setFilters({ ...filters, birthDate: s })}
         />
       </div>
-      <LabeledFilter
+      {/*<LabeledFilter
         label="Genre"
         value={filters.gender}
         setValue={(s) => setFilters({ ...filters, gender: s })}
-      />
+  />*/}
     </div>
   )
 }

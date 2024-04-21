@@ -1,14 +1,6 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from "typeorm"
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
 import { ProtocolAssociation } from "./ProtocolAssociation"
 import { ProtocoleMoleculeAssociation } from "./ProtocoleMoleculeAssociation"
-import { Prescription } from "./Prescription"
 
 //TODO : auto genereated id and change backend/src/Services/protocolService.ts:12
 @Entity()

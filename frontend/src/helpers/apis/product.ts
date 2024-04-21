@@ -10,3 +10,7 @@ export async function addProduct(data: any) {
 export async function deleteProduct(id: number) {
   await axios.delete(`/product/${id}`)
 }
+
+export async function getProductsOfMolecule(moleculeId: number) {
+  return axios.get<Product[]>(`/product/molecule/${moleculeId}`)
+}

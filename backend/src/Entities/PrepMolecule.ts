@@ -2,10 +2,9 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Entity,
-  OneToOne,
-  JoinColumn,
   ManyToOne,
   OneToMany,
+  DeleteDateColumn,
 } from "typeorm"
 import { Vehicule } from "./Vehicule"
 import { Cure } from "./Cure"
@@ -24,9 +23,11 @@ export class PrepMolecule {
   @Column("decimal")
   solventVolume: number
 
+  // can be deleted (can calculate it )
   @Column("decimal")
   finalVolume: number
 
+  // need to be deleted (can calculate it )
   @Column("decimal")
   VolumePA: number
 
@@ -49,6 +50,12 @@ export class PrepMolecule {
   @Column()
   validation: 0 | 1 | 2 // 0 : no validation | 1 : medecin | 2 : medecin && pharmacien
 
+  @Column({ default: false })
+  finished: boolean
+
+  @Column({ default: false })
+  isAdjusted: boolean
+
   @Column()
   theoreticalDose: number
 
@@ -61,8 +68,7 @@ export class PrepMolecule {
   @Column({ nullable: true })
   comment?: string
 
-  @OneToOne(() => Vehicule)
-  @JoinColumn()
+  @ManyToOne(() => Vehicule)
   vehicule: Vehicule
 
   @OneToMany(() => ProductUsed, (p) => p.prepMolecule, {
@@ -70,13 +76,14 @@ export class PrepMolecule {
   })
   productsUsed: ProductUsed[]
 
-  @ManyToOne(() => Cure, (b) => b.prepMolecule, {
-    onDelete: "CASCADE",
-  })
+  @ManyToOne(() => Cure, (b) => b.prepMolecule)
   cure: Cure
 
   @OneToMany(() => PrepMoleculeHistory, (p) => p.prepMolecule)
   prepMoleculeHistory: PrepMoleculeHistory[]
+
+  @DeleteDateColumn()
+  deleted_at: Date
 
   constructor(
     day: number,

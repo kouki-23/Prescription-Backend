@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -73,4 +74,7 @@ export class Patient {
 
   @UpdateDateColumn()
   updated_at: Date
+
+  @DeleteDateColumn()
+  deleted_at: Date
 }

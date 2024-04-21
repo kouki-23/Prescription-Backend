@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -52,6 +53,9 @@ export class Prescription {
     cascade: true,
   })
   cures: Cure[]
+
+  @DeleteDateColumn()
+  deleted_at: Date
 
   constructor(
     protocolName: string,

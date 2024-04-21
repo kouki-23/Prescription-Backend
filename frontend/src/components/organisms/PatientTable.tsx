@@ -4,7 +4,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -12,16 +11,21 @@ import deleteIcon from "@assets/icons/delete.svg"
 import listIcon from "@assets/icons/list.svg"
 import addIcon from "@assets/icons/add.svg"
 import editIcon from "@assets/icons/edit.svg"
+//import infoIcon from "@assets/icons/info.svg"
 import { useMutation } from "@tanstack/react-query"
 import { deletePatient } from "@helpers/apis/patient"
 import { toast } from "react-toastify"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import AddPrescription from "@components/molecules/AddPrescription"
 import { useNavigate } from "react-router-dom"
 import { getDate } from "@helpers/utils"
 import { twMerge } from "tailwind-merge"
 import ConfirmModel from "@components/molecules/ConfirmModel"
 import { handleError } from "@helpers/apis"
+import { useAuth } from "@helpers/auth/auth"
+import { UserRole } from "@helpers/types"
+//import axios from "axios"
+//import Model from "@components/atoms/Model"
 
 type Props = {
   data: TPatientData[]
@@ -40,6 +44,7 @@ export type TPatientData = {
 }
 
 export default function PatientTable({ data, refetch, filters }: Props) {
+  const { user } = useAuth()
   const mutation = useMutation({
     mutationKey: ["patients"],
     mutationFn: (id: number) => deletePatient(id),
@@ -80,37 +85,69 @@ export default function PatientTable({ data, refetch, filters }: Props) {
       cell: (info) => <PrescriptionActions patient={info.row.original} />,
       header: "Prescription",
     }),
-    columnHelper.display({
-      id: "Actions",
+    /*columnHelper.display({
+      header: "mcda",
       cell: (info) => {
-        const [deleteConfirm, setDeleteConfirm] = useState(false)
+        const [isOpen, setIsOpen] = useState(false)
+        const [data, setData] = useState({})
         return (
           <>
-            <ConfirmModel
-              text={`Voulez-vous vraiment supprimer ce${
-                info.row.original.gender == "Femme" ? "tte" : ""
-              } patient${info.row.original.gender == "Femme" ? "e" : ""}?`}
-              isOpen={deleteConfirm}
-              setIsOpen={setDeleteConfirm}
-              confirmFn={() => mutation.mutate(info.row.original.id)}
+            <MCDAModel data={data} isOpen={isOpen} setIsOpen={setIsOpen} />
+            <Icon
+              src={infoIcon}
+              onCLick={() => {
+                axios
+                  .post(
+                    "http://102.219.179.156:5030/graphql",
+                    `{"query": "query AllValuesByCode ($index: String!) { allValuesByCode (index: $index) { value attribute { name } } }","operationName": "AllValuesByCode","variables": { "index": "14785236" }}`,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    },
+                  )
+                  .then((data) => {
+                    setData(data.data.data)
+                    setIsOpen(true)
+                  })
+                  .catch(() => {})
+              }}
             />
-            <Actions deleteFn={() => setDeleteConfirm(true)} />
           </>
         )
       },
-      header: "Actions",
-    }),
+    }),*/
   ]
-  useEffect(() => {
-    console.log(columns)
-  }, [filters])
+
+  if (user && user.role === UserRole.MEDECIN)
+    columns.push(
+      columnHelper.display({
+        id: "Actions",
+        cell: (info) => {
+          const [deleteConfirm, setDeleteConfirm] = useState(false)
+          return (
+            <>
+              <ConfirmModel
+                text={`Voulez-vous vraiment supprimer ce${
+                  info.row.original.gender == "Femme" ? "tte" : ""
+                } patient${info.row.original.gender == "Femme" ? "e" : ""}?`}
+                isOpen={deleteConfirm}
+                setIsOpen={setDeleteConfirm}
+                confirmFn={() => mutation.mutate(info.row.original.id)}
+              />
+              <Actions deleteFn={() => setDeleteConfirm(true)} />
+            </>
+          )
+        },
+        header: "Actions",
+      }),
+    )
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     state: {
       columnFilters: filters,
     },
@@ -118,7 +155,7 @@ export default function PatientTable({ data, refetch, filters }: Props) {
 
   return (
     <>
-      <table className="container mx-auto text-sm table-fixed border-collapse rounded-xl border-hidden shadow">
+      <table className="container mx-auto text-sm table-fixed border-collapse rounded-xl border-hidden shadow mb-10">
         <thead className="text-white-shade">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr className="" key={headerGroup.id}>
@@ -179,17 +216,23 @@ type PrescriptionActionsProps = {
 }
 
 function PrescriptionActions({ patient }: PrescriptionActionsProps) {
+  const { user } = useAuth()
   const navigator = useNavigate()
   const [isPrescriptionOpen, setIsPrescriptionOpen] = useState(false)
+  if (!user) return <div></div>
   return (
     <>
-      <AddPrescription
-        patient={patient}
-        isOpen={isPrescriptionOpen}
-        setIsOpen={setIsPrescriptionOpen}
-      />
+      {user.role === UserRole.MEDECIN && (
+        <AddPrescription
+          patient={patient}
+          isOpen={isPrescriptionOpen}
+          setIsOpen={setIsPrescriptionOpen}
+        />
+      )}
       <div className="flex justify-center gap-4">
-        <Icon src={addIcon} onCLick={() => setIsPrescriptionOpen(true)} />
+        {user.role === UserRole.MEDECIN ? (
+          <Icon src={addIcon} onCLick={() => setIsPrescriptionOpen(true)} />
+        ) : null}
         <Icon
           src={listIcon}
           onCLick={() => navigator(`${patient.id}/prescription`)}
@@ -216,3 +259,21 @@ function Icon({
     />
   )
 }
+
+/*function MCDAModel({ data, isOpen, setIsOpen }: any) {
+  const d = data.allValuesByCode
+  return (
+    <Model isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      {d ? (
+        d.map((a: any) => (
+          <div className="grid grid-cols-2">
+            <p>{a.attribute.name} : </p>
+            <p>{a.value}</p>
+          </div>
+        ))
+      ) : (
+        <p>no info</p>
+      )}
+    </Model>
+  )
+}*/

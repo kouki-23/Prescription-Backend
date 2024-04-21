@@ -7,7 +7,7 @@ import ErrorPage from "@pages/Error/ErrorPage"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams } from "react-router-dom"
 import backIcon from "@assets/icons/back.svg"
-import { Patient, Prescription } from "@helpers/types"
+import { Patient, Prescription, UserRole } from "@helpers/types"
 import Title from "@components/atoms/Title"
 import { useEffect, useMemo, useState } from "react"
 import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
@@ -23,6 +23,7 @@ import Model from "@components/atoms/Model"
 import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import DateInput from "@components/atoms/DateInput"
+import { useAuth } from "@helpers/auth/auth"
 
 type Props = {}
 
@@ -356,11 +357,13 @@ function InfoText({
   isNumber?: boolean
   isDate?: boolean
 }) {
+  const { user } = useAuth()
+  if (!user) return <></>
   const [editMode, setEditMode] = useState(false)
   return (
     <div className="flex gap-3 items-center py-1 showImage">
       <span>{label}:</span>
-      {editFn && setValue && editMode ? (
+      {user.role == UserRole.MEDECIN && editFn && setValue && editMode ? (
         !isDate ? (
           <TextInput
             className="w-full"
@@ -376,7 +379,8 @@ function InfoText({
           {value + (unite ? " " + unite : "")}
         </span>
       )}
-      {editFn &&
+      {user.role == UserRole.MEDECIN &&
+        editFn &&
         (!editMode ? (
           <img
             className="size-4 opacity-80 cursor-pointer hidden"

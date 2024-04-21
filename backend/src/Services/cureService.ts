@@ -94,7 +94,21 @@ export async function deleteCure(cureId: number) {
   })
   console.log(nextCures)
   await Promise.all([
-    repo.delete({ id: cure.id }),
-    ...nextCures.map((c) => repo.delete({ id: c.id })),
+    repo.softDelete({ id: cure.id }),
+    ...nextCures.map((c) => repo.softDelete({ id: c.id })),
   ])
+}
+
+export async function getCureByPrepMoleculeId(prepMoleculeId: number) {
+  const cure = await repo.findOne({
+    where: {
+      prepMolecule: {
+        id: prepMoleculeId,
+      },
+    },
+  })
+  if (!cure) {
+    throw "no cure"
+  }
+  return cure
 }

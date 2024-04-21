@@ -157,3 +157,23 @@ export const createProductBodySchema = z.object({
   disable: z.boolean(),
 })
 export type CreateProductBody = z.infer<typeof createProductBodySchema>
+
+export const partialProductSchema = z.object({
+  productId: z.number(),
+  quantity: z.number().nonnegative(),
+  frac: z.number().nonnegative(),
+})
+
+export type PartialProduct = z.infer<typeof partialProductSchema>
+
+export const adjustPrepMoleculeBodySchema = z.object({
+  vehiculeId: z.number().positive(),
+  condFinal: z.string(),
+  volumeSolvant: z.number().positive(),
+  repartitionProducts: z.array(partialProductSchema),
+  fractionProducts: z.array(partialProductSchema),
+})
+
+export type AdjustPrepMoleculeBody = z.infer<
+  typeof adjustPrepMoleculeBodySchema
+>

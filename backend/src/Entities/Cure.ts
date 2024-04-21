@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -40,9 +41,11 @@ export class Cure {
 
   @OneToMany(() => PrepMolecule, (b) => b.cure, {
     cascade: true,
-    onDelete: "CASCADE",
   })
   prepMolecule: PrepMolecule[]
+
+  @DeleteDateColumn()
+  deleted_at: Date
 
   constructor(
     startDate: Date,

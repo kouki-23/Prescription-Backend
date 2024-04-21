@@ -42,7 +42,9 @@ export async function createPrescrptition(data: CreatePrescriptionBody) {
   //creating the first cure
   let cure = new Cure(startDate, CureState.EN_COURS, prescription, [])
   protocol.protocolMoleculeAssociation.map((p) => {
-    const product = products.find((p) => p.molecule.id === p.molecule.id)
+    const product = products.find(
+      (product) => product.molecule.id === p.molecule.id,
+    )
     if (product) {
       const prepMolecule: PrepMolecule = new PrepMolecule(
         p.day,
@@ -141,5 +143,16 @@ export async function updatePrescription(id: number, prescription: any) {
 }
 
 export async function deletePrescription(id: number) {
-  return repo.delete({ id })
+  const prescription = await repo.findOne({
+    where: { id },
+    relations: {
+      cures: {
+        prepMolecule: true,
+      },
+    },
+  })
+  if (!prescription) {
+    throw new HttpError("prescription introuvable ", StatusCode.NotFound)
+  }
+  await repo.softRemove(prescription)
 }

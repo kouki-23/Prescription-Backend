@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
@@ -20,6 +20,12 @@ import AddProtocolPage from "@pages/Protocol/AddProtocol"
 import SpecialityList from "@pages/Speciality/SpecialityList"
 import SideNavbar from "@components/organisms/SideNavbar"
 import AddSpeciality from "@pages/Speciality/AddSpeciality"
+import ListProtocolPage from "@pages/Protocol/ListProtocol"
+import { UserRole } from "@helpers/types"
+import NavBar from "@components/molecules/NavBar"
+import AdjustementPage from "@pages/Adjustement/AdjustementPage"
+import AdjustementDetailsPage from "@pages/Adjustement/AdjustementDetailsPage"
+const FicheFabrication = lazy(() => import("@pages/FAB/FicheFabrication"))
 
 globalDefault()
 
@@ -34,39 +40,61 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route element={<AuthGuard />}>
               <Route path="/" element={<Index />} />
             </Route>
-            <Route path="/admin" element={<AuthGuard role="admin" />}>
+            <Route path="/admin" element={<AuthGuard role={UserRole.ADMIN} />}>
               <Route path="" element={<SideNavbar />}>
                 <Route path="specialite" element={<SpecialityList />} />
                 <Route path="ajouterSpecialite" element={<AddSpeciality />} />
               </Route>
               <Route path="ajouteProtocole" element={<AddProtocolPage />} />
             </Route>
-            <Route element={<AuthGuard role="medecin" />}>
+            <Route
+              element={
+                <AuthGuard role={[UserRole.MEDECIN, UserRole.PHARMACIEN]} />
+              }
+            >
+              <Route path="/FAB/:prepid" element={<FicheFabrication />} />
               <Route
                 path="/:prescriptionid/:cureorder/file"
                 element={<PrescriptionFilePage />}
               />
             </Route>
             <Route element={<Layout />}>
-              <Route path="/medecin" element={<AuthGuard role="medecin" />}>
+              <Route
+                path="/medecin"
+                element={<AuthGuard role={UserRole.MEDECIN} />}
+              >
                 <Route path="" element={<ListPatient />} />
-                <Route path="addPatient" element={<AddPatient />} />
-                <Route
-                  path=":patientId/prescription"
-                  element={<PrescriptionPage />}
-                />
-                <Route path="prescription/:id">
-                  <Route path="" element={<PrescriptionDetailsPage />} />
+                <Route path=":patientId/prescription">
+                  <Route path="" element={<PrescriptionPage />} />
+                  <Route path=":id" element={<PrescriptionDetailsPage />} />
                 </Route>
-                <Route
-                  path="prescription/:id"
-                  element={<PrescriptionDetailsPage />}
-                />
+                <Route path="addPatient" element={<AddPatient />} />
+              </Route>
+              <Route
+                path="/admin"
+                element={<AuthGuard role={UserRole.ADMIN} />}
+              >
+                <Route path="ajouterprotocole" element={<AddProtocolPage />} />
+                <Route path="" element={<ListProtocolPage />} />
               </Route>
               <Route
                 path="/pharmacien"
-                element={<AuthGuard role="pharmacien" />}
-              ></Route>
+                element={<AuthGuard role={UserRole.PHARMACIEN} />}
+              >
+                <Route
+                  path="ajustement/adjust/:prepid"
+                  element={<AdjustementDetailsPage />}
+                />
+                <Route element={<NavBar />}>
+                  <Route path="" element={<ListPatient />} />
+                  <Route path="ajustement" element={<AdjustementPage />} />
+                  <Route path="planning" element={<ListPatient />} />
+                </Route>
+                <Route path=":patientId/prescription">
+                  <Route path="" element={<PrescriptionPage />} />
+                  <Route path=":id" element={<PrescriptionDetailsPage />} />
+                </Route>
+              </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />
           </Routes>
