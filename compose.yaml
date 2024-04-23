@@ -20,6 +20,8 @@ services:
       - postgres_network
       - prescription
     restart: on-failure
+    volumes:
+      - backendLogs:/app/logs/
   db:
     image: postgres
     networks:
@@ -33,6 +35,7 @@ services:
 
 volumes:
   dbData:
+  backendLogs:
 
 networks:
   prescription: {}
