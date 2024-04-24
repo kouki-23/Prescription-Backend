@@ -64,7 +64,6 @@ export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>
 export const createMoleculeBodySchema = z.object({
   name: z.string(),
   way: z.string(),
-  perfusionType: z.string(),
   comment: z.string().optional(),
 })
 export type CreateMoleculeBody = z.infer<typeof createMoleculeBodySchema>

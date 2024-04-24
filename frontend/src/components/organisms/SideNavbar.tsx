@@ -1,4 +1,3 @@
-import dashboardIcon from "@assets/icons/dashboard.svg"
 import userIcon from "@assets/icons/user_white.svg"
 import protocoleIcon from "@assets/icons/protocoles.svg"
 import moleculeIcon from "@assets/icons/molecule_white.svg"
@@ -12,7 +11,9 @@ type Props = {}
 
 export default function SideNavbar({}: Props) {
   const { user, logout } = useAuth()
-  const [selected, setSelected] = useState(getPath(window.location.pathname))
+  const [selected, setSelected] = useState(
+    getPath(window.location.pathname) || "user", // for now it default to user. need to be changed later
+  )
   const navigate = useNavigate()
 
   function logoutClick() {
@@ -34,19 +35,19 @@ export default function SideNavbar({}: Props) {
       </div>
       <div className="h-screen w-1/5 z-10">
         <aside className="pt-10 fixed bg-primary-blue h-screen w-1/5 z-10 shadow-md ">
-          <NavElement
+          {/*<NavElement
             icon={dashboardIcon}
             text="Dashboard"
             selected={selected}
             setSelected={setSelected}
             to=""
             size={8}
-          />
+  />*/}
           <NavElement
             icon={userIcon}
             text="Utilisateurs"
             size={7}
-            to="users"
+            to="user"
             selected={selected}
             setSelected={setSelected}
           />
@@ -54,7 +55,7 @@ export default function SideNavbar({}: Props) {
             icon={protocoleIcon}
             text="Protocoles"
             size={8}
-            to="protocols"
+            to="protocol"
             selected={selected}
             setSelected={setSelected}
           />
@@ -62,7 +63,7 @@ export default function SideNavbar({}: Props) {
             icon={moleculeIcon}
             text="Molecules"
             size={8}
-            to="molecules"
+            to="molecule"
             selected={selected}
             setSelected={setSelected}
           />

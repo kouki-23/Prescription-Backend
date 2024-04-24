@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm"
 import { PrepMoleculeHistory } from "./HistoryEntities/PrepMoleculeHistory"
 import { PatientHistory } from "./HistoryEntities/PatientHistory"
 
@@ -40,4 +46,7 @@ export class User {
 
   @OneToMany(() => PrepMoleculeHistory, (prep) => prep.modifiedBy)
   prepMoleculeHistory: PrepMoleculeHistory
+
+  @DeleteDateColumn()
+  deleted_at: Date
 }
