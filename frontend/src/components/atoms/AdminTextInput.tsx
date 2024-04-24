@@ -12,9 +12,11 @@ export function AdminTextInput({
   setValue,
   className,
   disabled,
+  isNumber,
 }: Tprops) {
   return (
     <input
+      type={isNumber ? "number" : "text"}
       className={twMerge(
         `bg-white-shade bg-opacity-50 rounded-lg py-2 px-4 border border-primary-blue border-opacity-20 w-72 h-7  focus:outline-secondary-blue shadow-none ${
           disabled ? "bg-secondary-gray" : null

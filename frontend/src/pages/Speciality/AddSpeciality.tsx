@@ -5,7 +5,7 @@ import { Switch } from "@headlessui/react"
 import { getAllMolecules } from "@helpers/apis/molecule"
 import { Option } from "@helpers/types"
 import ErrorPage from "@pages/Error/ErrorPage"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { twMerge } from "tailwind-merge"
@@ -21,21 +21,26 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import TextInput from "@components/atoms/TextInput"
+import SecondaryBtn from "@components/atoms/SecondaryBtn"
+import deleteIcon from "@assets/icons/delete.svg"
+import addIcon from "@assets/icons/add.svg"
 
-type ProductForm = {
+type Flacon = {
+  dosage: number
+  volume: number
+}
+
+export type ProductForm = {
   moleculeId: number
   minConcentration: number
   maxConcentration: number
-  speciality: string
+  specialite: string
   dilutionVolume: number
-  flacons: {
-    dosage: number
-    volume: number
-  }[]
+  flacons: Flacon[]
   lightShelter: boolean
-  SensivityPVC: boolean
-  conservrationDilutionFridge: boolean
-  concervationtionPeriodDilution: number
+  SensibilityPVC: boolean
+  conservationDilutionFridge: boolean
+  conservationPeriodDilution: number
   conservationReconstitutionFridge: boolean
   isReconstruct: boolean
   solventReconstitution: string
@@ -61,7 +66,7 @@ export default function AddSpeciality() {
     moleculeId: 0,
     minConcentration: 0,
     maxConcentration: 0,
-    speciality: "",
+    specialite: "",
     dilutionVolume: 0,
     flacons: [
       {
@@ -70,16 +75,16 @@ export default function AddSpeciality() {
       },
     ],
     lightShelter: false,
-    SensivityPVC: false,
-    conservrationDilutionFridge: false,
-    concervationtionPeriodDilution: 0,
+    SensibilityPVC: false,
+    conservationDilutionFridge: false,
+    conservationPeriodDilution: 0,
     conservationReconstitutionFridge: false,
     isReconstruct: false,
     solventReconstitution: "",
     volumeReconstitution: 0,
     comment: "",
   })
-
+  const queryClient = useQueryClient()
   const addProtocolMutation = useMutation({
     mutationKey: ["product", "add"],
     mutationFn: () => addProduct(data),
@@ -87,7 +92,9 @@ export default function AddSpeciality() {
       toast.error("Une erreur s'est produit")
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] })
       toast.success("La spécialité est ajoutée avec succés")
+      navigator("/admin/specialite")
     },
   })
 
@@ -148,8 +155,8 @@ export default function AddSpeciality() {
           />
           <LabledSwitch
             label=" Sensibilité PVC"
-            enabled={data.SensivityPVC}
-            setEnabled={(b) => setData({ ...data, SensivityPVC: b })}
+            enabled={data.SensibilityPVC}
+            setEnabled={(b) => setData({ ...data, SensibilityPVC: b })}
           />
           <LabledSwitch
             label="Abri Lumière"
@@ -165,17 +172,17 @@ export default function AddSpeciality() {
           />
           <LabledSwitch
             label="Conservation dilution frigo"
-            enabled={data.conservrationDilutionFridge}
+            enabled={data.conservationDilutionFridge}
             setEnabled={(b) =>
-              setData({ ...data, conservrationDilutionFridge: b })
+              setData({ ...data, conservationDilutionFridge: b })
             }
           />
-          {data.conservrationDilutionFridge && (
+          {data.conservationDilutionFridge && (
             <AdminLabledInput
               text="Délai conservation (jours)"
-              value={String(data.concervationtionPeriodDilution)}
+              value={String(data.conservationPeriodDilution)}
               setValue={(s) =>
-                setData({ ...data, concervationtionPeriodDilution: Number(s) })
+                setData({ ...data, conservationPeriodDilution: Number(s) })
               }
             />
           )}
@@ -183,9 +190,9 @@ export default function AddSpeciality() {
         <div className="space-y-8">
           <AdminLabledInput
             text="Spécialité"
-            value={data.speciality}
+            value={data.specialite}
             setValue={(value: string) =>
-              setData({ ...data, speciality: value })
+              setData({ ...data, specialite: value })
             }
             isNumber={false}
           />
@@ -198,6 +205,13 @@ export default function AddSpeciality() {
             isNumber={true}
           />
         </div>
+      </div>
+      <div className="mt-10">
+        <Title text="Flacons" className="py-4" />
+        <FlaconTable
+          data={data.flacons}
+          setData={(flacons) => setData({ ...data, flacons })}
+        />
       </div>
       <div className="mx-6 my-16 space-y-8">
         <BigSwitch
@@ -239,15 +253,17 @@ export default function AddSpeciality() {
           onChange={(e) => setData({ ...data, comment: e.target.value })}
         ></textarea>
       </div>
-      <PrimaryBtn
-        className="absolute right-4 "
-        text="Ajouter"
-        clickFn={() => {
-          if (Verif(data)) {
-            addProtocolMutation.mutate()
-          }
-        }}
-      />
+      <div className="flex gap-28 justify-center mt-24 mb-12">
+        <SecondaryBtn text="Annuler" clickFn={() => navigator(-1)} />
+        <PrimaryBtn
+          text="Ajouter"
+          clickFn={() => {
+            if (Verif(data)) {
+              addProtocolMutation.mutate()
+            }
+          }}
+        />
+      </div>
     </div>
   )
 }
@@ -257,7 +273,7 @@ function Verif(data: ProductForm): Boolean {
     toast.error("Veuillez selectionner une molécule")
     return false
   }
-  if (isEmpty(data.speciality)) {
+  if (isEmpty(data.specialite)) {
     toast.error("Veuillez saisir une spécialité")
     return false
   }
@@ -308,10 +324,7 @@ function Verif(data: ProductForm): Boolean {
     toast.error("Le volume dilution doit être un décimal")
     return false
   }
-  if (
-    data.conservrationDilutionFridge &&
-    !data.concervationtionPeriodDilution
-  ) {
+  if (data.conservationDilutionFridge && !data.conservationPeriodDilution) {
     toast.error("Veuillez saisir le délai de conservation")
     return false
   }
@@ -425,18 +438,14 @@ function BigSwitch({ option1, option2, enabled, setEnabled }: BigSwitchProps) {
     </Switch>
   )
 }
-type Flacons = {
-  dosage: number
-  volume: number
-}
-function FlaconTable() {
-  const columnHelperFlacon = createColumnHelper()
-  const [flacons, setFlacons] = useState<Flacons[]>([
-    {
-      dosage: 0,
-      volume: 0,
-    },
-  ])
+function FlaconTable({
+  data,
+  setData,
+}: {
+  data: Flacon[]
+  setData: (flacons: Flacon[]) => void
+}) {
+  const columnHelperFlacon = createColumnHelper<Flacon>()
   const columns = [
     columnHelperFlacon.accessor((row) => row.dosage, {
       id: "dosage",
@@ -451,10 +460,114 @@ function FlaconTable() {
               value={String(value)}
               setValue={setValue}
               isNumber={true}
+              onBlur={() => {
+                let temp = [...data]
+                temp[info.row.index].dosage = Number(value)
+                setData(temp)
+              }}
+            />
+          </div>
+        )
+      },
+    }),
+    columnHelperFlacon.accessor((row) => row.volume, {
+      id: "volume",
+      header: "Volume",
+      cell: (info) => {
+        const initialvalue = info.getValue()
+        const [value, setValue] = useState(String(initialvalue))
+        return (
+          <div className="">
+            <TextInput
+              className="focus:outline-secondary-blue shadow-none border-primary-blue border-opacity-20 w-24"
+              value={String(value)}
+              setValue={setValue}
+              isNumber={true}
+              onBlur={() => {
+                let temp = [...data]
+                temp[info.row.index].volume = Number(value)
+                setData(temp)
+              }}
+            />
+          </div>
+        )
+      },
+    }),
+    columnHelperFlacon.display({
+      header: "Action",
+      cell: (info) => {
+        return (
+          <div className="flex justify-center">
+            <img
+              className="size-8 cursor-pointer"
+              src={deleteIcon}
+              onClick={() =>
+                setData(data.filter((_, i) => i != info.row.index))
+              }
             />
           </div>
         )
       },
     }),
   ]
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  return (
+    <>
+      <table className="w-full text-sm border-collapse rounded-xl border-hidden shadow mb-10">
+        <thead className="text-white-shade">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr className="" key={headerGroup.id}>
+              {headerGroup.headers.map((header, index) => (
+                <th
+                  className={`py-3 bg-primary-blue ${
+                    index === 0 ? "rounded-tl-xl" : ""
+                  } ${
+                    index === headerGroup.headers.length - 1
+                      ? "rounded-tr-xl"
+                      : ""
+                  }
+                `}
+                  key={header.id}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td className="text-center py-3" key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+          <tr className="">
+            <td colSpan={3} className="p-2 bg-gray-table">
+              <div className={`flex justify-center items-center`}>
+                <img
+                  src={addIcon}
+                  onClick={() => setData([...data, { dosage: 0, volume: 0 }])}
+                />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  )
 }

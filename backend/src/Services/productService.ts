@@ -81,29 +81,32 @@ export async function getAllEnabledProducts() {
   return products
 }
 export async function createProduct(productBody: CreateProductBody) {
-  const product = new Product(
-    productBody.specialite,
-    productBody.dosage,
-    productBody.dosageUnite,
-    productBody.volume,
-    productBody.volumeUnite,
-    productBody.isReconstruct,
-    productBody.solvantReconstitution,
-    productBody.volumeReconstitution,
-    productBody.volumeReconstitutionUnite,
-    productBody.conservationDilutionFridge,
-    productBody.dilutionVolume,
-    productBody.dilutionVolumeUnite,
-    productBody.minConcentration,
-    productBody.maxConcentration,
-    productBody.concentrationUnite,
-    productBody.conservationDilutionFridge,
-    productBody.conservationPeriodDilution,
-    productBody.lightShelter,
-    productBody.sensitivityPVC,
-    productBody.disable,
-  )
-  return await repo.save(product)
+  const products = productBody.flacons.map((flacon) => {
+    return new Product(
+      productBody.moleculeId,
+      productBody.specialite,
+      flacon.dosage,
+      "mg",
+      flacon.volume,
+      "ml",
+      productBody.isReconstruct,
+      productBody.solventReconstitution,
+      productBody.volumeReconstitution,
+      "ml",
+      productBody.conservationDilutionFridge,
+      productBody.dilutionVolume,
+      "ml",
+      productBody.minConcentration,
+      productBody.maxConcentration,
+      "mg/ml",
+      productBody.conservationDilutionFridge,
+      productBody.conservationPeriodDilution,
+      productBody.lightShelter,
+      productBody.SensibilityPVC,
+      false,
+    )
+  })
+  return await repo.save(products)
 }
 export async function deleteProduct(id: number) {
   const product = await repo.findOne({

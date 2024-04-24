@@ -18,7 +18,7 @@ import { getProductsOfMoleculeHandler } from "../Handlers/product"
 const router = Router()
 
 router.post(
-  "/,",
+  "/",
   isAdmin,
   validateRequestBody(createProductBodySchema),
   createProductHandler,

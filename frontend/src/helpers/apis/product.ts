@@ -1,10 +1,11 @@
 import axios from "axios"
 import { Product } from "@helpers/types"
+import { ProductForm } from "@pages/Speciality/AddSpeciality"
 export async function getAllProducts() {
   const response = await axios.get<Product[]>("/product/")
   return response.data
 }
-export async function addProduct(data: any) {
+export async function addProduct(data: ProductForm) {
   await axios.post("/product/", data)
 }
 export async function deleteProduct(id: number) {

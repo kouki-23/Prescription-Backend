@@ -83,9 +83,14 @@ export class Product {
 
   // DCI
   @ManyToOne(() => Molecule, (m) => m.products)
-  @JoinColumn()
+  @JoinColumn({ name: "moleculeId" })
   molecule: Molecule
+
+  @Column()
+  moleculeId: number
+
   constructor(
+    moleculeId: number,
     specialite: string,
     dosage: number,
     dosageUnite: string,
@@ -104,9 +109,10 @@ export class Product {
     conservationDilutionFridge: boolean,
     conservationPeriodDilution: number,
     lightShelter: boolean,
-    sensitivityPVC: boolean,
+    SensibilityPVC: boolean,
     disable: boolean,
   ) {
+    this.moleculeId = moleculeId
     this.specialite = specialite
     this.dosage = dosage
     this.dosageUnite = dosageUnite
@@ -125,7 +131,7 @@ export class Product {
     this.conservrationDilutionFridge = conservationDilutionFridge
     this.concervationtionPeriodDilution = conservationPeriodDilution
     this.lightShelter = lightShelter
-    this.SensivityPVC = sensitivityPVC
+    this.SensivityPVC = SensibilityPVC
     this.disabled = disable
   }
 }
