@@ -1,15 +1,26 @@
 import { AdminLabledInput } from "@components/molecules/AdminLabledInput"
-import OptionInput from "@components/atoms/OptionInput"
 import Title from "@components/atoms/Title"
 import LoadingInterface from "@components/organisms/LoadingInterface"
 import { Switch } from "@headlessui/react"
 import { getAllMolecules } from "@helpers/apis/molecule"
 import { Option } from "@helpers/types"
 import ErrorPage from "@pages/Error/ErrorPage"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { twMerge } from "tailwind-merge"
+import AdminOptionInput from "@components/atoms/AdminOptionInput"
+import PrimaryBtn from "@components/atoms/PrimaryBtn"
+import { toast } from "react-toastify"
+import { isEmpty, isFloat, isPositif } from "@helpers/validation"
+import { addProduct } from "@helpers/apis/product"
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import TextInput from "@components/atoms/TextInput"
 
 type ProductForm = {
   moleculeId: number
@@ -28,6 +39,8 @@ type ProductForm = {
   conservationReconstitutionFridge: boolean
   isReconstruct: boolean
   solventReconstitution: string
+  volumeReconstitution: number
+  comment?: string
 }
 
 const solvantOptions: Option<string>[] = [
@@ -63,6 +76,19 @@ export default function AddSpeciality() {
     conservationReconstitutionFridge: false,
     isReconstruct: false,
     solventReconstitution: "",
+    volumeReconstitution: 0,
+    comment: "",
+  })
+
+  const addProtocolMutation = useMutation({
+    mutationKey: ["product", "add"],
+    mutationFn: () => addProduct(data),
+    onError: () => {
+      toast.error("Une erreur s'est produit")
+    },
+    onSuccess: () => {
+      toast.success("La spécialité est ajoutée avec succés")
+    },
   })
 
   const {
@@ -105,7 +131,7 @@ export default function AddSpeciality() {
           />
 
           <AdminLabledInput
-            text="Concentration Min"
+            text="Concentration Min (mg/ml)"
             value={String(data.minConcentration)}
             setValue={(value: string) =>
               setData({ ...data, minConcentration: Number(value) })
@@ -113,7 +139,7 @@ export default function AddSpeciality() {
             isNumber={true}
           />
           <AdminLabledInput
-            text="Volume Dilution"
+            text="Volume Dilution (ml)"
             value={String(data.dilutionVolume)}
             setValue={(value: string) =>
               setData({ ...data, dilutionVolume: Number(value) })
@@ -121,7 +147,7 @@ export default function AddSpeciality() {
             isNumber={true}
           />
           <LabledSwitch
-            label="PVC"
+            label=" Sensibilité PVC"
             enabled={data.SensivityPVC}
             setEnabled={(b) => setData({ ...data, SensivityPVC: b })}
           />
@@ -156,7 +182,7 @@ export default function AddSpeciality() {
         </div>
         <div className="space-y-8">
           <AdminLabledInput
-            text="Specialité"
+            text="Spécialité"
             value={data.speciality}
             setValue={(value: string) =>
               setData({ ...data, speciality: value })
@@ -164,7 +190,7 @@ export default function AddSpeciality() {
             isNumber={false}
           />
           <AdminLabledInput
-            text="Concentration Max"
+            text="Concentration Max (mg/ml)"
             value={String(data.maxConcentration)}
             setValue={(value: string) =>
               setData({ ...data, maxConcentration: Number(value) })
@@ -180,6 +206,7 @@ export default function AddSpeciality() {
           enabled={data.isReconstruct}
           setEnabled={(b) => setData({ ...data, isReconstruct: b })}
         />
+
         {data.isReconstruct && (
           <div className="flex gap-80">
             <AdminLabelOption
@@ -192,20 +219,121 @@ export default function AddSpeciality() {
               }
               options={solvantOptions}
             />
+
             <AdminLabledInput
-              text="Volume de reconstiturion"
-              value={String(data.maxConcentration)}
+              text="Volume de reconstiturion (ml)"
+              value={String(data.volumeReconstitution)}
               setValue={(value: string) =>
-                setData({ ...data, maxConcentration: Number(value) })
+                setData({ ...data, volumeReconstitution: Number(value) })
               }
               isNumber={true}
             />
           </div>
         )}
       </div>
+      <div className="mx-6 block mb-2  space-y-2">
+        <label className="text-xl">Commentaire</label>
+        <textarea
+          className="w-full h-24 bg-white-shade bg-opacity-50 rounded-lg py-2 px-4 border border-primary-blue border-opacity-20  focus:outline-secondary-blue shadow-none"
+          value={data.comment}
+          onChange={(e) => setData({ ...data, comment: e.target.value })}
+        ></textarea>
+      </div>
+      <PrimaryBtn
+        className="absolute right-4 "
+        text="Ajouter"
+        clickFn={() => {
+          if (Verif(data)) {
+            addProtocolMutation.mutate()
+          }
+        }}
+      />
     </div>
   )
 }
+
+function Verif(data: ProductForm): Boolean {
+  if (!data.moleculeId) {
+    toast.error("Veuillez selectionner une molécule")
+    return false
+  }
+  if (isEmpty(data.speciality)) {
+    toast.error("Veuillez saisir une spécialité")
+    return false
+  }
+
+  if (!data.minConcentration) {
+    toast.error("Veuillez saisir une concetracion min")
+    return false
+  }
+
+  if (!isPositif(data.minConcentration)) {
+    toast.error("La concetracion min doit être positive")
+    return false
+  }
+  if (!isFloat(data.minConcentration)) {
+    toast.error("La concetracion min doit être un décimal")
+    return false
+  }
+  if (!data.maxConcentration) {
+    toast.error("Veuillez saisir une concetracion max")
+    return false
+  }
+
+  if (!isPositif(data.maxConcentration)) {
+    toast.error("La concetracion max doit être positive")
+    return false
+  }
+  if (!isFloat(data.maxConcentration)) {
+    toast.error("La concetracion max doit être un décimal")
+    return false
+  }
+  if (data.minConcentration >= data.maxConcentration) {
+    toast.error(
+      "La concentration min doit être inférieure à la concentration max",
+    )
+    return false
+  }
+
+  if (!data.dilutionVolume) {
+    toast.error("Veuillez saisir un volume dilution")
+    return false
+  }
+
+  if (!isPositif(data.dilutionVolume)) {
+    toast.error("Le volume dilution doit être positif")
+    return false
+  }
+  if (!isFloat(data.dilutionVolume)) {
+    toast.error("Le volume dilution doit être un décimal")
+    return false
+  }
+  if (
+    data.conservrationDilutionFridge &&
+    !data.concervationtionPeriodDilution
+  ) {
+    toast.error("Veuillez saisir le délai de conservation")
+    return false
+  }
+  if (data.isReconstruct) {
+    if (!data.solventReconstitution) {
+      toast.error("Veuillez selectionner un solvant de reconstitution")
+      return false
+    }
+
+    if (!data.volumeReconstitution) {
+      toast.error("Veuillez saisir un volume de reconstitution")
+      return false
+    }
+  }
+  if (!isFloat(data.volumeReconstitution)) {
+    toast.error("Le volume de reconstitution est un décimal")
+    return false
+  }
+
+  return true
+}
+
 export type OptionProps<T> = {
   text: string
   selected: Option<T> | undefined
@@ -223,7 +351,7 @@ function AdminLabelOption<T>({
   return (
     <div>
       <label className={twMerge("block mb-2 text-xl", className)}>{text}</label>
-      <OptionInput
+      <AdminOptionInput
         options={options}
         selected={selected}
         setSelected={setSelected}
@@ -296,4 +424,37 @@ function BigSwitch({ option1, option2, enabled, setEnabled }: BigSwitchProps) {
       />
     </Switch>
   )
+}
+type Flacons = {
+  dosage: number
+  volume: number
+}
+function FlaconTable() {
+  const columnHelperFlacon = createColumnHelper()
+  const [flacons, setFlacons] = useState<Flacons[]>([
+    {
+      dosage: 0,
+      volume: 0,
+    },
+  ])
+  const columns = [
+    columnHelperFlacon.accessor((row) => row.dosage, {
+      id: "dosage",
+      header: "Dosage",
+      cell: (info) => {
+        const initialvalue = info.getValue()
+        const [value, setValue] = useState(String(initialvalue))
+        return (
+          <div className="">
+            <TextInput
+              className="focus:outline-secondary-blue shadow-none border-primary-blue border-opacity-20 w-24"
+              value={String(value)}
+              setValue={setValue}
+              isNumber={true}
+            />
+          </div>
+        )
+      },
+    }),
+  ]
 }
