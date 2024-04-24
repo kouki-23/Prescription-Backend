@@ -47,12 +47,12 @@ export default function ProtocolTable({ protocols, refetch }: Props) {
     }),
     columnHelper.accessor((row) => row.details, {
       id: "details",
-      cell: (info) => info.getValue(),
+      cell: (info) => info.getValue() || "-",
       header: "details",
     }),
     columnHelper.accessor((row) => row.indications, {
       id: "indications",
-      cell: (info) => info.getValue(),
+      cell: (info) => info.getValue() || "-",
       header: "Indications",
     }),
     columnHelper.accessor((row) => row.disabled, {
@@ -79,11 +79,13 @@ export default function ProtocolTable({ protocols, refetch }: Props) {
       header: "Actions",
     }),
   ]
+
   const table = useReactTable({
     data: protocols,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
   return (
     <div>
       <>

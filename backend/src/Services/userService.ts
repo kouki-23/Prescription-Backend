@@ -3,6 +3,8 @@ import { User, UserRole } from "../Entities/User"
 import { CreateUserBody } from "../Middlewares/validation/schema"
 import bcrypt from "bcrypt"
 
+const repo = db.getRepository(User)
+
 // TODO : 5it
 export async function createUser(userB: CreateUserBody) {
   const user = new User()
@@ -15,4 +17,13 @@ export async function createUser(userB: CreateUserBody) {
   user.password = hashedPassword
   const userC = await db.getRepository(User).save(user)
   return userC
+}
+
+export async function getAllUsers() {
+  const users = await repo.find()
+  return users.map((user) => ({ ...user, password: "" }))
+}
+
+export async function deleteUser(id: number) {
+  repo.softDelete({ id })
 }

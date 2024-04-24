@@ -1,4 +1,6 @@
 import { useAuth } from "@helpers/auth/auth"
+import { User } from "@helpers/types"
+import { UserForm } from "@pages/User/AddUser"
 import axios from "axios"
 
 export function login(username: string, password: string) {
@@ -21,4 +23,16 @@ export async function fetchAccessToken() {
   } catch {
     throw "unauthrozid"
   }
+}
+
+export async function getAllUsers() {
+  return await axios.get<User[]>("user")
+}
+
+export async function deleteUser(id: number) {
+  return await axios.delete(`user/${id}`)
+}
+
+export async function addUser(user: UserForm) {
+  return await axios.post("user", user)
 }
