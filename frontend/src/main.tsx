@@ -91,6 +91,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>
-    <ToastContainer />
+    <ToastContainer draggable="mouse" autoClose={1500} />
   </React.StrictMode>,
 )
