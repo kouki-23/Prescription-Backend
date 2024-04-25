@@ -1,7 +1,7 @@
 import React, { lazy } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import LoginPage from "@pages/Login/LoginPage"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ToastContainer } from "react-toastify"
@@ -17,11 +17,18 @@ import PrescriptionPage from "@pages/Prescription/PrescriptionPage"
 import PrescriptionDetailsPage from "@pages/Prescription/PrescriptionDetailsPage"
 import PrescriptionFilePage from "@pages/Prescription/PrescriptionFilePage"
 import AddProtocolPage from "@pages/Protocol/AddProtocol"
+import SpecialityList from "@pages/Speciality/SpecialityList"
+import SideNavbar from "@components/organisms/SideNavbar"
+import AddSpeciality from "@pages/Speciality/AddSpeciality"
 import ListProtocolPage from "@pages/Protocol/ListProtocol"
 import { UserRole } from "@helpers/types"
 import NavBar from "@components/molecules/NavBar"
 import AdjustementPage from "@pages/Adjustement/AdjustementPage"
 import AdjustementDetailsPage from "@pages/Adjustement/AdjustementDetailsPage"
+import ListUser from "@pages/User/ListUser"
+import AddUser from "@pages/User/AddUser"
+import ListMolecule from "@pages/Molecule/ListMolecule"
+import AddMolecule from "@pages/Molecule/AddMolecule"
 const FicheFabrication = lazy(() => import("@pages/FAB/FicheFabrication"))
 
 globalDefault()
@@ -36,6 +43,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route element={<AuthGuard />}>
               <Route path="/" element={<Index />} />
+            </Route>
+            <Route path="/admin" element={<AuthGuard role={UserRole.ADMIN} />}>
+              <Route path="" element={<SideNavbar />}>
+                <Route path="" element={<Navigate to="user" />} />
+                <Route path="specialite" element={<SpecialityList />} />
+                <Route path="ajouterSpecialite" element={<AddSpeciality />} />
+                <Route path="protocol" element={<ListProtocolPage />} />
+                <Route path="user" element={<ListUser />} />
+                <Route path="ajouterUser" element={<AddUser />} />
+                <Route path="molecule" element={<ListMolecule />} />
+                <Route path="ajouterMolecule" element={<AddMolecule />} />
+              </Route>
+              <Route
+                path="protocol/ajouterprotocole"
+                element={<AddProtocolPage />}
+              />
             </Route>
             <Route
               element={
@@ -59,13 +82,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   <Route path=":id" element={<PrescriptionDetailsPage />} />
                 </Route>
                 <Route path="addPatient" element={<AddPatient />} />
-              </Route>
-              <Route
-                path="/admin"
-                element={<AuthGuard role={UserRole.ADMIN} />}
-              >
-                <Route path="ajouterprotocole" element={<AddProtocolPage />} />
-                <Route path="" element={<ListProtocolPage />} />
               </Route>
               <Route
                 path="/pharmacien"

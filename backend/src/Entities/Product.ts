@@ -83,6 +83,55 @@ export class Product {
 
   // DCI
   @ManyToOne(() => Molecule, (m) => m.products)
-  @JoinColumn()
+  @JoinColumn({ name: "moleculeId" })
   molecule: Molecule
+
+  @Column()
+  moleculeId: number
+
+  constructor(
+    moleculeId: number,
+    specialite: string,
+    dosage: number,
+    dosageUnite: string,
+    volume: number,
+    volumeUnite: string,
+    isReconstruct: boolean,
+    solventReconstitution: string,
+    volumeReconstitution: number,
+    volumeReconstitutionUnite: string,
+    conservationReconstitutionFridge: boolean,
+    dilutionVolume: number,
+    dilutionVolumeUnite: string,
+    minConcentration: number,
+    maxConcentration: number,
+    concentrationUnite: string,
+    conservationDilutionFridge: boolean,
+    conservationPeriodDilution: number,
+    lightShelter: boolean,
+    SensibilityPVC: boolean,
+    disable: boolean,
+  ) {
+    this.moleculeId = moleculeId
+    this.specialite = specialite
+    this.dosage = dosage
+    this.dosageUnite = dosageUnite
+    this.volume = volume
+    this.volumeUnite = volumeUnite
+    this.isReconstruct = isReconstruct
+    this.solventReconstitution = solventReconstitution
+    this.volumeReconstitution = volumeReconstitution
+    this.volumeReconstitutionUnite = volumeReconstitutionUnite
+    this.conservationReconstitutionFridge = conservationReconstitutionFridge
+    this.dilutionVolume = dilutionVolume
+    this.dilutionVolumeUnite = dilutionVolumeUnite
+    this.minConcentrarion = minConcentration
+    this.maxConcentrarion = maxConcentration
+    this.concentrationUnite = concentrationUnite
+    this.conservrationDilutionFridge = conservationDilutionFridge
+    this.concervationtionPeriodDilution = conservationPeriodDilution
+    this.lightShelter = lightShelter
+    this.SensivityPVC = SensibilityPVC
+    this.disabled = disable
+  }
 }

@@ -1,52 +1,130 @@
-import dashboardIcon from "@assets/icons/dashboard.svg"
-import statistiqueIcon from "@assets/icons/stats.svg"
-import userIcon from "@assets/icons/user_gray.svg"
+import userIcon from "@assets/icons/user_white.svg"
 import protocoleIcon from "@assets/icons/protocoles.svg"
-export default function SideNavbar() {
+import moleculeIcon from "@assets/icons/molecule_white.svg"
+import specialiteIcon from "@assets/icons/specialite.svg"
+import logoutIcon from "@assets/icons/gray_logout.svg"
+import { useAuth } from "@helpers/auth/auth"
+import { Link, Outlet, useNavigate } from "react-router-dom"
+import { useState } from "react"
+
+type Props = {}
+
+export default function SideNavbar({}: Props) {
+  const { user, logout } = useAuth()
+  const [selected, setSelected] = useState(
+    getPath(window.location.pathname) || "user", // for now it default to user. need to be changed later
+  )
+  const navigate = useNavigate()
+
+  function logoutClick() {
+    logout()
+    navigate("/login")
+  }
   return (
-    <aside className="bg-white-shade shadow-sm fixed inset-0 z-50 w-60 h-screen">
-      <NavElement
-        icon={dashboardIcon}
-        text="Dashboard"
-        isSelected={true}
-        size={8}
-      />
-      <NavElement
-        icon={statistiqueIcon}
-        text="Statistiques"
-        size={6}
-        isSelected={false}
-      />
-      <NavElement
-        icon={userIcon}
-        text="Utilisateurs"
-        size={7}
-        isSelected={false}
-      />
-      <NavElement
-        icon={protocoleIcon}
-        text="Protocoles"
-        size={8}
-        isSelected={false}
-      />
-    </aside>
+    <div className="flex">
+      <div className=" absolute text-gray-button flex right-4 top-2 items-center gap-1">
+        <div className="flex flex-col items-end">
+          <p className="font-bold text-lg">{user?.name}</p>
+          <p>{user?.role}</p>
+        </div>
+        <img
+          className=" size-7 cursor-pointer"
+          src={logoutIcon}
+          onClick={logoutClick}
+        />
+      </div>
+      <div className="h-screen w-1/5 z-10">
+        <aside className="pt-10 fixed bg-primary-blue h-screen w-1/5 z-10 shadow-md ">
+          {/*<NavElement
+            icon={dashboardIcon}
+            text="Dashboard"
+            selected={selected}
+            setSelected={setSelected}
+            to=""
+            size={8}
+  />*/}
+          <NavElement
+            icon={userIcon}
+            text="Utilisateurs"
+            size={7}
+            to="user"
+            selected={selected}
+            setSelected={setSelected}
+          />
+          <NavElement
+            icon={protocoleIcon}
+            text="Protocoles"
+            size={8}
+            to="protocol"
+            selected={selected}
+            setSelected={setSelected}
+          />
+          <NavElement
+            icon={moleculeIcon}
+            text="Molecules"
+            size={8}
+            to="molecule"
+            selected={selected}
+            setSelected={setSelected}
+          />
+          <NavElement
+            icon={specialiteIcon}
+            text="Specialité"
+            size={8}
+            to="specialite"
+            selected={selected}
+            setSelected={setSelected}
+          />
+        </aside>
+      </div>
+      <div className="w-4/5 px-10">
+        <Outlet />
+      </div>
+    </div>
   )
 }
 
 type PropsElement = {
   icon: string
   text: string
-  isSelected: boolean
   size: number
+  to: string
+  selected: string
+  setSelected: (url: string) => void
 }
 
-function NavElement({ icon, text, size }: PropsElement) {
+function NavElement({
+  icon,
+  text,
+  size,
+  to,
+  selected,
+  setSelected,
+}: PropsElement) {
+  const isSelected = selected === to
+
   return (
-    <div>
-      <button className="flex justify-between w-44 items-center p-3 font-normal cursor-pointer hover:bg-light-blue hover:opacity-20 ">
+    <div
+      className={`hover:bg-white-shade hover:bg-opacity-20  transition duration-75 ${
+        isSelected ? "bg-white-shade bg-opacity-50" : ""
+      }`}
+    >
+      <Link
+        to={to}
+        className="flex justify-between w-44 items-center p-3 font-normal cursor-pointer"
+        onClick={() => setSelected(to)}
+      >
         <img className={`size-${size}`} src={icon} />
-        <h3>{text}</h3>
-      </button>
+        <h3 className="text-white-shade">{text}</h3>
+      </Link>
     </div>
   )
+}
+
+function getPath(pathName: string): string {
+  const indexSlach = pathName.indexOf("/", 1)
+  if (indexSlach === -1) {
+    return ""
+  }
+  return pathName.substring(indexSlach + 1, pathName.length)
 }

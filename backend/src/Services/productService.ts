@@ -2,6 +2,8 @@ import db from "../Config/db"
 import { Product } from "../Entities/Product"
 import { HttpError, StatusCode } from "../Utils/HttpError"
 import { Molecule } from "../Entities/Molecule"
+import { ReturnDocument } from "typeorm"
+import { CreateProductBody } from "../Middlewares/validation/schema"
 
 const repo = db.getRepository(Product)
 
@@ -38,6 +40,18 @@ export async function getProductByMoleculeId(moleculeId: number) {
   return product
 }
 
+export async function getAllProducts() {
+  const products: Product[] = await repo.find({
+    order: {
+      specialite: "ASC",
+    },
+    relations: {
+      molecule: true,
+    },
+  })
+  return products
+}
+
 export async function getProductsByMoleculeId(moleculeId: number) {
   const products = await repo.find({
     where: {
@@ -50,4 +64,56 @@ export async function getProductsByMoleculeId(moleculeId: number) {
     },
   })
   return products
+}
+
+export async function getAllEnabledProducts() {
+  const products: Product[] = await repo.find({
+    where: {
+      disabled: false,
+    },
+    order: {
+      specialite: "ASC",
+    },
+    relations: {
+      molecule: true,
+    },
+  })
+  return products
+}
+export async function createProduct(productBody: CreateProductBody) {
+  const products = productBody.flacons.map((flacon) => {
+    return new Product(
+      productBody.moleculeId,
+      productBody.specialite,
+      flacon.dosage,
+      "mg",
+      flacon.volume,
+      "ml",
+      productBody.isReconstruct,
+      productBody.solventReconstitution,
+      productBody.volumeReconstitution,
+      "ml",
+      productBody.conservationDilutionFridge,
+      productBody.dilutionVolume,
+      "ml",
+      productBody.minConcentration,
+      productBody.maxConcentration,
+      "mg/ml",
+      productBody.conservationDilutionFridge,
+      productBody.conservationPeriodDilution,
+      productBody.lightShelter,
+      productBody.SensibilityPVC,
+      false,
+    )
+  })
+  return await repo.save(products)
+}
+export async function deleteProduct(id: number) {
+  const product = await repo.findOne({
+    where: {
+      id: id,
+    },
+  })
+  if (!product) throw new HttpError("produit introuvable", StatusCode.NotFound)
+  await repo.delete(product)
 }

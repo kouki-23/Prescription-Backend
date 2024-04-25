@@ -8,6 +8,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { twMerge } from "tailwind-merge"
+import backIcon from "@assets/icons/back.svg"
 
 type PropsInput = {
   text: string
@@ -73,7 +74,12 @@ export default function AddProtocolPage({}: Props) {
     },
   })
   return (
-    <div>
+    <div className="px-5">
+      <img
+        className="cursor-pointer py-5"
+        src={backIcon}
+        onClick={() => navigator(-1)}
+      />
       <AddProtocol data={data} setData={setData} />
       <Title text="Ajouter Molécule" className="bg-opacity-40 ml-10 p-6" />
       <div className="container mx-auto">

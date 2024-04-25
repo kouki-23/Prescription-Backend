@@ -64,7 +64,6 @@ export type UpdatePatientBody = z.infer<typeof updatePatientBodySchema>
 export const createMoleculeBodySchema = z.object({
   name: z.string(),
   way: z.string(),
-  perfusionType: z.string(),
   comment: z.string().optional(),
 })
 export type CreateMoleculeBody = z.infer<typeof createMoleculeBodySchema>
@@ -134,6 +133,29 @@ export const updateCureStartDateBodySchema = z.object({
 export type updateCureStartDateBody = z.infer<
   typeof updateCureStartDateBodySchema
 >
+export const createProductBodySchema = z.object({
+  moleculeId: z.number(),
+  specialite: z.string(),
+  flacons: z.array(
+    z.object({
+      dosage: z.number().nonnegative(),
+      volume: z.number().nonnegative(),
+    }),
+  ),
+  isReconstruct: z.boolean(),
+  solventReconstitution: z.string(),
+  volumeReconstitution: z.number(),
+  conservationReconstitutionFridge: z.boolean(),
+  dilutionVolume: z.number(),
+  minConcentration: z.number(),
+  maxConcentration: z.number(),
+  conservationDilutionFridge: z.boolean(),
+  conservationPeriodDilution: z.number(),
+  lightShelter: z.boolean(),
+  SensibilityPVC: z.boolean(),
+  comment: z.string(),
+})
+export type CreateProductBody = z.infer<typeof createProductBodySchema>
 
 export const partialProductSchema = z.object({
   productId: z.number(),

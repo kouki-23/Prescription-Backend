@@ -23,6 +23,9 @@ export async function getAllMolecules() {
     order: {
       name: "ASC",
     },
+    relations: {
+      products: true,
+    },
   })
   return molecules
 }
