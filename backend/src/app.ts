@@ -4,6 +4,7 @@ import fs from "fs"
 import express, { Request, Response, NextFunction } from "express"
 import dotenv from "dotenv"
 import cors from "cors"
+import helmet from "helmet"
 
 dotenv.config()
 
@@ -46,6 +47,7 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 
+app.use(helmet())
 app.use(
   cors({
     origin: "*",
