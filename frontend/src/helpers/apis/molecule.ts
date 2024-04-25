@@ -1,6 +1,6 @@
 import axios from "axios"
 import { Molecule } from "@helpers/types"
-import { MoleculeForm } from "@pages/molecule/AddMolecule"
+import { MoleculeForm } from "@pages/Molecule/AddMolecule"
 
 export async function getAllMolecules() {
   const response = await axios.get("/molecule/")

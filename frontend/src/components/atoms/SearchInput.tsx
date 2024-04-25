@@ -1,11 +1,5 @@
 import searchIcon from "@assets/icons/search.svg"
-export function SearchInput({
-  placeholder,
-  className,
-}: {
-  className?: string
-  placeholder?: string
-}) {
+export function SearchInput({ placeholder }: { placeholder?: string }) {
   return (
     <label>
       <div className=" relative mt-2 ">
