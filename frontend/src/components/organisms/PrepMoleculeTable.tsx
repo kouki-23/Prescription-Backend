@@ -464,19 +464,24 @@ function DayCell({
   startDate: Date
   setDay: (day: number) => void
 }) {
+  const { user } = useAuth()
   return (
     <div className="flex items-center gap-1 justify-center">
-      <img
-        className="size-5 cursor-pointer"
-        src={minusIcon}
-        onClick={() => setDay(day - 1)}
-      />
+      {user!.role === UserRole.MEDECIN && (
+        <img
+          className="size-5 cursor-pointer"
+          src={minusIcon}
+          onClick={() => setDay(day - 1)}
+        />
+      )}
       {`J${day} ( ${getDate(addDaysToDate(startDate, day - 1))} )`}
-      <img
-        className="size-5 cursor-pointer"
-        src={plusIcon}
-        onClick={() => setDay(day + 1)}
-      />
+      {user!.role === UserRole.MEDECIN && (
+        <img
+          className="size-5 cursor-pointer"
+          src={plusIcon}
+          onClick={() => setDay(day + 1)}
+        />
+      )}
     </div>
   )
 }
