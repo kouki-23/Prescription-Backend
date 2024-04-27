@@ -1,13 +1,14 @@
 import { Response, Request, NextFunction } from "express"
 import { CreateProductBody, IdParams } from "../Middlewares/validation/schema"
 import { Product } from "../Entities/Product"
-import { StatusCode, handleError } from "../Utils/HttpError"
+import { HttpError, StatusCode, handleError } from "../Utils/HttpError"
 import { UserRole } from "../Entities/User"
 import {
   createProduct,
   deleteProduct,
   getAllEnabledProducts,
   getAllProducts,
+  getProductById,
 } from "../Services/productService"
 import { getProductsByMoleculeId } from "../Services/productService"
 
@@ -26,6 +27,20 @@ export async function getAllProductsHandler(
     res.json(products)
   } catch (e) {
     return next(handleError(e))
+  }
+}
+
+export async function getProductByIdHandler(
+  req: Request<IdParams, never, never, never>,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params
+  try {
+    const product = await getProductById(Number(id))
+    res.json(product)
+  } catch (e) {
+    next(handleError(e))
   }
 }
 export async function createProductHandler(

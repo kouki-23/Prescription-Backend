@@ -65,6 +65,20 @@ export async function getProductsByMoleculeId(moleculeId: number) {
   })
   return products
 }
+export async function getProductById(id: number) {
+  const product = await repo.findOne({
+    where: {
+      id,
+    },
+  })
+  if (!product) {
+    throw new HttpError(
+      "Aucune spécialité trouvée avec cet identifiant",
+      StatusCode.NotFound,
+    )
+  }
+  return product
+}
 
 export async function getAllEnabledProducts() {
   const products: Product[] = await repo.find({

@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteProduct } from "@helpers/apis/product"
 import { handleError } from "@helpers/apis"
 import { toast } from "react-toastify"
+import { useState } from "react"
 
 type Props = {
   data: Product[]
@@ -21,6 +22,7 @@ type Props = {
 
 export function SpecialtityTable({ data }: Props) {
   const queryClient = useQueryClient()
+  const [isDetailedOpen, setIsDetailedOpen] = useState(false)
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteProduct(id),
     onError: (e) => toast.error(handleError(e)),
@@ -62,7 +64,7 @@ export function SpecialtityTable({ data }: Props) {
       cell: (info) => {
         return (
           <div className="flex justify-center gap-4">
-            <Icon src={listIcon} />
+            <Icon src={listIcon} onCLick={() => setIsDetailedOpen(true)} />
             <Icon src={editIcon} />
             <Icon
               src={deleteIcon}

@@ -5,6 +5,10 @@ export async function getAllProducts() {
   const response = await axios.get<Product[]>("/product/")
   return response.data
 }
+
+export async function getProductById(id: number) {
+  return axios.get<Product>(`/product/${id}`)
+}
 export async function addProduct(data: ProductForm) {
   await axios.post("/product/", data)
 }

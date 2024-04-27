@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge"
 
 export type Tprops = {
-  value: string
+  value: string | number
   setValue: (s: string) => void
   className?: string
   disabled?: boolean
