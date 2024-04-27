@@ -10,7 +10,7 @@ export default function Model({ children, isOpen, onClose }: Props) {
   return (
     <Dialog
       as="div"
-      className="fixed inset-0 w-screen h-screen z-20 bg-primary-blue bg-opacity-45 flex justify-center items-center overflow-y-auto"
+      className="fixed inset-0 w-screen h-screen z-20 bg-primary-blue bg-opacity-5 flex justify-center items-center overflow-y-auto"
       open={isOpen}
       onClose={onClose}
     >
