@@ -433,7 +433,7 @@ function AddPatientPage2({ data, setData, setPageN, original }: PageProps) {
       <div className="container mx-auto flex justify-center mt-16 gap-36">
         <SecondaryBtn text="Précédent" clickFn={() => setPageN(1)} />
         <PrimaryBtn
-          text="Ajouter"
+          text={original ? "Modifier" : "Ajouter"}
           clickFn={async () => {
             if (verif()) {
               if (original) {
