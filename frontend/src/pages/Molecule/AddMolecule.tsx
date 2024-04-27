@@ -40,7 +40,7 @@ export default function AddMolecule() {
 
   return (
     <div className="container p-10">
-      <Title text="Ajouter utilisateur" className="py-16 pb-20" />
+      <Title text="Ajouter une molecule" className="py-16 pb-20" />
       <div className="px-10 grid grid-cols-2 gap-32">
         <AdminLabledInput
           text="Nom"
@@ -48,7 +48,7 @@ export default function AddMolecule() {
           setValue={(s) => setMolecule({ ...molecule, name: s })}
         />
         <AdminLabledInput
-          text="Way"
+          text="Voie"
           value={molecule.way}
           setValue={(s) => setMolecule({ ...molecule, way: s })}
         />

@@ -148,6 +148,8 @@ INSERT INTO public.molecule(
 	id, name, way,comment)
 	VALUES (30, 'Cyclophosphamide', 'IV', '');
 
+SELECT pg_catalog.setval('public.molecule_id_seq', 30, true);
+
 ---Products
 
 -- Paclitaxel
