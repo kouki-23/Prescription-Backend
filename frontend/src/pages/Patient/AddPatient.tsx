@@ -4,10 +4,15 @@ import PrimaryBtn from "@components/atoms/PrimaryBtn"
 import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import Title from "@components/atoms/Title"
 import LabledInput from "@components/molecules/LabledInput"
+import LoadingInterface from "@components/organisms/LoadingInterface"
 import { handleError } from "@helpers/apis"
-import { addPatient } from "@helpers/apis/patient"
+import {
+  addPatient,
+  getPatientById,
+  updatePatient,
+} from "@helpers/apis/patient"
 import { getAge, getBodySurf, getClairance } from "@helpers/personInfo"
-import { Option } from "@helpers/types"
+import { Option, Patient } from "@helpers/types"
 import {
   isEmpty,
   isFloat,
@@ -15,9 +20,10 @@ import {
   isPositif,
   isDateInPast,
 } from "@helpers/validation"
-import { useMutation } from "@tanstack/react-query"
+import ErrorPage from "@pages/Error/ErrorPage"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { toast } from "react-toastify"
 
 type TData = {
@@ -56,6 +62,18 @@ const genderOptions: Option<string>[] = [
 ]
 
 export default function AddPatient({}: Props) {
+  const [searchParams, _] = useSearchParams()
+  const patientId = searchParams.get("patientid")
+  const editMode = !!patientId
+  const {
+    data: patient,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["patient", patientId],
+    queryFn: () => getPatientById(Number(patientId)),
+    enabled: editMode,
+  })
   const [data, setData] = useState<TData>({
     DMI: "",
     index: "",
@@ -71,13 +89,39 @@ export default function AddPatient({}: Props) {
     clairanceFormula: "",
     clairance: 0,
   })
+  useEffect(() => {
+    if (editMode && patient) {
+      setData({
+        DMI: patient.data.DMI,
+        index: patient.data.index,
+        firstName: patient.data.firstName,
+        lastName: patient.data.lastName,
+        gender: patient.data.gender,
+        matrimonial: patient.data.matrimonial,
+        birthDate: patient.data.birthDate,
+        weight: Number(patient.data.weight),
+        height: Number(patient.data.height),
+        bodySurface: Number(patient.data.bodySurface),
+        creatinine: Number(patient.data.creatinine),
+        clairance: Number(patient.data.clairance),
+        clairanceFormula: patient.data.clairanceFormula,
+      })
+    }
+  }, [patient])
   const [pageN, setPageN] = useState<1 | 2>(1)
+  if (isLoading) return <LoadingInterface />
+  if (error) return <ErrorPage cause={error.message} />
   return (
     <div className="px-24">
       {pageN === 1 ? (
         <AddPatientPage1 data={data} setData={setData} setPageN={setPageN} />
       ) : (
-        <AddPatientPage2 data={data} setData={setData} setPageN={setPageN} />
+        <AddPatientPage2
+          data={data}
+          setData={setData}
+          setPageN={setPageN}
+          original={patient ? patient.data : undefined}
+        />
       )}
     </div>
   )
@@ -87,6 +131,7 @@ type PageProps = {
   data: TData
   setData: React.Dispatch<React.SetStateAction<TData>>
   setPageN: React.Dispatch<React.SetStateAction<1 | 2>>
+  original?: Patient
 }
 
 function AddPatientPage1({ data, setData, setPageN }: PageProps) {
@@ -223,7 +268,7 @@ function AddPatientPage1({ data, setData, setPageN }: PageProps) {
   )
 }
 
-function AddPatientPage2({ data, setData, setPageN }: PageProps) {
+function AddPatientPage2({ data, setData, setPageN, original }: PageProps) {
   const navigator = useNavigate()
   const [bodySurf, setBodySurf] = useState<number>(0)
 
@@ -277,6 +322,19 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
     onSuccess: () => {
       navigator("/medecin")
       toast.success("patient ajouter avec succès")
+    },
+  })
+  const updateMut = useMutation({
+    mutationFn: async () => {
+      if (!addMut.isPending)
+        await updatePatient(original!.id, { ...data, bodySurface: bodySurf })
+    },
+    onError: (e) => {
+      toast.error(handleError(e))
+    },
+    onSuccess: () => {
+      navigator("/medecin")
+      toast.success("patient modifie avec succès")
     },
   })
 
@@ -378,7 +436,11 @@ function AddPatientPage2({ data, setData, setPageN }: PageProps) {
           text="Ajouter"
           clickFn={async () => {
             if (verif()) {
-              addMut.mutate()
+              if (original) {
+                updateMut.mutate()
+              } else {
+                addMut.mutate()
+              }
             }
           }}
         />

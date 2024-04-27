@@ -45,6 +45,7 @@ export type TPatientData = {
 
 export default function PatientTable({ data, refetch, filters }: Props) {
   const { user } = useAuth()
+  const navigator = useNavigate()
   const mutation = useMutation({
     mutationKey: ["patients"],
     mutationFn: (id: number) => deletePatient(id),
@@ -135,7 +136,12 @@ export default function PatientTable({ data, refetch, filters }: Props) {
                 setIsOpen={setDeleteConfirm}
                 confirmFn={() => mutation.mutate(info.row.original.id)}
               />
-              <Actions deleteFn={() => setDeleteConfirm(true)} />
+              <Actions
+                deleteFn={() => setDeleteConfirm(true)}
+                editFn={() =>
+                  navigator(`addPatient?patientid=${info.row.original.id}`)
+                }
+              />
             </>
           )
         },
@@ -200,12 +206,13 @@ export default function PatientTable({ data, refetch, filters }: Props) {
 
 export type ActionsProps = {
   deleteFn: () => void
+  editFn: () => void
 }
 
-function Actions({ deleteFn }: ActionsProps) {
+function Actions({ editFn, deleteFn }: ActionsProps) {
   return (
     <div className="flex justify-center gap-4">
-      <Icon src={editIcon} />
+      <Icon src={editIcon} onCLick={editFn} />
       <Icon src={deleteIcon} onCLick={deleteFn} />
     </div>
   )

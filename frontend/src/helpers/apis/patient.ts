@@ -17,3 +17,7 @@ export async function deletePatient(id: number) {
 export async function updatePatient(id: number, patient: any) {
   return await axios.patch(`/patient/${id}`, patient)
 }
+
+export async function getPatientById(id: Number) {
+  return await axios.get<Patient>(`/patient/${id}`)
+}
