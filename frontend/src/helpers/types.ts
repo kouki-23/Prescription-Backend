@@ -191,6 +191,7 @@ export interface Product {
   disabled: boolean
   ProductsUsed: ProductUsed[]
   molecule: Molecule
+  comment?: string
 }
 
 export interface Molecule {
