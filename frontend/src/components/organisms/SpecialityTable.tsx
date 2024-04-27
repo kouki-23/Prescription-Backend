@@ -8,7 +8,7 @@ import {
 import { twMerge } from "tailwind-merge"
 import editIcon from "@assets/icons/edit.svg"
 import deleteIcon from "@assets/icons/delete.svg"
-import listIcon from "@assets/icons/detailList.svg"
+import listIcon from "@assets/icons/specialitydetail.svg"
 import { Product } from "@helpers/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteProduct } from "@helpers/apis/product"
@@ -23,7 +23,6 @@ type Props = {
 
 export function SpecialtityTable({ data }: Props) {
   const queryClient = useQueryClient()
-  const [isDetailedOpen, setIsDetailedOpen] = useState(false)
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteProduct(id),
     onError: (e) => toast.error(handleError(e)),
@@ -63,6 +62,8 @@ export function SpecialtityTable({ data }: Props) {
       id: "actions",
       header: "Actions",
       cell: (info) => {
+        const [isDetailedOpen, setIsDetailedOpen] = useState(false)
+
         return (
           <>
             <DetailsSpeciality
