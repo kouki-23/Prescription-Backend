@@ -87,11 +87,20 @@ export async function updatePatient(
 }
 
 export async function deletePatient(id: number, userId: number) {
-  const patient = await repo.findOneBy({
-    id,
+  const patient = await repo.findOne({
+    where: {
+      id,
+    },
+    relations: {
+      prescription: {
+        cures: {
+          prepMolecule: true,
+        },
+      },
+    },
   })
   if (!patient) throw new HttpError("patient introuvable", StatusCode.NotFound)
-  await repo.softDelete({ id: patient.id })
+  await repo.softRemove(patient)
   await repoHistory.save(
     new PatientHistory(
       getHistoryPayload(patient),

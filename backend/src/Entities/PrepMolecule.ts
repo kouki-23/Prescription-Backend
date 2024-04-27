@@ -76,7 +76,9 @@ export class PrepMolecule {
   })
   productsUsed: ProductUsed[]
 
-  @ManyToOne(() => Cure, (b) => b.prepMolecule)
+  @ManyToOne(() => Cure, (b) => b.prepMolecule, {
+    onDelete: "CASCADE",
+  })
   cure: Cure
 
   @OneToMany(() => PrepMoleculeHistory, (p) => p.prepMolecule)

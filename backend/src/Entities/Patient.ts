@@ -66,7 +66,9 @@ export class Patient {
   @OneToMany(() => PatientHistory, (p) => p.patient)
   patientHistory: PatientHistory[]
 
-  @OneToMany(() => Prescription, (p) => p.patient)
+  @OneToMany(() => Prescription, (p) => p.patient, {
+    cascade: true,
+  })
   prescription: Prescription[]
 
   @CreateDateColumn()
