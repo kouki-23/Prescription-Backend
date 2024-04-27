@@ -25,7 +25,7 @@ import SecondaryBtn from "@components/atoms/SecondaryBtn"
 import deleteIcon from "@assets/icons/delete.svg"
 import addIcon from "@assets/icons/add.svg"
 
-type Flacon = {
+export type Flacon = {
   dosage: number
   volume: number
 }
