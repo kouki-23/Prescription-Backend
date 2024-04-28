@@ -79,10 +79,12 @@ function MoleculeTable({ data }: { data: Molecule[] }) {
     columnHelper.accessor((row) => row.products, {
       id: "products",
       cell: (info) =>
-        info
-          .getValue()
-          .map((v) => v.specialite + " " + v.dosage + "mg")
-          .join(","),
+        info.getValue()
+          ? info
+              .getValue()
+              .map((v) => v.specialite + " " + v.dosage + "mg")
+              .join(",")
+          : "-",
       header: "Products",
     }),
     columnHelper.accessor((row) => row.disabled, {
