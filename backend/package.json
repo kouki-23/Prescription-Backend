@@ -4,9 +4,10 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
     "start": "node dist/app.js",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon src/app.ts",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org asqii --project backend ./dist && sentry-cli sourcemaps upload --org asqii --project backend ./dist"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@sentry/cli": "^2.31.0",
+    "@sentry/node": "^7.112.2",
+    "@sentry/profiling-node": "^7.112.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

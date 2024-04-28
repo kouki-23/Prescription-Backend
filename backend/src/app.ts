@@ -8,6 +8,8 @@ import helmet from "helmet"
 
 dotenv.config()
 
+import * as Sentry from "@sentry/node"
+import { nodeProfilingIntegration } from "@sentry/profiling-node"
 import db from "./Config/db"
 import { HttpError } from "./Utils/HttpError"
 import auth from "./Routers/auth"
@@ -47,15 +49,37 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 
+Sentry.init({
+  dsn: "https://7839fb88cd5d68f4aa845e4b6bf6bedf@o4507147507007488.ingest.de.sentry.io/4507164809494608",
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Sentry.Integrations.Express({ app }),
+    nodeProfilingIntegration(),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  // Set sampling rate for profiling - this is relative to tracesSampleRate
+  profilesSampleRate: 1.0,
+})
+
+app.use(Sentry.Handlers.requestHandler())
+
+app.use(Sentry.Handlers.tracingHandler())
+
 app.use(helmet())
+
 app.use(
   cors({
     origin: "*",
     credentials: true,
   }),
 )
+
 app.use(cookieParser())
 app.use(express.json())
+
 if (process.env.ENV === "dev") {
   app.use(morgan("dev"))
 } else {
@@ -77,6 +101,8 @@ app.use("/cure", cureRouter)
 app.use("/prep", prepRouter)
 app.use("/product", productRouter)
 app.use("/vehicule", vehiculeRouter)
+
+app.use(Sentry.Handlers.errorHandler())
 
 //error handler
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
