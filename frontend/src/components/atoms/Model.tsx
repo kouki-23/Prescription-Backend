@@ -14,7 +14,7 @@ export default function Model({ children, isOpen, onClose }: Props) {
       open={isOpen}
       onClose={onClose}
     >
-      <Dialog.Panel className="bg-white-shade p-16 px-28 w-fit h-fit rounded-3xl flex flex-col items-center">
+      <Dialog.Panel className="bg-white-shade p-16 px-28 w-fit h-fit rounded-3xl flex flex-col items-center relative">
         {children}
       </Dialog.Panel>
     </Dialog>

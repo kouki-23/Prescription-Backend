@@ -12,6 +12,7 @@ import {
   createProductHandler,
   deleteProductHandler,
   getAllProductsHandler,
+  getProductByIdHandler,
 } from "../Handlers/product"
 import { getProductsOfMoleculeHandler } from "../Handlers/product"
 
@@ -25,6 +26,7 @@ router.post(
 )
 
 router.get("/", getAllProductsHandler)
+router.get("/:id", getProductByIdHandler)
 
 router.delete(
   "/:id",

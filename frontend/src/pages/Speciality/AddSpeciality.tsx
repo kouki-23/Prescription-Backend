@@ -343,6 +343,20 @@ function Verif(data: ProductForm): Boolean {
     toast.error("Le volume de reconstitution est un décimal")
     return false
   }
+  if (data.flacons.length === 0) {
+    toast.error("Ajouter au moins un flacon")
+    return false
+  }
+  for (let flacon of data.flacons) {
+    if (!isPositif(flacon.dosage)) {
+      toast.error("Le dosage doit  être strictement positif ")
+      return false
+    }
+    if (!isPositif(flacon.volume)) {
+      toast.error("Le volume doit  être strictement positif ")
+      return false
+    }
+  }
 
   return true
 }

@@ -8,12 +8,14 @@ import {
 import { twMerge } from "tailwind-merge"
 import editIcon from "@assets/icons/edit.svg"
 import deleteIcon from "@assets/icons/delete.svg"
-import listIcon from "@assets/icons/list.svg"
+import listIcon from "@assets/icons/specialitydetail.svg"
 import { Product } from "@helpers/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteProduct } from "@helpers/apis/product"
 import { handleError } from "@helpers/apis"
 import { toast } from "react-toastify"
+import { useState } from "react"
+import DetailsSpeciality from "@components/organisms/DetailsSpeciality"
 
 type Props = {
   data: Product[]
@@ -60,15 +62,24 @@ export function SpecialtityTable({ data }: Props) {
       id: "actions",
       header: "Actions",
       cell: (info) => {
+        const [isDetailedOpen, setIsDetailedOpen] = useState(false)
+
         return (
-          <div className="flex justify-center gap-4">
-            <Icon src={listIcon} />
-            <Icon src={editIcon} />
-            <Icon
-              src={deleteIcon}
-              onCLick={() => deleteMutation.mutate(info.row.original.id)}
+          <>
+            <DetailsSpeciality
+              data={info.row.original}
+              isOpen={isDetailedOpen}
+              setIsOpen={setIsDetailedOpen}
             />
-          </div>
+            <div className="flex justify-center gap-4">
+              <Icon src={listIcon} onCLick={() => setIsDetailedOpen(true)} />
+              <Icon src={editIcon} />
+              <Icon
+                src={deleteIcon}
+                onCLick={() => deleteMutation.mutate(info.row.original.id)}
+              />
+            </div>
+          </>
         )
       },
     }),
