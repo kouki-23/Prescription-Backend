@@ -235,7 +235,7 @@ export default function AddSpeciality() {
             />
 
             <AdminLabledInput
-              text="Volume de reconstiturion (ml)"
+              text="Volume de reconstitution (ml)"
               value={String(data.volumeReconstitution)}
               setValue={(value: string) =>
                 setData({ ...data, volumeReconstitution: Number(value) })
