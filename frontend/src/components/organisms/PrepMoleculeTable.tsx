@@ -39,6 +39,7 @@ type Props = {
 }
 
 type TCureData = {
+  id: number
   day: number
   name: string
   dose: number
@@ -95,13 +96,14 @@ export default function PrepMoleculeTable({
   }, [isCureChanged])
   useEffect(() => {
     let newCure = cure
-    newCure.prepMolecule = cure.prepMolecule.map((p, i) => {
+    newCure.prepMolecule = cure.prepMolecule.map((p) => {
+      const temp = data.find((value) => value.id === p.id)
       return {
         ...p,
-        dose: data[i].doseAdaptee,
-        time: data[i].time,
-        day: data[i].day,
-        validation: data[i].validation,
+        dose: temp!.doseAdaptee,
+        time: temp!.time,
+        day: temp!.day,
+        validation: temp!.validation,
       }
     })
     setCure(newCure)
@@ -440,6 +442,7 @@ function transformCureToDataTable(cure: Cure): TCureData[] {
   return cure.prepMolecule
     .map((p) => {
       return {
+        id: p.id,
         day: p.day,
         name: p.productsUsed[0].product.molecule.name,
         dose: p.theoreticalDose,

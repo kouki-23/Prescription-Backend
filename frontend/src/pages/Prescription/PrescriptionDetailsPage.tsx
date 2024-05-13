@@ -40,7 +40,7 @@ export default function PrescriptionDetailsPage({}: Props) {
 
   const [selectedCure, setSelectedCure] = useState(0)
   useEffect(() => {
-    setPrescription(data?.data)
+    if (data?.data) setPrescription(data.data)
   }, [data])
   if (isLoading) return <LoadingInterface />
   if (error) return <ErrorPage cause={error.message} />
