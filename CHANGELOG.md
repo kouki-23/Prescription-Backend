@@ -4,6 +4,12 @@
 
 ### Features/Changes
 
+### Bug Fixes
+
+## 1.1.0
+
+### Features/Changes
+
 - [#8](https://github.com/adchaa/Prescription/pull/8): Sentry implementation
 
 ### Bug Fixes
