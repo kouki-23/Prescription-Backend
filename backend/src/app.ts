@@ -26,6 +26,8 @@ import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
 import morgan from "morgan"
 import cookieParser from "cookie-parser"
+import hl7Router from "./Routers/hl7"
+
 
 db.initialize()
   .then(() => {
@@ -91,6 +93,7 @@ if (process.env.ENV === "dev") {
 
 //routers
 app.use("/auth", auth)
+app.use("/hl7", hl7Router)
 app.use(authorization)
 app.use("/user", userRouter)
 app.use("/patient", patientRouter)
@@ -101,6 +104,7 @@ app.use("/cure", cureRouter)
 app.use("/prep", prepRouter)
 app.use("/product", productRouter)
 app.use("/vehicule", vehiculeRouter)
+
 
 app.use(Sentry.Handlers.errorHandler())
 
