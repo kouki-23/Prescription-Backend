@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { getAllPatients } from '../../Services/patientService'; 
-import { fhirPatientResource } from '../../Utils/fhirutils'; 
+import { fhirPatientResource } from '../../Services/hl7/patient'; 
 import { HttpError, StatusCode } from '../../Utils/HttpError'; 
 
 export async function getAllPatientsHandler(

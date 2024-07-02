@@ -17,7 +17,7 @@ export class Patient {
 
   @Column({ unique: true })
   DMI: string
-
+ 
   @Column()
   index: string
 
