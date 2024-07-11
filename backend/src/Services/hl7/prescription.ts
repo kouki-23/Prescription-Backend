@@ -41,5 +41,6 @@ export async function createPrescription(prescriptionData : Prescription): Promi
   
   async function saveFhirBundle(bundle: Bundle): Promise<void> {
     // Implement saving logic here
+    // do i need to do this fiunction to save pres in databse ?
     
   }
