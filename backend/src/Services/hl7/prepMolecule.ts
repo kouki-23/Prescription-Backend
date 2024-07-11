@@ -1,6 +1,7 @@
 import { PrepMolecule } from "../../Entities/PrepMolecule";
+import { MedicationRequest } from "../../Utils/fhir-types";
 
-export function fhirprepMolResource(prepMolecule : PrepMolecule): any {    
+export function fhirprepMolResource(prepMolecule : PrepMolecule): MedicationRequest {    
     return {
         "resourceType": "MedicationRequest",
         "id": prepMolecule.id,
@@ -17,10 +18,10 @@ export function fhirprepMolResource(prepMolecule : PrepMolecule): any {
                         //"frequency":
                         "period": prepMolecule.duration,
                         "periodUnit":"d",
-                        "timeofDay": [
+                        "timeOfDay": [
                             prepMolecule.time
                         ],
-                        "dayofWeek": [
+                        "dayOfWeek": [
                             prepMolecule.day
                         ]
                 }

@@ -22,7 +22,7 @@ export default new DataSource({
   username: process.env.DB_USERNAME || "postgres",
   password: process.env.DB_PASSWORD || "root",
   database: process.env.DB_NAME || "prescription",
-  synchronize: true,
+  synchronize: false,
   //dropSchema: true,
   logging: process.env.ENV === "dev" ? true : false,
   //entities: ["./src/Entities/*.js"],

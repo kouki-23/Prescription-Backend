@@ -39,7 +39,7 @@ export async function getAllPatientsHandler(
     res.json(patients)
   } catch (e) {
     return next(
-      new HttpError("connot get patients", StatusCode.InternalServerError),
+      new HttpError("cannot get patients", StatusCode.InternalServerError),
     )
   }
 }

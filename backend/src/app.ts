@@ -26,7 +26,7 @@ import { authorization } from "./Middlewares/auth"
 import { User } from "./Entities/User"
 import morgan from "morgan"
 import cookieParser from "cookie-parser"
-import hl7Router from "./Routers/hl7"
+import hl7patientRouter from "./Routers/hl7patient"
 import hl7prescriptionRouter from "./Routers/hl7prescription"
 
 
@@ -94,8 +94,8 @@ if (process.env.ENV === "dev") {
 
 //routers
 app.use("/auth", auth)
-app.use("/hl7", hl7Router)
-app.use("/hl7prescription",hl7prescriptionRouter)
+app.use("/hl7patient", hl7patientRouter)
+app.use("/hl7prescription",hl7prescriptionRouter) 
 app.use(authorization)
 app.use("/user", userRouter)
 app.use("/patient", patientRouter)
