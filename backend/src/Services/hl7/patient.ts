@@ -8,7 +8,7 @@ export function fhirPatientResource(patient: Patient): any {
       name: [{
         use: "official",
         family: patient.lastName,
-        given: [patient.firstName]
+        given: patient.firstName
       }],
      
 

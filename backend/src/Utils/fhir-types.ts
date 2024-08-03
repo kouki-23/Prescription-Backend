@@ -21,11 +21,13 @@ export interface patient extends Resource {
 export interface Bundle extends Resource {
     resourceType: "Bundle"; 
     type: string;
+    total: number,
     entry:
     { 
         resource: (CarePlan | MedicationRequest)[] 
 
      }
+    status: string,
 }
 
 export interface CarePlan extends Resource {

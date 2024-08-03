@@ -6,7 +6,7 @@ return{
     "resourceType" : "CarePlan",
     "id": cure.id,
     "intent" : "plan",
-    "status": cure.state,    // (encours,prévu,basedon)
+    "status": cure.state,    // (encours,prévu,terminee)
     "period" : {
         "start": cure.startDate,
         //"end":

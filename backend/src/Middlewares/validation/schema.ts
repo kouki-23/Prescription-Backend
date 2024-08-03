@@ -29,7 +29,7 @@ export const createPatientBodySchema = z.object({
   lastName: z.string().min(1).max(50),
   gender: z.string().min(1).max(20),
   matrimonial: z.string().min(1).max(50),
-  birthDate: z.string(),
+  birthDate: z.date(),//.regex(/^\d{4}-\d{2}-\d{2}$/),
   weight: z.number().positive(),
   height: z.number().positive(),
   bodySurface: z.number().positive(),

@@ -93,10 +93,10 @@ if (process.env.ENV === "dev") {
 }
 
 //routers
-app.use("/auth", auth)
+//app.use("/auth", auth)
+//app.use(authorization)
 app.use("/hl7patient", hl7patientRouter)
 app.use("/hl7prescription",hl7prescriptionRouter) 
-app.use(authorization)
 app.use("/user", userRouter)
 app.use("/patient", patientRouter)
 app.use("/molecule", moleculeRouter)

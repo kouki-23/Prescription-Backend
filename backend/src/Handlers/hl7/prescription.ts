@@ -2,8 +2,7 @@ import { Request,Response,NextFunction } from "express";
 import { CreatePrescriptionBody, IdParams } from "../../Middlewares/validation/schema";
 import { createPrescrptition, getPrescriptionById } from "../../Services/prescriptionSevice";
 import { HttpError, StatusCode, handleError } from "../../Utils/HttpError";
-import { createPrescription, fhirPrescriptionRessource } from "../../Services/hl7/prescription";
-import { Cure } from "../../Entities/Cure";
+import { createPrescription, fhirPrescriptionResource} from "../../Services/hl7/prescription";
 
 
 export async function getPrescriptionByIdHandler(
@@ -17,7 +16,7 @@ export async function getPrescriptionByIdHandler(
         if(!prescription) {
             return next(new HttpError("INVALID ID", StatusCode.NotFound));
         }
-        const fhirprescription = fhirPrescriptionRessource(prescription);
+        const fhirprescription = fhirPrescriptionResource(prescription);
         return res.json(fhirprescription);
 
     }catch(e) {
