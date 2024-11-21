@@ -42,6 +42,7 @@ export async function createPatientHandler(
   next: NextFunction,
 ) {
   try{
+    
     if(!req.user) {
       throw new Error("");
     }

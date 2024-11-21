@@ -55,13 +55,12 @@ export async function createPrescription(prescriptionData: Prescription): Promis
   }
 
 
- // Function to save the FHIR bundle to the HAPI FHIR server
  
  async function saveFhirBundle(bundle: Bundle): Promise<void> {
   try {
     const response = await axios.post('localhost:3006/hl7prescription', bundle);
     console.log('Server response:', response.data);
   } catch (error) {
-    console.error('Error saving bundle:', error) // Log  error 
+    console.error('Error saving bundle:', error) 
   }
 }
